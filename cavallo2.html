@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso Clinico Interattivo: Asma Equina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .correct-answer {
+            background-color: #d1fae5; /* Green 100 */
+            border-color: #10b981; /* Green 500 */
+            color: #065f46; /* Green 800 */
+        }
+        .incorrect-answer {
+            background-color: #fee2e2; /* Red 100 */
+            border-color: #ef4444; /* Red 500 */
+            color: #991b1b; /* Red 800 */
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .feedback {
+            border-top: 1px solid #e5e7eb;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            font-size: 0.9rem;
+        }
+        @media print {
+            body { 
+                font-family: 'Times New Roman', serif;
+            }
+            .no-print {
+                display: none;
+            }
+            h1, h2, h3 {
+                break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
+        
+        <header class="bg-white p-6 rounded-xl shadow-md mb-8 border border-gray-200">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-800">Caso Clinico Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2">Un Cavallo da Salto Ostacoli con la Tosse</p>
+        </header>
+
+        <main>
+            <!-- Case Description Section -->
+            <div id="case-description" class="bg-white p-6 rounded-xl shadow-md mb-8 border border-gray-200">
+                <section id="anamnesi" class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-4">Segnalamento e Anamnesi</h2>
+                    <p class="mb-4">Viene portato alla vostra attenzione "Fulmine", un cavallo castrone di razza Purosangue Inglese di 12 anni, utilizzato per attività sportiva amatoriale (salto ostacoli).</p>
+                    <p class="mb-4">Il proprietario riferisce la comparsa di tosse cronica da circa 3 mesi. Inizialmente sporadica, la tosse è diventata progressivamente più frequente, manifestandosi soprattutto during il riscaldamento all'inizio del lavoro e mentre il cavallo consuma il fieno. È stato notato anche un leggero calo della performance, con il cavallo che "sembra stancarsi prima del solito". A riposo, occasionalmente, il proprietario ha notato un aumento della frequenza respiratoria.</p>
+                    <p>Fulmine vive in un box singolo con lettiera in paglia. La sua dieta è composta da fieno di prato stabile e mangime pellettato. Nessun altro cavallo nella stessa scuderia presenta una sintomatologia simile. I protocolli vaccinali e di trattamento per endoparassiti sono regolari.</p>
+                </section>
+
+                <section id="esame-obiettivo">
+                    <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-blue-200 pb-2 mb-4">Esame Obiettivo Generale</h2>
+                    <p class="mb-4">All'esame clinico, Fulmine si presenta vigile e reattivo, con un buono stato di nutrizione (BCS 6/9).</p>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h3 class="font-semibold text-lg text-blue-900 mb-2">Parametri Vitali</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1">
+                            <li><strong>Temperatura rettale:</strong> 37.8°C</li>
+                            <li><strong>Frequenza cardiaca:</strong> 36 battiti per minuto</li>
+                            <li><strong>Frequenza respiratoria:</strong> 20 atti per minuto a riposo</li>
+                        </ul>
+                    </div>
+                    <p>Si osserva una lieve dilatazione delle narici e una leggera dispnea espiratoria, con un minimo accenno di "heaves line" (ipertrofia del muscolo obliquo esterno dell'addome). All'auscultazione del torace, si percepiscono sibili espiratori diffusi su entrambi i campi polmonari e un soffio tracheale impuro all'auscultazione della trachea. Non si apprezzano rantoli umidi. La percussione del torace risulta normale. Non è presente scolo nasale. Il rebreathing bag test scatena facilmente un colpo di tosse. Anche la palpazione/trazione della trachea scatena il riflesso della tosse.</p>
+                </section>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quiz-section" class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <!-- Quiz content will be injected here -->
+            </div>
+        </main>
+        
+        <footer class="text-center text-gray-500 mt-12 pb-4">
+            <p>&copy; 2025 - Strumento didattico per Medicina Veterinaria</p>
+        </footer>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "1. Quale elemento raccolto durante l'anamnesi è più suggestivo di una patologia cronica delle basse vie respiratorie?",
+                options: [
+                    "Il fatto che il cavallo viva in un box su lettiera di paglia.",
+                    "La tosse cronica che peggiora con l'esercizio e durante il consumo di fieno.",
+                    "L'età del cavallo (12 anni).",
+                    "L'assenza di sintomi respiratori negli altri cavalli della scuderia."
+                ],
+                answer: 1,
+                explanation: "La cronicità del sintomo (3 mesi) e i fattori scatenanti (esercizio, esposizione a polveri del fieno) sono elementi classici che indirizzano verso una patologia infiammatoria cronica delle basse vie aeree come l'asma equina."
+            },
+            {
+                question: "2. Durante l'esame clinico, quale reperto è più specificamente indicativo di un'ostruzione delle piccole vie aeree (bronchi e bronchioli)?",
+                options: [
+                    "L'aumento della frequenza respiratoria a 20 atti al minuto.",
+                    "La dilatazione delle narici a riposo.",
+                    "La presenza di sibili espiratori diffusi all'auscultazione polmonare.",
+                    "La temperatura corporea nella norma."
+                ],
+                answer: 2,
+                explanation: "I sibili sono suoni musicali ad alta frequenza generati dal passaggio turbolento dell'aria attraverso vie aeree di piccolo calibro ristrette a causa di broncocostrizione, edema e/o accumulo di muco."
+            },
+            {
+                question: "3. Considerando l'anamnesi e i reperti clinici, quale esame collaterale rappresenta il passo diagnostico successivo più logico e informativo?",
+                options: [
+                    "Un'ecografia toracica per valutare la pleura e il parenchima superficiale.",
+                    "Una radiografia del torace per visualizzare il pattern polmonare.",
+                    "Un'endoscopia delle vie aeree (superiori e inferiori).",
+                    "Un esame del sangue completo (emocromo e profilo biochimico)."
+                ],
+                answer: 2,
+                explanation: "L'endoscopia permette la visualizzazione diretta della trachea e dei bronchi principali, consentendo di valutare la presenza e la quantità di muco (indice di infiammazione) ed escludere altre cause di ostruzione. Inoltre, è il pre-requisito per eseguire un lavaggio broncoalveolare (BAL)."
+            },
+            {
+                question: "4. Durante l'endoscopia si osserva un accumulo di muco denso e biancastro a livello dello sperone tracheale (grado di muco 3/5). Qual è il significato clinico principale di questo reperto?",
+                options: [
+                    "È un segno patognomonico di un'infezione batterica primaria.",
+                    "Indica la presenza di un processo infiammatorio a carico delle basse vie aeree.",
+                    "È suggestivo di emorragia polmonare indotta da sforzo (EIPH).",
+                    "È una conseguenza di un anomalo reflusso gastroesofageo."
+                ],
+                answer: 1,
+                explanation: "L'eccessiva produzione di muco (ipercrinia) è una conseguenza diretta dell'infiammazione cronica della mucosa bronchiale. Sebbene possa esserci una componente batterica secondaria, il muco da solo non è patognomonico di infezione."
+            },
+            {
+                question: "5. Quale esame è considerato il \"gold standard\" per caratterizzare citologicamente l'infiammazione presente nelle basse vie respiratorie del cavallo?",
+                options: [
+                    "Il lavaggio transtracheale (TTA).",
+                    "La biopsia polmonare a cielo aperto.",
+                    "Il lavaggio broncoalveolare (BAL).",
+                    "Un tampone nasale profondo."
+                ],
+                answer: 2,
+                explanation: "Il BAL campiona le cellule e il surfattante presenti negli spazi aerei più distali (bronchioli e alveoli), fornendo un quadro citologico rappresentativo dell'infiammazione tipica dell'asma."
+            },
+             {
+                question: "6. L'esame citologico del liquido di lavaggio broncoalveolare (BAL) mostra i seguenti risultati: Macrofagi 45%, Linfociti 25%, Neutrofili 28%, Mastociti 2%, Eosinofili <1%. Come si interpreta questo quadro?",
+                options: [
+                    "È un quadro citologico perfettamente nella norma per un cavallo adulto.",
+                    "È indicativo di un'emorragia polmonare recente o pregressa.",
+                    "Mostra una marcata infiammazione neutrofilica, compatibile con asma equina.",
+                    "Suggerisce una reazione allergica di tipo parassitario."
+                ],
+                answer: 2,
+                explanation: "In un cavallo sano, i neutrofili nel BAL non dovrebbero superare il 5-10%. Un valore del 28% indica una forte infiammazione neutrofilica, che è il reperto citologico caratteristico dell'asma equina di grado severo."
+            },
+            {
+                question: "7. Sulla base di tutti i dati raccolti, quale tra le seguenti è la diagnosi differenziale MENO probabile per Fulmine?",
+                options: [
+                    "Polmonite batterica cronica.",
+                    "Asma equina di grado severo (precedentemente nota come RAO o bolsaggine).",
+                    "Neoplasia polmonare.",
+                    "Edema polmonare cardiogeno acuto."
+                ],
+                answer: 3,
+                explanation: "L'edema polmonare acuto è una condizione di emergenza, con dispnea gravissima a insorgenza improvvisa, spesso accompagnata da schiuma rosea dalle narici e gravi reperti cardiaci. Il quadro di Fulmine è cronico e progressivo."
+            },
+            {
+                question: "8. Quale test aggiuntivo potrebbe essere eseguito per confermare la presenza di una componente di broncocostrizione reversibile?",
+                options: [
+                    "Una misurazione dei gas ematici arteriosi (emogasanalisi).",
+                    "La somministrazione di un farmaco broncodilatatore per via inalatoria e la successiva rivalutazione clinica.",
+                    "L'esecuzione di test allergologici cutanei (intradermoreazione).",
+                    "La somministrazione di una terapia antibiotica sistemica per 7 giorni."
+                ],
+                answer: 1,
+                explanation: "La reversibilità dell'ostruzione bronchiale è un elemento chiave dell'asma. Un miglioramento significativo dopo la somministrazione di un beta-2 agonista (es. salbutamolo) conferma la broncocostrizione."
+            },
+            {
+                question: "9. Integrando l'anamnesi, i segni clinici, i reperti endoscopici e i risultati della citologia del BAL, qual è la diagnosi definitiva più probabile?",
+                options: [
+                    "Bronchite cronica idiopatica.",
+                    "Polmonite interstiziale multifattoriale.",
+                    "Asma equina di grado severo.",
+                    "Infezione polmonare da Rhodococcus equi."
+                ],
+                answer: 2,
+                explanation: "Questa diagnosi racchiude tutti gli elementi del caso: la storia di esposizione a polveri, la tosse cronica, i sibili espiratori, l'accumulo di muco e, soprattutto, l'infiammazione neutrofilica al BAL."
+            },
+            {
+                question: "10. Qual è l'approccio terapeutico più completo e corretto per la gestione a lungo termine di questa patologia?",
+                options: [
+                    "Una terapia antibiotica prolungata associata a riposo assoluto in box.",
+                    "Una rigorosa gestione ambientale (es. fieno bagnato, lettiera a bassa polverosità) associata a terapia farmacologica con corticosteroidi e broncodilatatori.",
+                    "La sola somministrazione di broncodilatatori per via orale al bisogno, prima dell'esercizio fisico.",
+                    "L'utilizzo di farmaci antistaminici e diuretici per ridurre la produzione di muco e l'edema."
+                ],
+                answer: 1,
+                explanation: "La terapia dell'asma equina si basa su due pilastri: 1) ridurre l'esposizione all'allergene/irritante (gestione ambientale) e 2) controllare l'infiammazione e la broncocostrizione (farmaci)."
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-section');
+        let currentQuestionIndex = 0;
+
+        function displayQuestion() {
+            quizContainer.innerHTML = ''; // Clear previous content
+            if (currentQuestionIndex < quizData.length) {
+                const questionData = quizData[currentQuestionIndex];
+                
+                let progressHTML = `
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-600">Domanda ${currentQuestionIndex + 1} di ${quizData.length}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${((currentQuestionIndex + 1) / quizData.length) * 100}%"></div>
+                        </div>
+                    </div>`;
+
+                let questionHTML = `
+                    <div id="question-${currentQuestionIndex}">
+                        <p class="font-semibold text-lg mb-4">${questionData.question}</p>
+                        <div class="options-container space-y-2">
+                `;
+
+                questionData.options.forEach((option, optionIndex) => {
+                    questionHTML += `
+                        <label class="block p-3 rounded-md border border-gray-300 hover:bg-gray-100 cursor-pointer transition-colors duration-200">
+                            <input type="radio" name="question${currentQuestionIndex}" value="${optionIndex}" class="mr-3" onclick="checkAnswer(this)">
+                            ${String.fromCharCode(97 + optionIndex)}) ${option}
+                        </label>`;
+                });
+
+                questionHTML += `
+                        </div>
+                        <div class="feedback-container mt-4 hidden"></div>
+                        <div class="navigation-container mt-6 text-right hidden">
+                             <button onclick="nextQuestion()" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-md">
+                                Prossima Domanda &rarr;
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                quizContainer.innerHTML = progressHTML + questionHTML;
+
+            } else {
+                displayResults();
+            }
+        }
+
+        function checkAnswer(radioInput) {
+            const selectedIndex = parseInt(radioInput.value);
+            const questionData = quizData[currentQuestionIndex];
+            const optionsContainer = radioInput.closest('.options-container');
+            const feedbackContainer = optionsContainer.nextElementSibling;
+            
+            const inputs = optionsContainer.querySelectorAll('input');
+
+            // Disable all options temporarily to prevent multiple clicks while processing
+            inputs.forEach(input => input.disabled = true);
+
+            if (selectedIndex === questionData.answer) {
+                radioInput.parentElement.classList.add('correct-answer');
+                feedbackContainer.innerHTML = `
+                    <div class="feedback text-gray-600">
+                        <strong class="font-bold text-green-700">Corretto!</strong><br>
+                        <strong class="font-bold text-gray-800">Spiegazione:</strong> ${questionData.explanation}
+                    </div>`;
+                feedbackContainer.classList.remove('hidden');
+                feedbackContainer.nextElementSibling.classList.remove('hidden'); // Show navigation
+            } else {
+                radioInput.parentElement.classList.add('incorrect-answer');
+                feedbackContainer.innerHTML = `
+                    <div class="feedback text-red-700">
+                        <strong class="font-bold">Sbagliato. Riprova tra poco...</strong>
+                    </div>`;
+                feedbackContainer.classList.remove('hidden');
+                
+                // Allow retry after a short delay
+                setTimeout(() => {
+                    // Re-enable all inputs for another attempt
+                    inputs.forEach(input => {
+                        input.disabled = false;
+                        input.checked = false;
+                    });
+                    radioInput.parentElement.classList.remove('incorrect-answer');
+                    feedbackContainer.classList.add('hidden');
+                }, 1500); // Wait 1.5 seconds before resetting
+            }
+        }
+        
+        function nextQuestion() {
+            currentQuestionIndex++;
+            displayQuestion();
+            quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function displayResults() {
+             quizContainer.innerHTML = `
+                <div class="text-center p-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Caso Clinico Completato!</h2>
+                    <p class="text-lg text-gray-600 mb-8">Ottimo lavoro! Hai completato l'analisi del caso di Fulmine.</p>
+                </div>
+                
+                <div id="summary-section" class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <h3 class="text-2xl font-bold text-blue-900 border-b-2 border-blue-200 pb-2 mb-4">Riepilogo del Caso e Take-Home Messages</h3>
+                    
+                    <h4 class="font-bold text-lg text-gray-800 mt-4 mb-2">Punti Chiave del Caso "Fulmine"</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><b>Paziente:</b> Purosangue Inglese castrone, 12 anni, atleta.</li>
+                        <li><b>Anamnesi:</b> Tosse cronica (3 mesi) esacerbata da esercizio e fieno; calo di performance. Stabulazione in box su paglia.</li>
+                        <li><b>Esame Obiettivo:</b> Dispnea espiratoria, "heaves line", sibili espiratori diffusi, tosse facilmente inducibile.</li>
+                        <li><b>Diagnostica:</b> Endoscopia con accumulo di muco tracheale; BAL con marcata infiammazione neutrofilica (28%).</li>
+                        <li><b>Diagnosi Definitiva:</b> Asma Equina di Grado Severo.</li>
+                    </ul>
+
+                    <h4 class="font-bold text-lg text-gray-800 mt-6 mb-2">Concetti Fondamentali sull'Asma Equina</h4>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><b>Patogenesi:</b> Reazione infiammatoria/allergica cronica a polveri organiche inalate (muffe, acari) da fieno e lettiere.</li>
+                        <li><b>Diagnosi:</b> Basata su anamnesi, clinica e, in modo definitivo, sulla citologia del BAL (aumento % neutrofili >10-20%).</li>
+                        <li><b>Terapia - 2 Pilastri Fondamentali:</b>
+                            <ol class="list-decimal list-inside ml-4 mt-1">
+                                <li><b>Controllo Ambientale (essenziale):</b> Ridurre l'esposizione alle polveri (fieno bagnato/vaporizzato, lettiere alternative, massimizzare il tempo all'aperto).</li>
+                                <li><b>Terapia Farmacologica:</b> Corticosteroidi (sistemici o inalatori) per l'infiammazione e Broncodilatatori per la broncocostrizione.</li>
+                            </ol>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mt-8 text-center flex flex-col sm:flex-row justify-center gap-4">
+                     <button onclick="downloadSummary()" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300 shadow-lg text-lg">
+                        Scarica Riepilogo
+                    </button>
+                    <button onclick="restartQuiz()" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300 shadow-lg text-lg">
+                        Ricomincia il Caso
+                    </button>
+                </div>
+            `;
+        }
+
+        function downloadSummary() {
+            const summaryContent = document.getElementById('summary-section').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Riepilogo Caso Clinico: Asma Equina</title>
+                        <script src="https://cdn.tailwindcss.com"><\/script>
+                        <style> 
+                            body { font-family: 'Inter', sans-serif; padding: 2rem; } 
+                            h3, h4 { margin-top: 1.5rem; margin-bottom: 0.5rem; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1 class="text-3xl font-bold text-blue-800">Caso Clinico: Asma Equina</h1>
+                        ${summaryContent}
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => { printWindow.print(); }, 500);
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            displayQuestion();
+            quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        window.onload = displayQuestion;
+    </script>
+
+</body>
+</html>
