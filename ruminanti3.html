@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso Clinico Interattivo: Bovino con Anoressia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .case-section {
+            background-color: #f9fafb;
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .quiz-option.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+        .feedback {
+            padding: 0.75rem 1.25rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+        .feedback.correct {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .feedback.incorrect {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+        .summary-section {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-radius: 0.5rem;
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #printable-summary, #printable-summary * { visibility: visible; }
+            #printable-summary { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-blue-600">Caso Clinico Veterinario Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2">Risolvi il caso passo dopo passo</p>
+        </header>
+
+        <main id="case-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+
+            <!-- Sezione 1: Anamnesi (visibile da subito) -->
+            <section id="anamnesi" class="case-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
+                <div class="space-y-3 text-gray-700">
+                    <p><strong>Animale:</strong> Bovino, femmina, Frisona Italiana di 5 anni.</p>
+                    <p><strong>Storia recente:</strong> Ha partorito da 12 giorni ed è alla sua quarta lattazione.</p>
+                    <p><strong>Motivo della visita:</strong> L'allevatore segnala un crollo della produzione lattea (da 40L a 15L/giorno) e anoressia selettiva da 3 giorni (rifiuta il concentrato).</p>
+                </div>
+            </section>
+            
+            <!-- Sezione 2: Visita Clinica (nascosta) -->
+            <section id="visita-clinica" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">2. Esame Obiettivo Generale e Particolare</h2>
+                 <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Parametri Vitali e Atteggiamento</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1">
+                            <li><strong>Atteggiamento:</strong> Animale apatico, lievemente disidratato.</li>
+                            <li><strong>T°:</strong> 38.6 °C (Normale), <strong>FC:</strong> 84 bpm (Lieve tachicardia), <strong>FR:</strong> 30 apm (Normale).</li>
+                            <li><strong>Motilità ruminale:</strong> Fortemente ridotta.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sezione 3: Esame Addome (nascosta) -->
+            <section id="esame-addome" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">3. Esame dell'Addome</h2>
+                <div class="space-y-2 text-gray-700">
+                   <p><strong>Ispezione:</strong> Lieve "insellamento" della fossa del fianco sinistro.</p>
+                   <p><strong>Auscultazione e Percussione (Manovra combinata):</strong> Eseguendo la manovra sulla parete addominale sinistra (tra la 9ª e la 13ª costa), si percepisce un suono metallico, acuto e risonante, classicamente definito <strong>"PING"</strong>.</p>
+                   <p><strong>Esplorazione Rettale:</strong> Il rumine appare spostato medialmente e verso destra.</p>
+                </div>
+            </section>
+
+            <!-- Sezione 4: Esami Collaterali (nascosta) -->
+             <section id="esami-collaterali" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">4. Esami Collaterali</h2>
+                <p class="text-gray-700">Un test rapido sulle urine tramite striscia reattiva rivela una moderata chetonuria (++).</p>
+            </section>
+
+            <!-- Contenitore del Quiz (SPOSTATO QUI) -->
+            <div id="quiz-container" class="mt-6"></div>
+
+            <!-- Sezione Finale: Diagnosi e Riassunto (nascosta) -->
+            <div id="final-summary" class="summary-section hidden-section">
+                <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Caso Risolto!</h2>
+                <p class="text-center text-xl mb-4">Diagnosi: <strong>Dislocazione Abomasale Sinistra (DAS) con Chetosi Secondaria</strong></p>
+                
+                <div id="printable-summary">
+                    <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Dislocazione Abomasale Sinistra (DAS)</h2>
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-600">Cos'è la DAS?</h3>
+                            <p class="text-gray-700">La Dislocazione Abomasale a Sinistra è una patologia multifattoriale tipica delle vacche da latte ad alta produzione nel periodo del post-parto. L'abomaso si riempie di gas, si dilata e si sposta dalla sua normale posizione, rimanendo intrappolato tra il rumine e la parete addominale sinistra.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-600">Fattori di Rischio Principali</h3>
+                            <ul class="list-disc list-inside text-gray-700">
+                                <li>Periodo di transizione (prime 2-4 settimane post-parto).</li>
+                                <li>Dietetica: diete ad alto contenuto di concentrati e basso contenuto di fibra.</li>
+                                <li>Atonia abomasale causata da ipocalcemia o patologie concomitanti (metriti, mastiti, ecc.).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-600">Diagnosi e Terapia</h3>
+                            <p class="text-gray-700">La diagnosi di certezza si basa sull'identificazione del <strong>suono di "PING"</strong>. La terapia d'elezione è quella chirurgica, che mira a riposizionare l'abomaso e fissarlo (omentopessi o piloropessi) per prevenire recidive. La prognosi dopo chirurgia è favorevole.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-8 no-print">
+                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">Stampa o Salva Riassunto</button>
+                </div>
+            </div>
+
+        </main>
+        
+        <footer class="text-center mt-8 text-sm text-gray-500 no-print">
+            <p>Questo caso clinico è stato generato a scopo didattico.</p>
+        </footer>
+    </div>
+
+<script>
+const quizData = [
+    {
+        question: "1/10: Basandoti sull'anamnesi, quale combinazione di fattori è più indicativa per orientare la diagnosi?",
+        options: [
+            "Età avanzata e calo di produzione",
+            "Recente parto, alta produzione e anoressia selettiva",
+            "Razza Frisona e anoressia",
+            "Quarta lattazione e rifiuto di ogni alimento"
+        ],
+        answer: 1,
+        feedback: "Corretto. L'associazione tra il periodo del post-parto, l'alta produzione e l'anoressia selettiva è un campanello d'allarme per le patologie metaboliche e dislocative tipiche di questa fase.",
+        reveals: null
+    },
+    {
+        question: "2/10: Quale apparato è quasi certamente il principale coinvolto in questo scenario clinico?",
+        options: [
+            "Apparato respiratorio",
+            "Apparato cardiovascolare",
+            "Apparato gastroenterico",
+            "Apparato urinario"
+        ],
+        answer: 2,
+        feedback: "Esatto. L'anoressia e il calo di produzione puntano direttamente a un problema a carico dell'apparato digerente. Ora procediamo con la visita clinica.",
+        reveals: "visita-clinica"
+    },
+    {
+        question: "3/10: L'assenza di febbre, associata a una lieve tachicardia e disidratazione, cosa suggerisce?",
+        options: [
+            "Un'infezione batterica grave",
+            "Un processo infiammatorio acuto o un disordine metabolico/meccanico",
+            "Un forte stato di shock",
+            "Un problema primariamente cardiaco"
+        ],
+        answer: 1,
+        feedback: "Perfetto. L'assenza di ipertermia tende a escludere un processo settico acuto, orientando verso una causa metabolica o un problema meccanico/ostruttivo a livello gastroenterico.",
+        reveals: null
+    },
+    {
+        question: "4/10: La forte riduzione della motilità ruminale è un segno importante. Qual è la procedura diagnostica successiva più logica?",
+        options: [
+            "Eseguire subito un'ecografia cardiaca",
+            "Procedere con l'esame sistematico dell'addome",
+            "Somministrare antibiotici e antipiretici",
+            "Prelevare un campione di urine"
+        ],
+        answer: 1,
+        feedback: "Ottima scelta. Con un sospetto problema gastroenterico, l'esame completo dell'addome è il passo fondamentale per proseguire nell'iter diagnostico.",
+        reveals: "esame-addome"
+    },
+    {
+        question: "5/10: Il 'PING' rilevato al fianco sinistro è un suono patognomonico. Da cosa è generato?",
+        options: [
+            "Dalla contrazione del rumine pieno di liquido",
+            "Dalla percussione di un organo cavo pieno di gas, interposto tra la parete e altri visceri",
+            "Dal movimento di liquidi nell'intestino tenue",
+            "Da una raccolta di pus (ascesso) nella cavità addominale"
+        ],
+        answer: 1,
+        feedback: "Esattamente. Il 'PING' si genera quando un viscere pieno di gas si sposta e si tende contro la parete addominale. È il segno chiave per la nostra diagnosi.",
+        reveals: null
+    },
+    {
+        question: "6/10: Mettendo insieme tutti i dati (anamnesi, clinica, PING a sinistra, esplorazione rettale), qual è la diagnosi più probabile?",
+        options: [
+            "Torsione del cieco",
+            "Indigestione gassosa (meteorismo ruminale)",
+            "Pneumoperitoneo (gas libero in addome)",
+            "Dislocazione abomasale sinistra (DAS)"
+        ],
+        answer: 3,
+        feedback: "Diagnosi corretta. Tutti i segni clinici e strumentali conducono inequivocabilmente a una Dislocazione Abomasale Sinistra. Verifichiamo con un ultimo test.",
+        reveals: "esami-collaterali"
+    },
+    {
+        question: "7/10: Perché troviamo chetonuria in questo animale?",
+        options: [
+            "È la causa primaria della malattia (chetosi primaria)",
+            "È un artefatto del test delle urine",
+            "È secondaria al bilancio energetico negativo causato dall'anoressia",
+            "È causata da un'insufficienza renale"
+        ],
+        answer: 2,
+        feedback: "Perfetto. L'animale non mangia a sufficienza, quindi mobilita le riserve corporee di grasso, portando alla produzione di corpi chetonici. È una chetosi secondaria alla patologia in atto.",
+        reveals: null
+    },
+    {
+        question: "8/10: Qual è l'approccio terapeutico considerato risolutivo e con la più bassa percentuale di recidive per la DAS?",
+        options: [
+            "Terapia medica con fluidi e farmaci procinetici",
+            "Far rotolare la vacca sul dorso (tecnica conservativa)",
+            "Correzione chirurgica con fissazione dell'abomaso (pessi)",
+            "Lasciare l'animale a digiuno per 24 ore"
+        ],
+        answer: 2,
+        feedback: "Esatto. La chirurgia (es. omentopessi in laparotomia sul fianco destro) permette di riposizionare l'organo e fissarlo, prevenendo future dislocazioni. È la terapia d'elezione.",
+        reveals: null
+    },
+    {
+        question: "9/10: Oltre alla chirurgia, quale terapia di supporto è fondamentale?",
+        options: [
+            "Solo un antinfiammatorio per il dolore post-operatorio",
+            "Fluidoterapia per correggere disidratazione e squilibri elettrolitici, e terapia per la chetosi",
+            "Una lunga terapia antibiotica per prevenire infezioni",
+            "Nessuna, la chirurgia è sufficiente"
+        ],
+        answer: 1,
+        feedback: "Corretto. È cruciale reidratare l'animale, correggere gli squilibri metabolici (ipocalcemia, ipokaliemia) e trattare la chetosi con precursori del glucosio (es. glicole propilenico).",
+        reveals: null
+    },
+    {
+        question: "10/10: Qual è la prognosi per una bovina con DAS trattata tempestivamente con la chirurgia?",
+        options: [
+            "Infausta, l'animale andrà macellato",
+            "Scarsa, la produzione di latte non tornerà mai normale",
+            "Riservata, dipende da molti fattori",
+            "Favorevole, con un rapido ritorno alla normale alimentazione e produzione"
+        ],
+        answer: 3,
+        feedback: "Esatto! Se diagnosticata e trattata rapidamente, la prognosi è ottima e la maggior parte delle bovine recupera completamente.",
+        reveals: "final-summary"
+    },
+];
+
+let currentQuestionIndex = 0;
+const quizContainer = document.getElementById('quiz-container');
+
+function displayQuestion() {
+    if (currentQuestionIndex >= quizData.length) {
+        quizContainer.innerHTML = ''; // Quiz finished
+        return;
+    }
+
+    const currentQuiz = quizData[currentQuestionIndex];
+    let optionsHtml = '';
+    currentQuiz.options.forEach((option, index) => {
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+    });
+
+    quizContainer.innerHTML = `
+        <div class="quiz-card p-4 border rounded-lg bg-gray-50">
+            <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
+            <div class="options-container">${optionsHtml}</div>
+            <div class="feedback-container mt-2"></div>
+        </div>
+    `;
+
+    document.querySelectorAll('.quiz-option').forEach(button => {
+        button.addEventListener('click', checkAnswer);
+    });
+}
+
+function checkAnswer(event) {
+    const selectedOption = event.target;
+    const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
+    const currentQuiz = quizData[currentQuestionIndex];
+    const feedbackContainer = quizContainer.querySelector('.feedback-container');
+
+    // Disable all buttons after an answer is chosen
+    document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+
+    if (selectedAnswerIndex === currentQuiz.answer) {
+        selectedOption.classList.add('correct');
+        feedbackContainer.innerHTML = `
+            <div class="feedback correct">
+                ${currentQuiz.feedback}
+            </div>
+            <button id="next-question-btn" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full">
+                Prosegui
+            </button>
+        `;
+
+        document.getElementById('next-question-btn').addEventListener('click', () => {
+            if (currentQuiz.reveals) {
+                document.getElementById(currentQuiz.reveals).style.display = 'block';
+            }
+            currentQuestionIndex++;
+            displayQuestion();
+        });
+    } else {
+        selectedOption.classList.add('incorrect');
+        feedbackContainer.innerHTML = `<div class="feedback incorrect">Risposta non corretta. Riprova a ragionare sul caso.</div>`;
+         setTimeout(() => { // Re-enable buttons to allow another try
+            document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = false);
+            selectedOption.classList.remove('incorrect');
+            feedbackContainer.innerHTML = '';
+        }, 2000);
+    }
+}
+
+// Start the quiz
+window.onload = displayQuestion;
+</script>
+
+</body>
+</html>
