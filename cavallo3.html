@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso Clinico Interattivo: Medicina del Cavallo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .question-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #eef2ff;
+            border-left: 4px solid #4f46e5;
+        }
+        .correct-answer {
+            background-color: #dcfce7 !important;
+            border-color: #22c55e !important;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .btn {
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-8">
+
+        <header class="text-center mb-8 border-b pb-4">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Caso Clinico Interattivo</h1>
+            <p class="text-xl text-indigo-600 mt-2">Medicina Interna del Cavallo</p>
+        </header>
+
+        <main>
+            <!-- Sezione Caso Clinico -->
+            <section id="case-study" class="mb-8">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">Presentazione del Paziente</h2>
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-lg">Segnalamento:</h3>
+                        <p>"Fulmine", cavallo Sella Italiano, castrone, 8 anni, impiegato in salto ostacoli.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">Anamnesi:</h3>
+                        <p>Il proprietario chiama alle 21:00 riferendo che il cavallo manifesta un episodio di dolore addominale acuto da circa 2 ore. Fulmine è irrequieto, si guarda i fianchi, raspa con gli anteriori e tenta di coricarsi e rotolarsi. La gestione alimentare non è cambiata di recente, ma c'è stato un brusco calo della pressione atmosferica nelle ultime ore. Profilassi vaccinali e trattamenti per endoparassiti sono regolari.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">Esame Obiettivo Generale e Parametri Vitali:</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Atteggiamento:</strong> Ansioso, sudato su collo e fianchi. Dolore moderato-grave, intermittente.</li>
+                            <li><strong>FC (Frequenza Cardiaca):</strong> 60 bpm</li>
+                            <li><strong>FR (Frequenza Respiratoria):</strong> 30 apm</li>
+                            <li><strong>T°C (Temperatura Corporea):</strong> 38.2 °C</li>
+                            <li><strong>Mucose Apparenti:</strong> Congeste, T.R.C. > 2 secondi.</li>
+                            <li><strong>Borborigmi intestinali:</strong> Assenti nel quadrante superiore destro e sinistro, diminuiti nei quadranti inferiori.</li>
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 class="font-semibold text-lg">Procedure Diagnostiche in Campo:</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Sondaggio naso-gastrico:</strong> Scarso reflusso di materiale gastrico (circa 1 litro).</li>
+                            <li><strong>Esplorazione rettale:</strong> Si apprezza la presenza di anse intestinali del grosso colon marcatamente distese da gas (meteoriche), tese e dislocate cranialmente. Il piccolo colon è vuoto.</li>
+                            <li><strong>Terapia iniziale:</strong> Somministrazione di Flunixin Meglumine (1.1 mg/kg EV). Il cavallo mostra un leggero miglioramento per circa 20 minuti, per poi ripresentare dolore intenso.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sezione Quiz -->
+            <section id="quiz">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Quiz Diagnostico</h2>
+                <form id="quiz-form" class="space-y-6">
+
+                    <!-- Domanda 1 -->
+                    <div class="question-container" id="q1-container">
+                        <p class="font-semibold mb-3">1. Alla luce dell'anamnesi e dell'atteggiamento di Fulmine, quale è la prima azione da intraprendere all'arrivo in scuderia?</p>
+                        <div class="space-y-2">
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q1" value="a" class="mr-2"> Somministrare subito un antibiotico ad ampio spettro.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q1" value="b" class="mr-2"> Eseguire un rapido esame obiettivo generale e valutazione dei parametri vitali per stabilire la gravità della situazione.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q1" value="c" class="mr-2"> Lasciare il cavallo libero nel box per vedere se si risolve da solo.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q1" value="d" class="mr-2"> Eseguire immediatamente un'esplorazione rettale.</label>
+                        </div>
+                        <div class="explanation" id="exp1"><b>Spiegazione:</b> La priorità assoluta è valutare la stabilità emodinamica e il grado di dolore del paziente attraverso l'esame obiettivo e la misurazione dei parametri vitali. Questo permette di classificare l'urgenza e guidare le successive decisioni.</div>
+                    </div>
+
+                    <!-- Domanda 2 -->
+                    <div class="question-container hidden" id="q2-container">
+                        <p class="font-semibold mb-3">2. La frequenza cardiaca di 60 bpm, associata a mucose congeste e TRC > 2 sec, cosa indica principalmente?</p>
+                        <div class="space-y-2">
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q2" value="a" class="mr-2"> Una condizione di dolore lieve e nessuna compromissione sistemica.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q2" value="b" class="mr-2"> Il cavallo è semplicemente eccitato per la visita.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q2" value="c" class="mr-2"> Un significativo grado di dolore e una compromissione cardiovascolare (shock ipovolemico/endotossico).</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q2" value="d" class="mr-2"> Un'infezione batterica sistemica in atto.</label>
+                        </div>
+                        <div class="explanation" id="exp2"><b>Spiegazione:</b> La tachicardia (FC > 48-50 bpm) è uno degli indicatori più affidabili del dolore e dello stato di shock nel cavallo. Insieme alle mucose congeste e al TRC aumentato, segnala una severa compromissione circolatoria che richiede un intervento immediato.</div>
+                    </div>
+
+                    <!-- Domanda 3 -->
+                    <div class="question-container hidden" id="q3-container">
+                        <p class="font-semibold mb-3">3. Qual è il duplice scopo del sondaggio naso-gastrico in un cavallo con dolore addominale acuto?</p>
+                        <div class="space-y-2">
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q3" value="a" class="mr-2"> Solo per somministrare farmaci e acqua.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q3" value="b" class="mr-2"> Per nutrire il cavallo e idratarlo.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q3" value="c" class="mr-2"> Solo diagnostico, per verificare la presenza di reflusso.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q3" value="d" class="mr-2"> Diagnostico (verificare il reflusso) e terapeutico (decomprimere lo stomaco per prevenire la rottura).</label>
+                        </div>
+                        <div class="explanation" id="exp3"><b>Spiegazione:</b> Il cavallo non può vomitare. In caso di ostruzione intestinale, lo stomaco si riempie di fluidi fino a rompersi. Il sondaggio è vitale sia per diagnosticare un'ostruzione (presenza di reflusso netto) sia per decomprimere lo stomaco, un'azione salvavita.</div>
+                    </div>
+
+                    <!-- Domanda 4 -->
+                    <div class="question-container hidden" id="q4-container">
+                        <p class="font-semibold mb-3">4. Il reperto dell'esplorazione rettale (grosso colon disteso da gas e dislocato) è fortemente indicativo di:</p>
+                        <div class="space-y-2">
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q4" value="a" class="mr-2"> Una lesione che molto probabilmente richiederà una correzione chirurgica.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q4" value="b" class="mr-2"> Una semplice colica gassosa che si risolverà con terapia medica.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q4" value="c" class="mr-2"> Una costipazione del piccolo colon.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q4" value="d" class="mr-2"> Enterite.</label>
+                        </div>
+                        <div class="explanation" id="exp4"><b>Spiegazione:</b> La palpazione di anse intestinali piene di gas, tese e in posizione anomala è un segno patognomonico di una dislocazione o volvolo del grosso colon. Queste condizioni raramente si risolvono spontaneamente e quasi sempre necessitano di un intervento chirurgico.</div>
+                    </div>
+                    
+                    <!-- Domanda 5 -->
+                    <div class="question-container hidden" id="q5-container">
+                        <p class="font-semibold mb-3">5. La diagnosi differenziale in questo caso è ampia. Tuttavia, basandosi su tutti i reperti clinici, quale delle seguenti è la diagnosi più probabile?</p>
+                        <div class="space-y-2">
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q5" value="a" class="mr-2"> Colica spasmodica.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q5" value="b" class="mr-2"> Costipazione del grosso colon.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q5" value="c" class="mr-2"> Dislocazione del grosso colon.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q5" value="d" class="mr-2"> Ostruzione da corpo estraneo nel piccolo intestino.</label>
+                        </div>
+                        <div class="explanation" id="exp5"><b>Spiegazione:</b> La combinazione di dolore severo, tachicardia, parametri di shock, assenza di motilità, scarso reflusso gastrico e, soprattutto, il reperto rettale di un grosso colon meteorico e dislocato, punta in modo quasi inequivocabile verso una dislocazione del grosso colon. L'ostruzione del piccolo intestino avrebbe causato un abbondante reflusso.</div>
+                    </div>
+
+                    <!-- Domanda 6 -->
+                    <div class="question-container hidden" id="q6-container">
+                        <p class="font-semibold mb-3">6. La risposta solo temporanea al Flunixin Meglumine è un indicatore importante. Cosa suggerisce?</p>
+                        <div class="space-y-2">
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q6" value="a" class="mr-2"> Il farmaco non è efficace e bisogna cambiarlo con un altro FANS.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q6" value="b" class="mr-2"> Il dolore è di origine meccanica (es. tensione sul mesentere) ed è troppo intenso per essere controllato a lungo con la sola terapia medica.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q6" value="c" class="mr-2"> Il dosaggio era insufficiente.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q6" value="d" class="mr-2"> Il cavallo ha sviluppato una resistenza ai FANS.</label>
+                        </div>
+                        <div class="explanation" id="exp6"><b>Spiegazione:</b> Il dolore refrattario alla terapia analgesica è uno dei criteri principali per definire una colica come "chirurgica". Se un FANS potente come il flunixin non riesce a controllare il dolore in modo duraturo, è altamente probabile che la causa sia una lesione fisica (strangolamento, torsione, distensione severa) che richiede una risoluzione meccanica.</div>
+                    </div>
+
+                    <!-- Domanda 7 -->
+                    <div class="question-container hidden" id="q7-container">
+                        <p class="font-semibold mb-3">7. Data la situazione, qual è la decisione gestionale più corretta e urgente?</p>
+                        <div class="space-y-2">
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q7" value="a" class="mr-2"> Riferire immediatamente il cavallo a una clinica chirurgica attrezzata.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q7" value="b" class="mr-2"> Provare con un altro ciclo di analgesici e una passeggiata di 30 minuti.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q7" value="c" class="mr-2"> Somministrare paraffina liquida tramite sonda e aspettare 4-6 ore.</label>
+                            <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q7" value="d" class="mr-2"> Sedare pesantemente il cavallo e rivalutarlo la mattina seguente.</label>
+                        </div>
+                        <div class="explanation" id="exp7"><b>Spiegazione:</b> Tutti i segni clinici (dolore incontrollabile, parametri vitali alterati, reperto rettale) indicano una colica chirurgica. Ogni minuto di ritardo nel riferire il cavallo diminuisce la prognosi, aumentando il rischio di necrosi intestinale, endotossiemia e complicanze post-operatorie. L'unica scelta corretta è il trasporto immediato in una struttura specializzata.</div>
+                    </div>
+
+                    <!-- Domanda 8 -->
+                    <div class="question-container hidden" id="q8-container">
+                        <p class="font-semibold mb-3">8. Durante il trasporto verso la clinica, quali sono gli obiettivi principali della gestione?</p>
+                        <div class="space-y-2">
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q8" value="a" class="mr-2"> Tenere il cavallo a digiuno e non somministrare nulla.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q8" value="b" class="mr-2"> Fornire fieno per tranquillizzarlo.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q8" value="c" class="mr-2"> Farlo viaggiare libero nel van per maggiore comfort.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q8" value="d" class="mr-2"> Controllare il dolore con analgesici/sedativi appropriati e iniziare la fluidoterapia, se possibile, per stabilizzarlo.</label>
+                        </div>
+                        <div class="explanation" id="exp8"><b>Spiegazione:</b> La stabilizzazione è fondamentale. Il dolore deve essere gestito per prevenire che il cavallo si traumatizzi durante il viaggio. La fluidoterapia endovenosa, se fattibile, è cruciale per contrastare lo shock e migliorare la perfusione tissutale, preparando il paziente nel miglior modo possibile all'anestesia e alla chirurgia.</div>
+                    </div>
+
+                    <!-- Domanda 9 -->
+                    <div class="question-container hidden" id="q9-container">
+                        <p class="font-semibold mb-3">9. All'arrivo in clinica, quale esame diagnostico aggiuntivo è fondamentale per confermare la gravità della compromissione intestinale e decidere per la chirurgia d'urgenza?</p>
+                        <div class="space-y-2">
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q9" value="a" class="mr-2"> Esami del sangue completi (emocromo e biochimico).</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q9" value="b" class="mr-2"> Gastroscopia.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q9" value="c" class="mr-2"> Ecografia addominale (FAST) e paracentesi con analisi del liquido peritoneale.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q9" value="d" class="mr-2"> Radiografie dell'addome.</label>
+                        </div>
+                        <div class="explanation" id="exp9"><b>Spiegazione:</b> L'ecografia può confermare la distensione e la dislocazione delle anse e valutare lo spessore della parete intestinale. L'analisi del liquido peritoneale è dirimente: un liquido sierosanguinolento, con aumento di proteine e lattati, indica sofferenza e necrosi della parete intestinale (lesione da strangolamento), rendendo la chirurgia non più procrastinabile.</div>
+                    </div>
+
+                    <!-- Domanda 10 -->
+                    <div class="question-container hidden" id="q10-container">
+                        <p class="font-semibold mb-3">10. Basandosi sulla valutazione completa in campo (dolore refrattario, parametri vitali e reperto rettale), qual è la conclusione clinica più appropriata e la conseguente comunicazione al proprietario?</p>
+                        <div class="space-y-2">
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q10" value="a" class="mr-2"> Concludere che si tratta di una colica medica grave e continuare con cicli di FANS ogni 4 ore.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q10" value="b" class="mr-2"> Spiegare al proprietario che il cavallo ha una prognosi infausta e che l'unica opzione è l'eutanasia.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q10" value="c" class="mr-2"> Comunicare che la diagnosi è incerta e che è meglio aspettare la mattina seguente per rivalutarlo.</label>
+                             <label class="block p-3 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer"><input type="radio" name="q10" value="d" class="mr-2"> Stabilire che si tratta di una "colica chirurgica", comunicando la necessità di un referaggio immediato, spiegandone urgenza, costi e prognosi.</label>
+                        </div>
+                        <div class="explanation" id="exp10"><b>Spiegazione:</b> La sintesi di tutti i dati raccolti porta a una sola conclusione: il cavallo ha una lesione che non può essere risolta con farmaci. Il ruolo del veterinario in campo è riconoscere questo punto critico, classificare il caso come chirurgico e comunicare in modo chiaro ed efficace al proprietario la necessità di un intervento immediato, che rappresenta l'unica possibilità di salvare l'animale.</div>
+                    </div>
+                </form>
+
+                <!-- Risultati Finali -->
+                <div id="results" class="hidden mt-8 text-center p-6 bg-blue-50 rounded-lg">
+                    <h3 class="text-2xl font-bold">Risultato Finale</h3>
+                    <p id="score" class="text-3xl font-bold text-indigo-600 my-2"></p>
+                    <p id="feedback" class="text-gray-700"></p>
+                </div>
+            </section>
+            
+            <!-- Sezione Riepilogo e Download -->
+            <section id="summary" class="mt-12 pt-8 border-t hidden">
+                 <h2 class="text-2xl font-bold mb-4 text-gray-800">Conclusioni e Materiali</h2>
+                 <div class="grid md:grid-cols-2 gap-8">
+                     <div class="bg-gray-50 p-6 rounded-lg border border-gray-200" id="case-summary-content">
+                         <h3 class="font-bold text-lg mb-2">Riepilogo del Caso Clinico</h3>
+                         <p>Il caso di "Fulmine" è un esempio classico di colica acuta grave che evolve verso la necessità di un referaggio. I punti chiave che hanno indirizzato la diagnosi in campo sono stati: <br>
+                         1. <strong>Dolore severo e refrattario</strong> alla terapia analgesica iniziale. <br> 
+                         2. <strong>Parametri cardiovascolari compromessi</strong> (FC 60 bpm, mucose congeste), indicativi di shock. <br> 
+                         3. <strong>Reperto palpatorio rettale</strong> di una dislocazione e distensione gassosa del grosso colon. <br> 
+                         La decisione tempestiva di identificare il caso come chirurgico e di organizzarne il trasporto a una struttura specializzata è stata l'azione cruciale per la prognosi. Questo caso sottolinea l'importanza di una valutazione rapida e sistematica per differenziare una colica medica da una chirurgica direttamente in campo e agire di conseguenza.</p>
+                     </div>
+                     <div class="bg-gray-50 p-6 rounded-lg border border-gray-200" id="colic-summary-content">
+                         <h3 class="font-bold text-lg mb-2">Approfondimento: Colica Medica vs. Chirurgica</h3>
+                         <p>La sfida principale nella gestione della colica in campo è decidere se il paziente può essere gestito medicalmente o se necessita di un referaggio urgente. <br>
+                         <strong>Indicatori di Colica CHIRURGICA (Red Flags):</strong><br>
+                         - <strong>Dolore:</strong> Da moderato a severo, persistente o refrattario agli analgesici. <br>
+                         - <strong>FC:</strong> Costantemente > 50-60 bpm. <br>
+                         - <strong>Stato emodinamico:</strong> Mucose congeste o cianotiche, TRC > 2 sec, polso debole. <br>
+                         - <strong>Sondaggio N-G:</strong> Presenza di reflusso netto (> 2L). <br>
+                         - <strong>Esplorazione Rettale:</strong> Anse intestinali molto distese (gas/liquido), dislocate, parete edematosa. <br>
+                         - <strong>Liquido Peritoneale (se prelevato):</strong> Aspetto torbido, sierosanguinolento, aumento proteine/lattati. <br>
+                         Una colica medica, al contrario, presenta solitamente dolore lieve-moderato che risponde bene agli analgesici, parametri vitali quasi normali e nessun reperto rettale grave. La tempestività nel riconoscere questi segni è l'elemento che più influenza la sopravvivenza del paziente.</p>
+                     </div>
+                 </div>
+                 <div class="text-center mt-8 flex justify-center gap-4">
+                     <button id="download-case-btn" class="bg-gray-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-800 btn">Scarica Riepilogo Caso</button>
+                     <button id="download-colic-btn" class="bg-gray-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-800 btn">Scarica Approfondimento</button>
+                 </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizForm = document.getElementById('quiz-form');
+            const resultsDiv = document.getElementById('results');
+            const scoreP = document.getElementById('score');
+            const feedbackP = document.getElementById('feedback');
+            const questionContainers = document.querySelectorAll('.question-container');
+            const summarySection = document.getElementById('summary');
+            const totalQuestions = questionContainers.length;
+            let currentQuestionIndex = 0;
+            let score = 0;
+            
+            const correctAnswers = {
+                q1: 'b', q2: 'c', q3: 'd', q4: 'a', q5: 'c',
+                q6: 'b', q7: 'a', q8: 'd', q9: 'c', q10: 'd'
+            };
+
+            quizForm.addEventListener('change', (event) => {
+                if (event.target.type === 'radio') {
+                    const questionName = event.target.name;
+                    const questionNumber = parseInt(questionName.substring(1));
+
+                    if (questionNumber - 1 !== currentQuestionIndex) {
+                        return; // Process questions in order
+                    }
+
+                    const userAnswer = event.target.value;
+                    const correctAnswer = correctAnswers[questionName];
+                    const questionContainer = document.getElementById(questionName + '-container');
+                    const explanation = document.getElementById('exp' + questionNumber);
+                    const selectedLabel = document.querySelector(`label:has(input[name="${questionName}"][value="${userAnswer}"])`);
+                    const correctLabel = document.querySelector(`label:has(input[name="${questionName}"][value="${correctAnswer}"])`);
+                    const radioButtons = questionContainer.querySelectorAll('input[type="radio"]');
+
+                    radioButtons.forEach(rb => rb.disabled = true);
+                    
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                        selectedLabel.classList.add('correct-answer');
+                    } else {
+                        selectedLabel.classList.add('wrong-answer');
+                        correctLabel.classList.add('correct-answer');
+                    }
+
+                    explanation.style.display = 'block';
+                    
+                    currentQuestionIndex++;
+
+                    setTimeout(() => {
+                        if (currentQuestionIndex < totalQuestions) {
+                            const nextQuestionContainer = questionContainers[currentQuestionIndex];
+                            nextQuestionContainer.classList.remove('hidden');
+                            nextQuestionContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } else {
+                            showFinalResults();
+                        }
+                    }, 2000); // Wait 2 seconds before showing the next question
+                }
+            });
+
+            function showFinalResults() {
+                scoreP.textContent = `${score} / ${totalQuestions}`;
+                
+                if (score === totalQuestions) {
+                    feedbackP.textContent = "Eccellente! Hai dimostrato una solida comprensione della gestione di un caso di colica chirurgica.";
+                } else if (score >= 7) {
+                    feedbackP.textContent = "Ottimo lavoro! Hai gestito il caso in modo efficace. Rivedi le risposte errate per perfezionare le tue conoscenze.";
+                } else {
+                    feedbackP.textContent = "Buon tentativo. Questo era un caso complesso. Rivedi attentamente le spiegazioni per comprendere i punti chiave.";
+                }
+
+                resultsDiv.classList.remove('hidden');
+                summarySection.classList.remove('hidden');
+                resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            function downloadText(filename, text) {
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                element.setAttribute('download', filename);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            }
+
+            document.getElementById('download-case-btn').addEventListener('click', function() {
+                const content = document.getElementById('case-summary-content').innerText;
+                downloadText('riepilogo_caso_fulmine.txt', content);
+            });
+
+            document.getElementById('download-colic-btn').addEventListener('click', function() {
+                const content = document.getElementById('colic-summary-content').innerText;
+                downloadText('approfondimento_colica_cavallo.txt', content);
+            });
+        });
+    </script>
+
+</body>
+</html>
