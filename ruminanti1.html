@@ -3,436 +3,357 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Veterinario: Medicina Ovina</title>
+    <title>Caso Clinico Interattivo: Pecora con Zoppia</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
+        }
+        .case-section {
+            background-color: #f9fafb;
+            border-left: 4px solid #4f46e5;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
+        }
+        .quiz-option.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+        .feedback {
+            padding: 0.75rem 1.25rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+        .feedback.correct {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .feedback.incorrect {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+        .summary-section {
             background-color: #f3f4f6;
-            color: #1f2937;
+            border: 1px solid #d1d5db;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-radius: 0.5rem;
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #printable-summary, #printable-summary * { visibility: visible; }
+            #printable-summary { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-100 text-gray-800">
 
-    <div id="app" class="bg-white rounded-xl shadow-lg w-full max-w-4xl overflow-hidden md:flex">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
-        <div class="bg-gray-800 text-white p-6 md:w-1/4 flex flex-col justify-between">
-            <div>
-                <h1 class="text-3xl font-bold mb-2">Caso Clinico</h1>
-                <p class="text-gray-400 text-sm">Medicina Ovina</p>
-                <div class="mt-8 space-y-4 text-sm font-medium">
-                    <div id="step1-nav" class="flex items-center space-x-2 text-white">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white">1</span>
-                        <span>Presentazione del caso</span>
-                    </div>
-                    <div id="step2-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">2</span>
-                        <span>Esame Obiettivo</span>
-                    </div>
-                    <div id="step3-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">3</span>
-                        <span>Piani Diagnostici</span>
-                    </div>
-                    <div id="step4-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">4</span>
-                        <span>Terapia & Prognosi</span>
-                    </div>
-                    <div id="step5-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">5</span>
-                        <span>Riepilogo del caso</span>
-                    </div>
-                </div>
-            </div>
-            <div id="loading" class="hidden flex items-center justify-center p-4">
-                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-                <span class="ml-3 text-gray-400">Caricamento...</span>
-            </div>
-        </div>
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600">Caso Clinico Veterinario Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2">Risolvi il caso passo dopo passo</p>
+        </header>
 
-        <div class="md:w-3/4 p-6 md:p-10 flex flex-col justify-between">
-            <div id="case-content">
+        <main id="case-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+
+            <!-- Sezione 1: Anamnesi (visibile da subito) -->
+            <section id="anamnesi" class="case-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
+                <div class="space-y-3 text-gray-700">
+                    <p><strong>Paziente:</strong> Pecora di razza Sarda, 4 anni, in lattazione da circa 60 giorni.</p>
+                    <p><strong>Allevamento:</strong> Semi-estensivo.</p>
+                    <p><strong>Motivo della visita:</strong> L'allevatore riferisce che la pecora presenta da circa 24 ore zoppia marcata all'arto posteriore sinistro, si isola dal gregge, è abbattuta e anoressica. La produzione di latte è quasi azzerata.</p>
                 </div>
-            <div class="flex justify-between mt-8 pt-4 border-t border-gray-200">
-                <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg shadow-sm hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Indietro</button>
-                <button id="next-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Avanti</button>
+            </section>
+            
+            <!-- Sezione 2: Visita Clinica (nascosta) -->
+            <section id="visita-clinica" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">2. Esame Clinico</h2>
+                 <div class="space-y-2 text-gray-700">
+                    <p>L'animale si presenta in decubito sternale, restio ad alzarsi. Si evidenziano marcati segni di malessere generale.</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Parametri vitali:</strong> T° 41.5°C, FC 120 bpm, FR 60 apm. Mucose congeste.</li>
+                        <li><strong>Esame della mammella:</strong> La ghiandola mammaria sinistra è marcatamente aumentata di volume, calda, edematosa e molto dolente alla palpazione. La cute sovrastante appare di colore rosso scuro-violaceo. La ghiandola destra è normale.</li>
+                        <li><strong>Esame del latte:</strong> Alla mungitura, dalla mammella sinistra fuoriesce un secreto acquoso, giallastro, maleodorante, contenente coaguli e fiocchi di fibrina.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Sezione 3: Iter Diagnostico (nascosta) -->
+            <section id="iter-diagnostico" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">3. Approccio Diagnostico</h2>
+                <p class="text-gray-700">Oltre all'esame clinico, si decide di effettuare alcuni test rapidi e di prelevare un campione di latte per analisi di laboratorio.</p>
+            </section>
+
+            <!-- Sezione 4: Risultati Test (nascosta) -->
+             <section id="risultati-test" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">4. Risultati degli Esami</h2>
+                <div class="space-y-3 text-gray-700">
+                    <p><strong>California Mastitis Test (CMT):</strong> Eseguito sul latte di entrambe le ghiandole, il test risulta fortemente positivo (reazione a gel denso, +++) per la mammella sinistra, mentre è negativo per la destra.</p>
+                    <p><strong>Esame batteriologico:</strong> Il campione di latte, inviato al laboratorio, rileva una crescita massiva di <em>Staphylococcus aureus</em>.</p>
+                </div>
+            </section>
+
+            <!-- Contenitore del Quiz -->
+            <div id="quiz-container" class="mt-6"></div>
+
+            <!-- Sezione Finale: Diagnosi e Riassunto (nascosta) -->
+            <div id="final-summary" class="summary-section hidden-section">
+                <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Caso Risolto!</h2>
+                <p class="text-center text-xl mb-4">Diagnosi: <strong>Mastite gangrenosa acuta da <em>Staphylococcus aureus</em></strong></p>
+                
+                <div id="printable-summary">
+                    <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Mastite Gangrenosa nella Pecora</h2>
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
+                            <p class="text-gray-700">È una forma iperacuta e grave di mastite, spesso causata da batteri produttori di tossine come <em>Staphylococcus aureus</em> o alcuni <em>Clostridium</em>. Le tossine causano una rapida necrosi (morte) del tessuto mammario, trombosi dei vasi sanguigni e il rilascio di gas, portando alla gangrena della ghiandola.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Segni Clinici</h3>
+                            <p class="text-gray-700">I segni sistemici sono gravi e rapidi: febbre alta, depressione, anoressia, tachicardia. La mammella colpita inizialmente è calda, rossa e dolente, ma evolve rapidamente diventando fredda, insensibile e di colore blu-nerastro a causa della necrosi. Il secreto è acquoso e maleodorante. La zoppia è comune a causa del dolore e dell'ingombro della mammella.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Terapia e Prognosi</h3>
+                            <p class="text-gray-700">La terapia deve essere immediata e aggressiva, focalizzata sul supporto sistemico: fluidoterapia, antibiotici ad ampio spettro per via endovenosa, antinfiammatori potenti. La prognosi per la vita dell'animale è riservata e dipende dalla rapidità dell'intervento. La prognosi per la funzionalità della ghiandola colpita è infausta: il tessuto necrotico non si rigenera e andrà incontro a sequestro o richiederà un'ablazione chirurgica (mastectomia).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-8 no-print">
+                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">Stampa o Salva Riassunto</button>
+                </div>
             </div>
 
-            <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center p-4">
-                <div class="bg-white rounded-lg p-6 shadow-xl w-full max-w-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 id="modal-title" class="text-xl font-bold"></h3>
-                        <button id="close-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
-                    </div>
-                    <p id="modal-body" class="text-gray-600 mb-4"></p>
-                    <div class="flex justify-end">
-                        <button id="modal-ok-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">OK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
+        
+        <footer class="text-center mt-8 text-sm text-gray-500 no-print">
+            <p>Questo caso clinico è stato generato a scopo didattico.</p>
+        </footer>
     </div>
 
-    <script>
-        const app = document.getElementById('app');
-        const caseContent = document.getElementById('case-content');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const loading = document.getElementById('loading');
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalBody = document.getElementById('modal-body');
-        const closeModalBtn = document.getElementById('close-modal');
-        const modalOkBtn = document.getElementById('modal-ok-btn');
-        
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=';
-        // INSERISCI QUI LA TUA CHIAVE API DI GEMINI
-        const apiKey = 'AIzaSyBHOCUN8QGnROL0gA0aXntB2skJpVcNTJw'; // <-- Incolla qui la tua chiave API
-        // FINE CHIAVE API
+<script>
+const quizData = [
+    {
+        question: "1/10: In base all'anamnesi, quale sintomo è più indicativo di una patologia grave e sistemica piuttosto che di un semplice problema locale?",
+        options: [
+            "La zoppia",
+            "La produzione di latte azzerata",
+            "L'isolamento dal gregge, l'abbattimento e l'anoressia",
+            "L'età dell'animale"
+        ],
+        answer: 2,
+        feedback: "Corretto. Mentre la zoppia e il calo di latte possono avere molte cause, i gravi segni sistemici indicano che l'intero organismo è compromesso, suggerendo una tossiemia o setticemia.",
+        reveals: "visita-clinica"
+    },
+    {
+        question: "2/10: La zoppia all'arto posteriore sinistro in una pecora con mastite è spesso definita 'zoppia da mastite'. Perché si manifesta?",
+        options: [
+            "Per un'infezione batterica all'articolazione",
+            "Per un meccanismo antalgico: l'animale allarga l'arto per non toccare la mammella dolente e ingrossata",
+            "Per un danno neurologico causato dalle tossine",
+            "Perché la mastite causa sempre artrite"
+        ],
+        answer: 1,
+        feedback: "Esatto. Il dolore e l'ingombro meccanico della mammella infiammata portano l'animale a modificare la propria andatura per evitare il contatto e alleviare il dolore.",
+        reveals: null
+    },
+    {
+        question: "3/10: I parametri vitali (T° 41.5°C, FC 120, FR 60) e l'aspetto della mammella (calda, edematosa, rosso-violacea) sono compatibili con quale forma di mastite?",
+        options: [
+            "Mastite subclinica",
+            "Mastite cronica",
+            "Mastite acuta/iperacuta",
+            "Un ascesso mammario localizzato"
+        ],
+        answer: 2,
+        feedback: "Perfetto. La febbre alta e i segni sistemici, uniti ai classici segni dell'infiammazione acuta (calor, rubor, tumor, dolor), definiscono una mastite acuta.",
+        reveals: "iter-diagnostico"
+    },
+    {
+        question: "4/10: Qual è il test di campo più rapido ed economico per confermare un sospetto di mastite e valutare l'infiammazione della mammella?",
+        options: [
+            "Esame batteriologico",
+            "Conta delle cellule somatiche in laboratorio",
+            "California Mastitis Test (CMT)",
+            "Esame del sangue (emocromo)"
+        ],
+        answer: 2,
+        feedback: "Corretto. Il CMT è un test rapido che si esegue in stalla e rileva la presenza di un elevato numero di cellule somatiche (leucociti), indicando la presenza di un'infiammazione.",
+        reveals: "risultati-test"
+    },
+    {
+        question: "5/10: Un risultato di CMT fortemente positivo (+++) indica:",
+        options: [
+            "La presenza di un batterio specifico",
+            "Un'alta carica batterica",
+            "Un'elevatissima conta di cellule somatiche (> 5.000.000/ml)",
+            "La presenza di sangue nel latte"
+        ],
+        answer: 2,
+        feedback: "Esatto. La densità del gel che si forma nel test è direttamente proporzionale al numero di cellule somatiche, che sono un indice diretto della gravità dell'infiammazione.",
+        reveals: null
+    },
+    {
+        question: "6/10: Qual è l'agente eziologico più probabile in una mastite ovina così grave, con tendenza alla gangrena?",
+        options: [
+            "Streptococcus agalactiae",
+            "Mycoplasma agalactiae",
+            "Escherichia coli",
+            "Staphylococcus aureus"
+        ],
+        answer: 3,
+        feedback: "Corretto. Lo S. aureus è tristemente noto per la sua capacità di produrre tossine potenti (come l'alfa-tossina) che causano vasocostrizione, trombosi e necrosi tissutale, portando alla mastite gangrenosa.",
+        reveals: null
+    },
+    {
+        question: "7/10: L'evoluzione del colore della mammella da rosso-violaceo a blu-nerastro e freddo al tatto è un segno patognomonico di:",
+        options: [
+            "Guarigione e formazione di tessuto cicatriziale",
+            "Formazione di un ascesso",
+            "Necrosi tissutale e gangrena",
+            "Edema sottomammario"
+        ],
+        answer: 2,
+        feedback: "Perfetto. Il cambiamento di colore e la perdita di calore indicano la morte del tessuto (necrosi) a causa dell'interruzione dell'apporto di sangue, un segno tipico della gangrena.",
+        reveals: null
+    },
+    {
+        question: "8/10: Qual è l'approccio terapeutico più importante e urgente in questo caso?",
+        options: [
+            "Mungiture frequenti per svuotare la mammella",
+            "Somministrazione di antibiotici per via intramammaria",
+            "Una terapia sistemica aggressiva (antibiotici, antinfiammatori, fluidi) per contrastare la tossiemia",
+            "Applicare impacchi caldi sulla mammella"
+        ],
+        answer: 2,
+        feedback: "Esatto. La priorità assoluta è salvare la vita dell'animale, che è a rischio per shock tossico. La terapia sistemica è fondamentale, mentre il trattamento locale è secondario.",
+        reveals: null
+    },
+    {
+        question: "9/10: Quale antibiotico è generalmente considerato di prima scelta per le mastiti gravi da Stafilococchi in attesa di un antibiogramma?",
+        options: [
+            "Penicillina",
+            "Tetracicline",
+            "Sulfamidici",
+            "Oxacillina o altre penicilline penicillasi-resistenti"
+        ],
+        answer: 3,
+        feedback: "Corretto. Molti ceppi di S. aureus producono beta-lattamasi (penicillasi), enzimi che inattivano la penicillina standard. È quindi necessario usare antibiotici resistenti a questi enzimi.",
+        reveals: null
+    },
+    {
+        question: "10/10: Qual è la prognosi per la ghiandola mammaria sinistra?",
+        options: [
+            "Favorevole, tornerà a produrre latte dopo la terapia",
+            "Infausta, la ghiandola andrà incontro a necrosi e non sarà più produttiva",
+            "Riservata, potrebbe recuperare parzialmente la funzione",
+            "Buona, ma produrrà sempre latte di bassa qualità"
+        ],
+        answer: 1,
+        feedback: "Risposta corretta. Nella mastite gangrenosa, il tessuto mammario muore e non può rigenerarsi. L'obiettivo della terapia è salvare la vita dell'animale; la ghiandola è irrimediabilmente persa.",
+        reveals: "final-summary"
+    },
+];
 
-        let currentStep = 1;
+let currentQuestionIndex = 0;
+const quizContainer = document.getElementById('quiz-container');
 
-        // Funzione per mostrare il modal
-        const showModal = (title, message, isError = false) => {
-            modalTitle.textContent = title;
-            modalBody.innerHTML = message;
-            if (isError) {
-                modalTitle.classList.add('text-red-600');
-            } else {
-                modalTitle.classList.remove('text-red-600');
+function displayQuestion() {
+    if (currentQuestionIndex >= quizData.length) {
+        quizContainer.innerHTML = ''; // Quiz finished
+        return;
+    }
+
+    const currentQuiz = quizData[currentQuestionIndex];
+    let optionsHtml = '';
+    currentQuiz.options.forEach((option, index) => {
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+    });
+
+    quizContainer.innerHTML = `
+        <div class="quiz-card p-4 border rounded-lg bg-gray-50">
+            <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
+            <div class="options-container">${optionsHtml}</div>
+            <div class="feedback-container mt-2"></div>
+        </div>
+    `;
+
+    document.querySelectorAll('.quiz-option').forEach(button => {
+        button.addEventListener('click', checkAnswer);
+    });
+}
+
+function checkAnswer(event) {
+    const selectedOption = event.target;
+    const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
+    const currentQuiz = quizData[currentQuestionIndex];
+    const feedbackContainer = quizContainer.querySelector('.feedback-container');
+
+    // Disable all buttons after an answer is chosen
+    document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+
+    if (selectedAnswerIndex === currentQuiz.answer) {
+        selectedOption.classList.add('correct');
+        feedbackContainer.innerHTML = `
+            <div class="feedback correct">
+                ${currentQuiz.feedback}
+            </div>
+            <button id="next-question-btn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg w-full">
+                Prosegui
+            </button>
+        `;
+
+        document.getElementById('next-question-btn').addEventListener('click', () => {
+            if (currentQuiz.reveals) {
+                document.getElementById(currentQuiz.reveals).style.display = 'block';
             }
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
+            currentQuestionIndex++;
+            displayQuestion();
+        });
+    } else {
+        selectedOption.classList.add('incorrect');
+        feedbackContainer.innerHTML = `<div class="feedback incorrect">Risposta non corretta. Riprova a ragionare sul caso.</div>`;
+         setTimeout(() => { // Re-enable buttons to allow another try
+            document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = false);
+            selectedOption.classList.remove('incorrect');
+            feedbackContainer.innerHTML = '';
+        }, 2000);
+    }
+}
 
-        // Funzione per nascondere il modal
-        const hideModal = () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
+// Start the quiz
+window.onload = displayQuestion;
+</script>
 
-        closeModalBtn.addEventListener('click', hideModal);
-        modalOkBtn.addEventListener('click', hideModal);
-
-        // Funzione per effettuare la chiamata all'API di Gemini
-        const callGemini = async (prompt) => {
-            loading.classList.remove('hidden');
-            try {
-                const response = await fetch(API_URL + apiKey, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                    }),
-                });
-                const result = await response.json();
-                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nessuna risposta generata.';
-                return text;
-            } catch (error) {
-                console.error('Errore nella chiamata all\'API di Gemini:', error);
-                return 'Si è verificato un errore. Riprova più tardi.';
-            } finally {
-                loading.classList.add('hidden');
-            }
-        };
-
-        // Funzione per scaricare il riassunto
-        const downloadSummary = (content, filename) => {
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        };
-
-        // Contenuto delle diverse fasi del caso
-        const caseData = {
-            step1: {
-                title: 'Presentazione del Caso & Anamnesi',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Presentazione del Caso: Pecora "Bianca"</h2>
-                        <p class="text-gray-700">Una pecora di razza Sarda, di 3 anni, primipara, in lattazione (60 giorni post-parto), allevata in un gregge di 200 capi in provincia di Perugia, si presenta con una storia di **inappetenza, letargia e zoppia marcata all'arto posteriore sinistro** da circa 24 ore. L'allevatore ha notato che una mammella è gonfia e dolente.</p>
-                        <h3 class="text-xl font-semibold mt-6">Dati Aggiuntivi:</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Alimentazione:</strong> Pascolo e integrazione con fieno e concentrato.</li>
-                            <li><strong>Gestione:</strong> Ricovero notturno in stalla con lettiera permanente.</li>
-                            <li><strong>Stato riproduttivo:</strong> Lattazione avanzata, agnello sano.</li>
-                            <li><strong>Anamnesi remota:</strong> Nessun problema di salute recente, buone condizioni corporee.</li>
-                        </ul>
-                        <div class="mt-8">
-                            <label for="initial-hypothesis" class="block text-gray-700 font-semibold mb-2">Formulare le diagnosi differenziali più probabili in base all'anamnesi:</label>
-                            <textarea id="initial-hypothesis" rows="4" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                    </div>
-                `,
-                requiredInputId: 'initial-hypothesis'
-            },
-            step2: {
-                title: 'Esame Obiettivo',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Esame Obiettivo Generale e Speciale</h2>
-                        <p class="text-gray-700">Durante l'esame clinico, i seguenti dati sono stati rilevati:</p>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Temperatura Rettale:</strong> 40.5°C (febbre)</li>
-                            <li><strong>Frequenza Cardiaca:</strong> 90 bpm (tachicardia)</li>
-                            <li><strong>Frequenza Respiratoria:</strong> 40 rpm (tachipnea)</li>
-                            <li><strong>Condizioni generali:</strong> Animale depresso, debole, con mucose iperemiche.</li>
-                            <li><strong>Esame dell'arto posteriore sinistro:</strong> Zoppia di 4° grado (non poggia l'arto), articolazioni e zoccolo nella norma.</li>
-                            <li><strong>Esame della mammella:</strong> Ghiandola mammaria destra normale. Ghiandola mammaria sinistra **aumentata di volume, calda, tesa e estremamente dolente alla palpazione**. Il latte estratto è acquoso, di colore giallastro e contiene fiocchi.</li>
-                        </ul>
-                        <div class="mt-8">
-                            <label class="block text-gray-700 font-semibold mb-2">Quale patogeno è più frequentemente associato a mastiti gravi e gangrenose nelle pecore?</label>
-                            <div class="space-y-2">
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="streptococcus-uberis" class="mr-2"> Streptococcus uberis
-                                </label>
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="escherichia-coli" class="mr-2"> Escherichia coli
-                                </label>
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="staphylococcus-aureus" class="mr-2"> Staphylococcus aureus
-                                </label>
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="mannheimia-haemolytica" class="mr-2"> Mannheimia haemolytica
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                requiredInputId: 'eo-hypothesis',
-                correctAnswer: 'staphylococcus-aureus'
-            },
-            step3: {
-                title: 'Piani Diagnostici & Diagnosi',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Piani Diagnostici & Risultati</h2>
-                        <p class="text-gray-700">Considerando la gravità dei segni clinici, è stata raccolta un campione di latte dalla mammella affetta per l'esame batteriologico con antibiogramma. Tuttavia, in attesa dei risultati, è necessaria una diagnosi clinica presuntiva immediata.</p>
-                        <h3 class="text-xl font-semibold mt-6">Risultati dell'Esame Clinico:</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li>L'esame della mammella sinistra mostra aree di colore blu-violaceo e fredde al tatto.</li>
-                            <li>La pecora è in evidente stato di shock.</li>
-                        </ul>
-                        <div class="mt-8">
-                            <label class="block text-gray-700 font-semibold mb-2">Qual è la diagnosi definitiva basata su questi dati?</label>
-                            <textarea id="final-diagnosis" rows="3" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                    </div>
-                `,
-                requiredInputId: 'final-diagnosis'
-            },
-            step4: {
-                title: 'Terapia & Prognosi',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Terapia & Prognosi</h2>
-                        <p class="text-gray-700">La diagnosi è **mastite gangrenosa acuta**. Ora è necessario impostare un piano terapeutico urgente, considerando la gravità della situazione. Quale sarebbe il tuo approccio?</p>
-                        <div class="mt-4">
-                            <label for="therapy-plan" class="block text-gray-700 font-semibold mb-2">Proponi un piano terapeutico urgente:</label>
-                            <textarea id="therapy-plan" rows="5" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                        <button id="show-outcome-btn" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Mostra Esito del Caso</button>
-                        <div id="case-outcome" class="hidden mt-6">
-                            <h3 class="text-xl font-semibold">Esito del caso:</h3>
-                            <p class="text-gray-700 mt-2">Alla pecora è stata somministrata una terapia di supporto intensiva (fluidoterapia endovenosa, antinfiammatori non steroidei) e terapia antibiotica sistemica ad ampio spettro. Nonostante gli sforzi, le condizioni dell'animale sono peggiorate a causa dello shock settico e la pecora è deceduta dopo 36 ore. La prognosi per le mastiti gangrenose acute è spesso **sfavorevole**.</p>
-                        </div>
-                    </div>
-                `
-            },
-            step5: {
-                title: 'Riepilogo del caso & Risorse',
-                content: `
-                    <div class="space-y-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Approfondimento e Riepilogo Finale</h2>
-                        <p class="text-gray-700">Ora che il caso è stato risolto, puoi approfondire la tua comprensione della patologia e ottenere un riassunto dettagliato.</p>
-                        <div class="space-y-4 pt-4 border-t border-gray-200">
-                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Approfondimento con Gemini</h3>
-                            <button id="generate-dd-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition-colors w-full">✨ Visualizza le Diagnosi Differenziali (DD) del caso ✨</button>
-                            <div id="dd-output" class="mt-4 p-4 bg-gray-50 rounded-lg text-gray-700 hidden"></div>
-                            <button id="explain-rationale-btn" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition-colors w-full">✨ Spiega il Razionale Diagnostico ✨</button>
-                            <div id="rationale-output" class="mt-4 p-4 bg-gray-50 rounded-lg text-gray-700 hidden"></div>
-                        </div>
-                        <div class="space-y-4 pt-4 border-t border-gray-200">
-                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Riepilogo della Patologia</h3>
-                            <button id="generate-summary-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors w-full">📝 Genera Riepilogo su Mastite Ovina 📝</button>
-                            <div id="summary-output" class="mt-4 p-4 bg-gray-50 rounded-lg text-gray-700 hidden"></div>
-                            <button id="download-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors w-full hidden">⬇️ Scarica il riassunto (.txt)</button>
-                        </div>
-                        <div class="mt-8 pt-4 border-t border-gray-200">
-                            <a href="index.html" class="block w-full py-3 px-6 bg-gray-200 text-gray-700 rounded-lg shadow-md hover:bg-gray-300 transition-colors text-center font-semibold">
-                                Torna alla pagina principale
-                            </a>
-                        </div>
-                    </div>
-                `
-            }
-        };
-
-        const renderStep = (step) => {
-            const data = caseData[`step${step}`];
-            if (!data) return;
-
-            // Aggiorna la navigazione
-            document.querySelectorAll('[id^="step"]').forEach((el, index) => {
-                const navStep = index + 1;
-                const circle = el.querySelector('span:first-child');
-                const text = el.querySelector('span:last-child');
-                if (navStep === step) {
-                    el.classList.add('text-white');
-                    el.classList.remove('text-gray-500');
-                    circle.classList.add('bg-blue-500');
-                    circle.classList.remove('bg-gray-600');
-                } else if (navStep < step) {
-                    el.classList.remove('text-white');
-                    el.classList.remove('text-gray-500');
-                    el.classList.add('text-green-500');
-                    circle.classList.add('bg-green-600');
-                    circle.classList.remove('bg-gray-600');
-                } else {
-                    el.classList.remove('text-white');
-                    el.classList.add('text-gray-500');
-                    circle.classList.remove('bg-blue-500');
-                    circle.classList.add('bg-gray-600');
-                }
-            });
-
-            caseContent.innerHTML = data.content;
-            prevBtn.disabled = step === 1;
-            nextBtn.disabled = step === Object.keys(caseData).length;
-            if (step === Object.keys(caseData).length) {
-                nextBtn.classList.add('hidden');
-            } else {
-                nextBtn.classList.remove('hidden');
-            }
-
-            // Aggiungi event listener per i nuovi pulsanti solo nello step finale
-            if (step === 5) {
-                const generateDdBtn = document.getElementById('generate-dd-btn');
-                const ddOutput = document.getElementById('dd-output');
-                if (generateDdBtn) {
-                    generateDdBtn.addEventListener('click', async () => {
-                        const prompt = `Agisci come un esperto veterinario degli ovini. Fornisci un elenco di 5 diagnosi differenziali per una pecora in lattazione con mastite acuta e grave, febbre e zoppia. Per ogni diagnosi, spiega brevemente perché è una possibilità in questo caso specifico e il meccanismo fisiopatologico dietro ai sintomi. Usa un formato di lista.`;
-                        const response = await callGemini(prompt);
-                        ddOutput.innerHTML = response.replace(/\n/g, '<br>');
-                        ddOutput.classList.remove('hidden');
-                    });
-                }
-
-                const explainRationaleBtn = document.getElementById('explain-rationale-btn');
-                const rationaleOutput = document.getElementById('rationale-output');
-                if (explainRationaleBtn) {
-                    explainRationaleBtn.addEventListener('click', async () => {
-                        const prompt = `Spiega, in circa 100 parole e in modo conciso per uno studente di veterinaria, perché la rapida progressione dei sintomi (febbre, zoppia, necrosi mammaria) e il quadro clinico generale della pecora indicano una mastite gangrenosa acuta come diagnosi più probabile, anche prima dei risultati dell'antibiogramma.`;
-                        const response = await callGemini(prompt);
-                        rationaleOutput.innerHTML = response.replace(/\n/g, '<br>');
-                        rationaleOutput.classList.remove('hidden');
-                    });
-                }
-
-                const generateSummaryBtn = document.getElementById('generate-summary-btn');
-                const summaryOutput = document.getElementById('summary-output');
-                const downloadBtn = document.getElementById('download-btn');
-                if (generateSummaryBtn) {
-                    generateSummaryBtn.addEventListener('click', async () => {
-                        const prompt = `Agisci come un esperto veterinario degli ovini. Fornisci un riassunto dettagliato ma conciso sulla mastite gangrenosa acuta nelle pecore, includendo la sua eziologia (i principali patogeni coinvolti come Staphylococcus aureus), la fisiopatologia (il ruolo delle tossine batteriche e l'ischemia tissutale), i segni clinici tipici e le principali opzioni terapeutiche, comprese quelle chirurgiche come la mastectomia. Menziona anche la prognosi. Presenta il tutto in paragrafi separati e chiari.`;
-                        const response = await callGemini(prompt);
-                        summaryOutput.innerHTML = response.replace(/\n/g, '<br>');
-                        summaryOutput.classList.remove('hidden');
-                        downloadBtn.classList.remove('hidden');
-                    });
-                }
-
-                if (downloadBtn) {
-                    downloadBtn.addEventListener('click', () => {
-                        const summaryText = summaryOutput.innerText;
-                        if (summaryText) {
-                            downloadSummary(summaryText, 'riassunto_mastite_ovina.txt');
-                        }
-                    });
-                }
-            }
-            
-            // Logica per lo step 4: abilita il pulsante solo dopo che l'utente ha scritto nel campo
-            if (step === 4) {
-                const therapyPlanTextarea = document.getElementById('therapy-plan');
-                const showOutcomeBtn = document.getElementById('show-outcome-btn');
-                const caseOutcome = document.getElementById('case-outcome');
-
-                const checkInput = () => {
-                    if (therapyPlanTextarea.value.trim() !== '') {
-                        showOutcomeBtn.disabled = false;
-                    } else {
-                        showOutcomeBtn.disabled = true;
-                    }
-                };
-
-                therapyPlanTextarea.addEventListener('input', checkInput);
-                showOutcomeBtn.addEventListener('click', () => {
-                    caseOutcome.classList.remove('hidden');
-                    showOutcomeBtn.disabled = true;
-                });
-                checkInput();
-            }
-        };
-
-        const validateStep = (step) => {
-            const data = caseData[`step${step}`];
-            if (!data.requiredInputId) return true;
-
-            const inputElement = document.getElementById(data.requiredInputId);
-            if (!inputElement) return true;
-
-            if (inputElement.type === 'textarea') {
-                return inputElement.value.trim() !== '';
-            } else if (inputElement.type === 'radio') {
-                const checkedRadio = document.querySelector(`input[name="${data.requiredInputId}"]:checked`);
-                return checkedRadio !== null;
-            }
-            return false;
-        };
-
-        const handleNext = () => {
-            if (currentStep === 2) {
-                const selectedAnswer = document.querySelector('input[name="eo-hypothesis"]:checked')?.value;
-                if (selectedAnswer !== caseData.step2.correctAnswer) {
-                    showModal('Risposta Sbagliata', 'Hai selezionato il patogeno sbagliato. Rivedi i tuoi appunti sulla mastite ovina e riprova!');
-                    return;
-                }
-            }
-
-            if (validateStep(currentStep)) {
-                loading.classList.remove('hidden');
-                setTimeout(() => {
-                    loading.classList.add('hidden');
-                    if (currentStep < Object.keys(caseData).length) {
-                        currentStep++;
-                        renderStep(currentStep);
-                    }
-                }, 1000);
-            } else {
-                showModal('Attenzione!', 'Per favora, compila il campo richiesto prima di procedere.');
-            }
-        };
-
-        const handlePrev = () => {
-            if (currentStep > 1) {
-                currentStep--;
-                renderStep(currentStep);
-            }
-        };
-
-        prevBtn.addEventListener('click', handlePrev);
-        nextBtn.addEventListener('click', handleNext);
-
-        // Inizializza l'applicazione
-        renderStep(currentStep);
-    </script>
 </body>
 </html>
