@@ -3,438 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Veterinario Interattivo</title>
+    <title>Caso Clinico Interattivo: Cavallo con Rumore Respiratorio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
+        }
+        .case-section {
+            background-color: #f9fafb;
+            border-left: 4px solid #4f46e5;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .quiz-option:hover {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
+        }
+        .quiz-option.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+        .feedback {
+            padding: 0.75rem 1.25rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+        .feedback.correct {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .feedback.incorrect {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+        .summary-section {
             background-color: #f3f4f6;
-            color: #1f2937;
+            border: 1px solid #d1d5db;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-radius: 0.5rem;
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #printable-summary, #printable-summary * { visibility: visible; }
+            #printable-summary { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-100 text-gray-800">
 
-    <div id="app" class="bg-white rounded-xl shadow-lg w-full max-w-4xl overflow-hidden md:flex">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
-        <!-- Sidebar di navigazione -->
-        <div class="bg-gray-800 text-white p-6 md:w-1/4 flex flex-col justify-between">
-            <div>
-                <h1 class="text-3xl font-bold mb-2">Caso Clinico</h1>
-                <p class="text-gray-400 text-sm">Patologia Respiratoria Equina</p>
-                <div class="mt-8 space-y-4 text-sm font-medium">
-                    <div id="step1-nav" class="flex items-center space-x-2 text-white">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white">1</span>
-                        <span>Presentazione del caso</span>
-                    </div>
-                    <div id="step2-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">2</span>
-                        <span>Esame Obiettivo</span>
-                    </div>
-                    <div id="step3-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">3</span>
-                        <span>Piani Diagnostici</span>
-                    </div>
-                    <div id="step4-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">4</span>
-                        <span>Terapia & Prognosi</span>
-                    </div>
-                    <div id="step5-nav" class="flex items-center space-x-2 text-gray-500">
-                        <span class="w-6 h-6 flex items-center justify-center rounded-full bg-gray-600 text-white">5</span>
-                        <span>Riepilogo del caso</span>
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600">Caso Clinico Veterinario Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2">Risolvi il caso passo dopo passo</p>
+        </header>
+
+        <main id="case-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+
+            <!-- Sezione 1: Anamnesi (visibile da subito) -->
+            <section id="anamnesi" class="case-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
+                <div class="space-y-3 text-gray-700">
+                    <p><strong>Paziente:</strong> Cavallo, maschio castrone, Purosangue Inglese di 3 anni.</p>
+                    <p><strong>Disciplina:</strong> Cavallo da galoppo in piena attività agonistica.</p>
+                    <p><strong>Motivo della visita:</strong> L'allenatore riferisce un calo delle performance e la comparsa di un rumore respiratorio "simile a un fischio o a un ruggito" che si manifesta solo durante il lavoro intenso, soprattutto in fase inspiratoria.</p>
+                </div>
+            </section>
+            
+            <!-- Sezione 2: Visita Clinica (nascosta) -->
+            <section id="visita-clinica" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">2. Esame Clinico a Riposo</h2>
+                 <div class="space-y-2 text-gray-700">
+                    <p>L'esame obiettivo generale a riposo non evidenzia alcuna anomalia.</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Atteggiamento:</strong> Vigile e attento.</li>
+                        <li><strong>Parametri vitali:</strong> FC 36 bpm, FR 12 apm, T° 37.8°C (tutti nella norma).</li>
+                        <li><strong>Auscultazione polmonare:</strong> Murmure vescicolare normale in entrambi i campi polmonari.</li>
+                        <li><strong>Ispezione:</strong> Nessuno scolo nasale, nessuna tosse.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Sezione 3: Iter Diagnostico (nascosta) -->
+            <section id="iter-diagnostico" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">3. Approccio Diagnostico</h2>
+                <p class="text-gray-700">Data la natura dinamica del problema (compare solo sotto sforzo), si decide di procedere con un esame endoscopico delle prime vie aeree, sia a riposo che durante l'esercizio su treadmill.</p>
+            </section>
+
+            <!-- Sezione 4: Risultati Endoscopia (nascosta) -->
+             <section id="risultati-endoscopia" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">4. Risultati dell'Esame Endoscopico</h2>
+                <div class="space-y-3 text-gray-700">
+                    <p><strong>Endoscopia a riposo:</strong> L'anatomia della laringe appare normale. Entrambe le cartilagini aritenoidi sono simmetriche e rispondono correttamente al test di deglutizione e di occlusione delle narici. Lo "slap test" controlaterale evoca una normale e simmetrica abduzione dell'aritenoide. La funzionalità laringea viene classificata come Grado I secondo la scala di Havemeyer.</p>
+                    <p><strong>Endoscopia durante esercizio:</strong> Al galoppo, si osserva che la cartilagine aritenoide sinistra non riesce a mantenere la massima abduzione (apertura), mostrando un'evidente asincronia con la controlaterale. Durante la fase inspiratoria, collassa progressivamente verso la linea mediana, causando una significativa ostruzione del lume laringeo. La condizione viene classificata come Grado C secondo la classificazione per l'endoscopia dinamica.</p>
+                </div>
+            </section>
+
+            <!-- Contenitore del Quiz -->
+            <div id="quiz-container" class="mt-6"></div>
+
+            <!-- Sezione Finale: Diagnosi e Riassunto (nascosta) -->
+            <div id="final-summary" class="summary-section hidden-section">
+                <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Caso Risolto!</h2>
+                <p class="text-center text-xl mb-4">Diagnosi: <strong>Neuropatia Laringea Ricorrente (RLN) Sinistra - Emiplegia Laringea</strong></p>
+                
+                <div id="printable-summary">
+                    <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Neuropatia Laringea Ricorrente (RLN)</h2>
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Cos'è la RLN?</h3>
+                            <p class="text-gray-700">Comunemente nota come "corneggio" o "roaring", è una patologia causata dalla progressiva degenerazione del nervo laringeo ricorrente (quasi sempre il sinistro) che innerva i muscoli abduttori della laringe. La conseguente paralisi del muscolo cricoaritenoideo dorsale impedisce la completa apertura della laringe durante l'inspirazione forzata, causando un'ostruzione e il tipico rumore respiratorio.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Diagnosi e Classificazione</h3>
+                            <p class="text-gray-700">La diagnosi di certezza si ottiene solo con l'<strong>endoscopia dinamica</strong> (durante esercizio), che permette di visualizzare il collasso dell'aritenoide. La gravità viene classificata con scale specifiche (es. scala di Havemeyer a riposo, scala A-D in esercizio), fondamentali per la scelta terapeutica e la prognosi.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Terapia e Prognosi</h3>
+                            <p class="text-gray-700">La terapia è chirurgica. L'intervento più comune è la <strong>laringoplastica ("tie-back")</strong>, che consiste nel fissare l'aritenoide paralizzata in una posizione di perenne abduzione tramite una protesi. La prognosi per il ritorno all'attività sportiva dopo la chirurgia è generalmente da buona a riservata, a seconda della gravità, della disciplina e delle possibili complicanze post-operatorie (es. tosse cronica).</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="loading" class="hidden flex items-center justify-center p-4">
-                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-                <span class="ml-3 text-gray-400">Caricamento...</span>
-            </div>
-        </div>
-
-        <!-- Contenuto principale del caso -->
-        <div class="md:w-3/4 p-6 md:p-10 flex flex-col justify-between">
-            <div id="case-content">
-                <!-- I contenuti delle varie sezioni saranno inseriti qui -->
-            </div>
-            <div class="flex justify-between mt-8 pt-4 border-t border-gray-200">
-                <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg shadow-sm hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Indietro</button>
-                <button id="next-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Avanti</button>
-            </div>
-
-            <!-- Modal per messaggi e feedback -->
-            <div id="modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center p-4">
-                <div class="bg-white rounded-lg p-6 shadow-xl w-full max-w-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 id="modal-title" class="text-xl font-bold"></h3>
-                        <button id="close-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
-                    </div>
-                    <p id="modal-body" class="text-gray-600 mb-4"></p>
-                    <div class="flex justify-end">
-                        <button id="modal-ok-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">OK</button>
-                    </div>
+                
+                <div class="text-center mt-8 no-print">
+                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">Stampa o Salva Riassunto</button>
                 </div>
             </div>
-        </div>
+
+        </main>
+        
+        <footer class="text-center mt-8 text-sm text-gray-500 no-print">
+            <p>Questo caso clinico è stato generato a scopo didattico.</p>
+        </footer>
     </div>
 
-    <script>
-        const app = document.getElementById('app');
-        const caseContent = document.getElementById('case-content');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const loading = document.getElementById('loading');
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalBody = document.getElementById('modal-body');
-        const closeModalBtn = document.getElementById('close-modal');
-        const modalOkBtn = document.getElementById('modal-ok-btn');
-        
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=';
-        const apiKey = 'AIzaSyBHOCUN8QGnROL0gA0aXntB2skJpVcNTJw';
+<script>
+const quizData = [
+    {
+        question: "1/10: Basandoti su anamnesi e segnalamento, qual è il dato più importante per orientare il sospetto diagnostico?",
+        options: [
+            "L'età del cavallo",
+            "La razza Purosangue Inglese",
+            "Il fatto che il rumore compaia solo durante l'esercizio intenso",
+            "Il calo delle performance"
+        ],
+        answer: 2,
+        feedback: "Corretto. La natura dinamica del sintomo è cruciale. Suggerisce un'ostruzione che si manifesta solo quando la richiesta di ossigeno aumenta drasticamente.",
+        reveals: "visita-clinica"
+    },
+    {
+        question: "2/10: L'esame clinico a riposo è completamente negativo. Cosa significa?",
+        options: [
+            "Si può escludere una patologia respiratoria grave",
+            "Il problema è probabilmente di natura muscolare e non respiratoria",
+            "È un risultato atteso per molte ostruzioni dinamiche delle alte vie aeree",
+            "L'allenatore ha probabilmente esagerato i sintomi"
+        ],
+        answer: 2,
+        feedback: "Esatto. Molte patologie ostruttive che limitano la performance si manifestano solo sotto sforzo, quindi un esame a riposo normale non esclude il problema.",
+        reveals: "iter-diagnostico"
+    },
+    {
+        question: "3/10: Qual è considerato il 'gold standard' per la diagnosi delle patologie dinamiche delle prime vie aeree nel cavallo?",
+        options: [
+            "Radiografia della testa",
+            "Esame endoscopico a riposo",
+            "Esame ecografico della laringe",
+            "Esame endoscopico durante l'esercizio (treadmill o overground)"
+        ],
+        answer: 3,
+        feedback: "Perfetto. L'endoscopia dinamica è l'unico esame che permette di osservare la funzionalità delle strutture laringee nelle condizioni in cui si manifesta il problema.",
+        reveals: null
+    },
+    {
+        question: "4/10: Durante l'endoscopia a riposo, la funzionalità laringea appare normale. Qual è la conclusione?",
+        options: [
+            "Si può escludere con certezza una neuropatia laringea",
+            "È necessario procedere con l'esame dinamico per confermare o escludere una patologia",
+            "La causa del rumore è probabilmente nelle basse vie respiratorie",
+            "Si tratta di un collasso faringeo"
+        ],
+        answer: 1,
+        feedback: "Ottima osservazione. Un esame a riposo normale non è sufficiente. Molti casi di emiplegia laringea non sono evidenti a riposo e richiedono la valutazione sotto sforzo.",
+        reveals: "risultati-endoscopia"
+    },
+    {
+        question: "5/10: Il collasso dell'aritenoide sinistra durante l'inspirazione in esercizio è patognomonico per quale condizione?",
+        options: [
+            "Incaceramento dell'epiglottide",
+            "Collasso dorsale del palato molle",
+            "Neuropatia Laringea Ricorrente (Emiplegia Laringea)",
+            "Iperplasia linfoide faringea"
+        ],
+        answer: 2,
+        feedback: "Esattamente. Questo è il segno clinico caratteristico della paralisi dei muscoli abduttori della laringe, causata dalla degenerazione del nervo laringeo ricorrente.",
+        reveals: null
+    },
+    {
+        question: "6/10: Perché questa patologia colpisce quasi esclusivamente il lato sinistro?",
+        options: [
+            "È una coincidenza statistica",
+            "A causa del decorso anatomico molto più lungo del nervo laringeo ricorrente sinistro, che lo rende più vulnerabile",
+            "Perché i cavalli da corsa girano sempre a sinistra in pista",
+            "Per una predisposizione genetica legata al lato sinistro del corpo"
+        ],
+        answer: 1,
+        feedback: "Corretto. Il nervo sinistro compie un lungo percorso nel torace, girando attorno all'arco aortico, il che lo espone maggiormente a traumi e stiramenti rispetto al nervo destro.",
+        reveals: null
+    },
+    {
+        question: "7/10: Qual è l'obiettivo principale della terapia chirurgica (laringoplastica)?",
+        options: [
+            "Rigenerare il nervo danneggiato",
+            "Rimuovere la cartilagine aritenoide paralizzata",
+            "Fissare permanentemente l'aritenoide in una posizione aperta per garantire il passaggio dell'aria",
+            "Ridurre l'infiammazione della laringe"
+        ],
+        answer: 2,
+        feedback: "Perfetto. La laringoplastica, o 'tie-back', utilizza una protesi per mantenere l'aritenoide in abduzione, bypassando di fatto la sua paralisi.",
+        reveals: null
+    },
+    {
+        question: "8/10: Oltre alla laringoplastica, quale altra procedura chirurgica viene spesso associata per migliorare il risultato?",
+        options: [
+            "Tracheotomia permanente",
+            "Ventriculectomia o cordectomia",
+            "Stafilectomia (resezione del palato molle)",
+            "Nessuna, la laringoplastica si esegue sempre da sola"
+        ],
+        answer: 1,
+        feedback: "Esatto. La rimozione del ventricolo laringeo e/o della corda vocale associata riduce ulteriormente il rumore e la turbolenza del flusso d'aria.",
+        reveals: null
+    },
+    {
+        question: "9/10: Qual è una delle complicanze più comuni e importanti dopo un intervento di laringoplastica?",
+        options: [
+            "Infezione della ferita chirurgica",
+            "Tosse cronica e/o disfagia con possibile aspirazione di cibo",
+            "Rottura della protesi chirurgica",
+            "Tutte le precedenti"
+        ],
+        answer: 3,
+        feedback: "Corretto. Sebbene tutte siano possibili, la tosse e la difficoltà di deglutizione sono molto comuni, poiché la laringe non può più chiudersi completamente per proteggere le vie aeree.",
+        reveals: null
+    },
+    {
+        question: "10/10: Qual è la prognosi per il ritorno alle competizioni per un cavallo da galoppo dopo un 'tie-back'?",
+        options: [
+            "Sempre eccellente, tornano tutti a vincere",
+            "Sempre infausta, il cavallo deve essere ritirato",
+            "Favorevole, circa il 70-80% dei cavalli migliora le proprie performance",
+            "Riservata, il successo dipende da molti fattori e non tutti tornano ai livelli precedenti"
+        ],
+        answer: 3,
+        feedback: "Risposta corretta. La prognosi è generalmente considerata da buona a riservata. Molti cavalli beneficiano dell'intervento, ma il successo non è garantito e dipende dalla gravità, dalla presenza di altre patologie e dalla gestione post-operatoria.",
+        reveals: "final-summary"
+    },
+];
 
-        let currentStep = 1;
+let currentQuestionIndex = 0;
+const quizContainer = document.getElementById('quiz-container');
 
-        // Funzione per mostrare il modal
-        const showModal = (title, message, isError = false) => {
-            modalTitle.textContent = title;
-            modalBody.innerHTML = message;
-            if (isError) {
-                modalTitle.classList.add('text-red-600');
-            } else {
-                modalTitle.classList.remove('text-red-600');
+function displayQuestion() {
+    if (currentQuestionIndex >= quizData.length) {
+        quizContainer.innerHTML = ''; // Quiz finished
+        return;
+    }
+
+    const currentQuiz = quizData[currentQuestionIndex];
+    let optionsHtml = '';
+    currentQuiz.options.forEach((option, index) => {
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+    });
+
+    quizContainer.innerHTML = `
+        <div class="quiz-card p-4 border rounded-lg bg-gray-50">
+            <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
+            <div class="options-container">${optionsHtml}</div>
+            <div class="feedback-container mt-2"></div>
+        </div>
+    `;
+
+    document.querySelectorAll('.quiz-option').forEach(button => {
+        button.addEventListener('click', checkAnswer);
+    });
+}
+
+function checkAnswer(event) {
+    const selectedOption = event.target;
+    const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
+    const currentQuiz = quizData[currentQuestionIndex];
+    const feedbackContainer = quizContainer.querySelector('.feedback-container');
+
+    // Disable all buttons after an answer is chosen
+    document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+
+    if (selectedAnswerIndex === currentQuiz.answer) {
+        selectedOption.classList.add('correct');
+        feedbackContainer.innerHTML = `
+            <div class="feedback correct">
+                ${currentQuiz.feedback}
+            </div>
+            <button id="next-question-btn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg w-full">
+                Prosegui
+            </button>
+        `;
+
+        document.getElementById('next-question-btn').addEventListener('click', () => {
+            if (currentQuiz.reveals) {
+                document.getElementById(currentQuiz.reveals).style.display = 'block';
             }
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
+            currentQuestionIndex++;
+            displayQuestion();
+        });
+    } else {
+        selectedOption.classList.add('incorrect');
+        feedbackContainer.innerHTML = `<div class="feedback incorrect">Risposta non corretta. Riprova a ragionare sul caso.</div>`;
+         setTimeout(() => { // Re-enable buttons to allow another try
+            document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = false);
+            selectedOption.classList.remove('incorrect');
+            feedbackContainer.innerHTML = '';
+        }, 2000);
+    }
+}
 
-        // Funzione per nascondere il modal
-        const hideModal = () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
+// Start the quiz
+window.onload = displayQuestion;
+</script>
 
-        closeModalBtn.addEventListener('click', hideModal);
-        modalOkBtn.addEventListener('click', hideModal);
-
-        // Funzione per effettuare la chiamata all'API di Gemini
-        const callGemini = async (prompt) => {
-            loading.classList.remove('hidden');
-            try {
-                const response = await fetch(API_URL + apiKey, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                    }),
-                });
-                const result = await response.json();
-                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Nessuna risposta generata.';
-                return text;
-            } catch (error) {
-                console.error('Errore nella chiamata all\'API di Gemini:', error);
-                return 'Si è verificato un errore. Riprova più tardi.';
-            } finally {
-                loading.classList.add('hidden');
-            }
-        };
-
-        // Funzione per scaricare il riassunto
-        const downloadSummary = (content, filename) => {
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        };
-
-        // Contenuto delle diverse fasi del caso
-        const caseData = {
-            step1: {
-                title: 'Presentazione del Caso & Anamnesi',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Presentazione del Caso: 'Vento'</h2>
-                        <p class="text-gray-700">Vento, un cavallo da salto ostacoli di 6 anni, si presenta con una storia di **rumore respiratorio anomalo (stridore inspiratorio)** notato dal cavaliere durante il lavoro intenso (galoppo). Il rumore non è presente a riposo e non c'è tosse o scolo nasale.</p>
-                        <h3 class="text-xl font-semibold mt-6">Dati Aggiuntivi:</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Alimentazione:</strong> Fieno di buona qualità, mangime specifico per cavalli atleti.</li>
-                            <li><strong>Gestione:</strong> Box e paddock, allenamento regolare.</li>
-                            <li><strong>Performance:</strong> Il cavaliere ha notato un calo delle performance sportive e una maggiore affaticabilità.</li>
-                            <li><strong>Anamnesi remota:</strong> Nessun problema respiratorio precedente.</li>
-                        </ul>
-                        <div class="mt-8">
-                            <label for="initial-hypothesis" class="block text-gray-700 font-semibold mb-2">Formulare le diagnosi differenziali più probabili in base all'anamnesi:</label>
-                            <textarea id="initial-hypothesis" rows="4" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                    </div>
-                `,
-                requiredInputId: 'initial-hypothesis'
-            },
-            step2: {
-                title: 'Esame Obiettivo',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Esame Obiettivo Generale e Speciale</h2>
-                        <p class="text-gray-700">Durante l'esame clinico a riposo, i seguenti dati sono stati rilevati:</p>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li><strong>Temperatura Rettale:</strong> 37.9°C (normale: 37.5-38.5°C)</li>
-                            <li><strong>Frequenza Cardiaca:</strong> 38 bpm (normale: 28-44 bpm)</li>
-                            <li><strong>Frequenza Respiratoria:</strong> 12 rpm (normale: 10-24 rpm)</li>
-                            <li><strong>Auscultazione toracica:</strong> Rumori polmonari normali in tutti i campi.</li>
-                            <li><strong>Esame delle prime vie aeree:</strong> Non si osservano anomalie evidenti.</li>
-                        </ul>
-                        <div class="mt-8">
-                            <label class="block text-gray-700 font-semibold mb-2">Quale tra le seguenti procedure diagnostiche è essenziale per giungere a una diagnosi definitiva in un caso di rumore respiratorio dinamico?</label>
-                            <div class="space-y-2">
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="eco-torace" class="mr-2"> Ecografia toracica
-                                </label>
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="endoscopia-riposo" class="mr-2"> Endoscopia delle vie aeree a riposo
-                                </label>
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="eco-laringe" class="mr-2"> Ecografia della laringe
-                                </label>
-                                <label class="block">
-                                    <input type="radio" name="eo-hypothesis" value="endoscopia-dinamica" class="mr-2"> Endoscopia dinamica delle vie aeree superiori
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                `,
-                requiredInputId: 'eo-hypothesis',
-                correctAnswer: 'endoscopia-dinamica'
-            },
-            step3: {
-                title: 'Piani Diagnostici & Diagnosi',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Piani Diagnostici & Risultati</h2>
-                        <p class="text-gray-700">L'esame endoscopico dinamico, eseguito mentre il cavallo galoppa su un tapis roulant, rivela:</p>
-                        <h3 class="text-xl font-semibold mt-6">Risultati:</h3>
-                        <ul class="list-disc list-inside space-y-1 text-gray-600">
-                            <li>Durante il galoppo, l'aritenoide sinistro non si abduce completamente, collassando nell'apertura della laringe durante l'inspirazione.</li>
-                            <li>Il grado di collasso è severo, compromettendo significativamente il flusso d'aria.</li>
-                        </ul>
-                        <div class="mt-8">
-                            <label class="block text-gray-700 font-semibold mb-2">Qual è la diagnosi definitiva basata su questi dati?</label>
-                            <textarea id="final-diagnosis" rows="3" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                    </div>
-                `,
-                requiredInputId: 'final-diagnosis'
-            },
-            step4: {
-                title: 'Terapia & Prognosi',
-                content: `
-                    <div class="space-y-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Terapia & Prognosi</h2>
-                        <p class="text-gray-700">La diagnosi è **paralisi laringea sinistra (Laryngeal Hemiplegia)**. Ora è necessario impostare un piano terapeutico. Quale sarebbe il tuo approccio?</p>
-                        <div class="mt-4">
-                            <label for="therapy-plan" class="block text-gray-700 font-semibold mb-2">Proponi un piano terapeutico:</label>
-                            <textarea id="therapy-plan" rows="5" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                        <button id="show-outcome-btn" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Mostra Esito del Caso</button>
-                        <div id="case-outcome" class="hidden mt-6">
-                            <h3 class="text-xl font-semibold">Esito del caso:</h3>
-                            <p class="text-gray-700 mt-2">Vento è stato sottoposto a un intervento chirurgico di **Laringoplastica (intervento di "tie-back")** per mantenere l'aritenoide sinistro in abduzione. A 3 mesi dall'intervento, ha ripreso l'allenamento completo. Il rumore respiratorio è scomparso e le sue performance sportive sono tornate ai livelli precedenti, con una prognosi **favorevole** per il ritorno all'attività agonistica.</p>
-                        </div>
-                    </div>
-                `
-            },
-            step5: {
-                title: 'Riepilogo del caso & Risorse',
-                content: `
-                    <div class="space-y-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Approfondimento e Riepilogo Finale</h2>
-                        <p class="text-gray-700">Ora che il caso è stato risolto, puoi approfondire la tua comprensione della patologia e ottenere un riassunto dettagliato.</p>
-                        <div class="space-y-4 pt-4 border-t border-gray-200">
-                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Approfondimento con Gemini</h3>
-                            <button id="generate-dd-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition-colors w-full">✨ Visualizza le Diagnosi Differenziali (DD) del caso ✨</button>
-                            <div id="dd-output" class="mt-4 p-4 bg-gray-50 rounded-lg text-gray-700 hidden"></div>
-                            <button id="explain-rationale-btn" class="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition-colors w-full">✨ Spiega il Razionale Diagnostico ✨</button>
-                            <div id="rationale-output" class="mt-4 p-4 bg-gray-50 rounded-lg text-gray-700 hidden"></div>
-                        </div>
-                        <div class="space-y-4 pt-4 border-t border-gray-200">
-                            <h3 class="text-xl font-semibold mb-2 text-gray-800">Riepilogo della Patologia</h3>
-                            <button id="generate-summary-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-colors w-full">📝 Genera Riepilogo su Emiplegia Laringea 📝</button>
-                            <div id="summary-output" class="mt-4 p-4 bg-gray-50 rounded-lg text-gray-700 hidden"></div>
-                            <button id="download-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors w-full hidden">⬇️ Scarica il riassunto (.txt)</button>
-                        </div>
-                        <div class="mt-8 pt-4 border-t border-gray-200">
-                            <a href="index.html" class="block w-full py-3 px-6 bg-gray-200 text-gray-700 rounded-lg shadow-md hover:bg-gray-300 transition-colors text-center font-semibold">
-                                Torna alla pagina principale
-                            </a>
-                        </div>
-                    </div>
-                `
-            }
-        };
-
-        const renderStep = (step) => {
-            const data = caseData[`step${step}`];
-            if (!data) return;
-
-            // Aggiorna la navigazione
-            document.querySelectorAll('[id^="step"]').forEach((el, index) => {
-                const navStep = index + 1;
-                const circle = el.querySelector('span:first-child');
-                const text = el.querySelector('span:last-child');
-                if (navStep === step) {
-                    el.classList.add('text-white');
-                    el.classList.remove('text-gray-500');
-                    circle.classList.add('bg-blue-500');
-                    circle.classList.remove('bg-gray-600');
-                } else if (navStep < step) {
-                    el.classList.remove('text-white');
-                    el.classList.remove('text-gray-500');
-                    el.classList.add('text-green-500');
-                    circle.classList.add('bg-green-600');
-                    circle.classList.remove('bg-gray-600');
-                } else {
-                    el.classList.remove('text-white');
-                    el.classList.add('text-gray-500');
-                    circle.classList.remove('bg-blue-500');
-                    circle.classList.add('bg-gray-600');
-                }
-            });
-
-            caseContent.innerHTML = data.content;
-            prevBtn.disabled = step === 1;
-            nextBtn.disabled = step === Object.keys(caseData).length;
-            if (step === Object.keys(caseData).length) {
-                nextBtn.classList.add('hidden');
-            } else {
-                nextBtn.classList.remove('hidden');
-            }
-
-            // Aggiungi event listener per i nuovi pulsanti solo nello step finale
-            if (step === 5) {
-                const generateDdBtn = document.getElementById('generate-dd-btn');
-                const ddOutput = document.getElementById('dd-output');
-                if (generateDdBtn) {
-                    generateDdBtn.addEventListener('click', async () => {
-                        const prompt = `Agisci come un esperto veterinario equino. Fornisci un elenco di 5 diagnosi differenziali per un cavallo con stridore inspiratorio dinamico (si presenta solo durante il galoppo). Per ogni diagnosi, spiega brevemente perché è una possibilità in questo caso specifico e il meccanismo fisiologico dietro al sintomo. Usa un formato di lista.`;
-                        const response = await callGemini(prompt);
-                        ddOutput.innerHTML = response.replace(/\n/g, '<br>');
-                        ddOutput.classList.remove('hidden');
-                    });
-                }
-
-                const explainRationaleBtn = document.getElementById('explain-rationale-btn');
-                const rationaleOutput = document.getElementById('rationale-output');
-                if (explainRationaleBtn) {
-                    explainRationaleBtn.addEventListener('click', async () => {
-                        const prompt = `Spiega, in circa 100 parole e in modo conciso per uno studente di veterinaria, perché l'endoscopia dinamica delle vie aeree superiori è l'esame diagnostico di elezione per un cavallo che presenta un rumore respiratorio udibile solo durante il lavoro e non a riposo.`;
-                        const response = await callGemini(prompt);
-                        rationaleOutput.innerHTML = response.replace(/\n/g, '<br>');
-                        rationaleOutput.classList.remove('hidden');
-                    });
-                }
-
-                const generateSummaryBtn = document.getElementById('generate-summary-btn');
-                const summaryOutput = document.getElementById('summary-output');
-                const downloadBtn = document.getElementById('download-btn');
-                if (generateSummaryBtn) {
-                    generateSummaryBtn.addEventListener('click', async () => {
-                        const prompt = `Agisci come un esperto veterinario equino. Fornisci un riassunto dettagliato ma conciso sull'emiplegia laringea sinistra, includendo la sua causa (paralisi del nervo laringeo ricorrente sinistro), la fisiopatologia (collasso dell'aritenoide sinistro durante l'inspirazione) e le principali opzioni terapeutiche chirurgiche (es. laringoplastica "tie-back"). Presenta il tutto in paragrafi separati e chiari.`;
-                        const response = await callGemini(prompt);
-                        summaryOutput.innerHTML = response.replace(/\n/g, '<br>');
-                        summaryOutput.classList.remove('hidden');
-                        downloadBtn.classList.remove('hidden');
-                    });
-                }
-
-                if (downloadBtn) {
-                    downloadBtn.addEventListener('click', () => {
-                        const summaryText = summaryOutput.innerText;
-                        if (summaryText) {
-                            downloadSummary(summaryText, 'riassunto_emiplegia_laringea.txt');
-                        }
-                    });
-                }
-            }
-            
-            // Logica per lo step 4: abilita il pulsante solo dopo che l'utente ha scritto nel campo
-            if (step === 4) {
-                const therapyPlanTextarea = document.getElementById('therapy-plan');
-                const showOutcomeBtn = document.getElementById('show-outcome-btn');
-                const caseOutcome = document.getElementById('case-outcome');
-
-                const checkInput = () => {
-                    if (therapyPlanTextarea.value.trim() !== '') {
-                        showOutcomeBtn.disabled = false;
-                    } else {
-                        showOutcomeBtn.disabled = true;
-                    }
-                };
-
-                therapyPlanTextarea.addEventListener('input', checkInput);
-                showOutcomeBtn.addEventListener('click', () => {
-                    caseOutcome.classList.remove('hidden');
-                    showOutcomeBtn.disabled = true;
-                });
-                checkInput();
-            }
-        };
-
-        const validateStep = (step) => {
-            const data = caseData[`step${step}`];
-            if (!data.requiredInputId) return true;
-
-            const inputElement = document.getElementById(data.requiredInputId);
-            if (!inputElement) return true;
-
-            if (inputElement.type === 'textarea') {
-                return inputElement.value.trim() !== '';
-            } else if (inputElement.type === 'radio') {
-                const checkedRadio = document.querySelector(`input[name="${data.requiredInputId}"]:checked`);
-                return checkedRadio !== null;
-            }
-            return false;
-        };
-
-        const handleNext = () => {
-            if (currentStep === 2) {
-                const selectedAnswer = document.querySelector('input[name="eo-hypothesis"]:checked')?.value;
-                if (selectedAnswer !== caseData.step2.correctAnswer) {
-                    showModal('Risposta Sbagliata', 'Hai selezionato la procedura diagnostica sbagliata. In un caso di rumore respiratorio dinamico (che si manifesta solo sotto sforzo), la diagnosi richiede un esame **dinamico**. Riprova!');
-                    return;
-                }
-            }
-
-            if (validateStep(currentStep)) {
-                loading.classList.remove('hidden');
-                setTimeout(() => {
-                    loading.classList.add('hidden');
-                    if (currentStep < Object.keys(caseData).length) {
-                        currentStep++;
-                        renderStep(currentStep);
-                    }
-                }, 1000);
-            } else {
-                showModal('Attenzione!', 'Per favore, compila il campo richiesto prima di procedere.');
-            }
-        };
-
-        const handlePrev = () => {
-            if (currentStep > 1) {
-                currentStep--;
-                renderStep(currentStep);
-            }
-        };
-
-        prevBtn.addEventListener('click', handlePrev);
-        nextBtn.addEventListener('click', handleNext);
-
-        // Inizializza l'applicazione
-        renderStep(currentStep);
-    </script>
 </body>
-
 </html>
