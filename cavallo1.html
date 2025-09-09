@@ -89,7 +89,7 @@
             <section id="anamnesi" class="case-section">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
                 <div class="space-y-3 text-gray-700">
-                    <p><strong>Paziente:</strong> Cavallo, maschio castrone, Purosangue Inglese di 3 anni.</p>
+                    <p><strong>Paziente:</strong> Cavallo, maschio castrone, Purosangue Inglese di 16 mesi.</p>
                     <p><strong>Disciplina:</strong> Cavallo da galoppo in piena attività agonistica.</p>
                     <p><strong>Motivo della visita:</strong> L'allenatore riferisce un calo delle performance e la comparsa di un rumore respiratorio "simile a un fischio o a un ruggito" che si manifesta solo durante il lavoro intenso, soprattutto in fase inspiratoria.</p>
                 </div>
@@ -213,7 +213,8 @@ const quizData = [
         reveals: "risultati-endoscopia"
     },
     {
-        question: "5/10: Il collasso dell'aritenoide sinistra durante l'inspirazione in esercizio è patognomonico per quale condizione?",
+        question: "5/10: Osservando l'immagine endoscopica, il collasso dell'aritenoide sinistra durante l'inspirazione in esercizio è patognomonico per quale condizione?",
+        imageUrl: "image_78a0b0.jpg",
         options: [
             "Incaceramento dell'epiglottide",
             "Collasso dorsale del palato molle",
@@ -301,9 +302,14 @@ function displayQuestion() {
         optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
     });
 
+    const imageHtml = currentQuiz.imageUrl 
+        ? `<img src="${currentQuiz.imageUrl}" alt="Immagine del caso clinico" class="my-4 rounded-lg shadow-md mx-auto">` 
+        : '';
+
     quizContainer.innerHTML = `
         <div class="quiz-card p-4 border rounded-lg bg-gray-50">
             <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
+            ${imageHtml}
             <div class="options-container">${optionsHtml}</div>
             <div class="feedback-container mt-2"></div>
         </div>
