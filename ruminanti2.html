@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Interattivo: Malattia Respiratoria Bovina</title>
+    <title>Caso Clinico Interattivo: Vitellone con Febbre e Depressione</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,500 +12,352 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        .screen { display: none; }
-        .active-screen { display: block; }
-        .answer-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
+        .case-section {
+            background-color: #f9fafb;
+            border-left: 4px solid #4f46e5;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
         }
-        .correct {
-            background-color: #dcfce7 !important;
-            border-color: #22c55e !important;
+        .hidden-section {
+            display: none;
         }
-        .incorrect {
-            background-color: #fee2e2 !important;
-            border-color: #ef4444 !important;
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
         }
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 50; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
-            padding-top: 60px;
+        .quiz-option:hover {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
         }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
+        .quiz-option.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+        .feedback {
+            padding: 0.75rem 1.25rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
+        .feedback.correct {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+        }
+        .feedback.incorrect {
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+        .summary-section {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
             padding: 2rem;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 700px;
-            border-radius: 1rem;
-            position: relative;
-        }
-        .close-btn {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-btn:hover,
-        .close-btn:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+            margin-top: 3rem;
+            border-radius: 0.5rem;
         }
         @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printable-brd-sheet, #printable-brd-sheet * {
-                visibility: visible;
-            }
-            #printable-brd-sheet {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            .no-print {
-                display: none;
-            }
+            body * { visibility: hidden; }
+            #printable-summary, #printable-summary * { visibility: visible; }
+            #printable-summary { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none; }
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100 text-gray-800">
 
-    <div id="main-container" class="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl max-w-4xl w-full transition-all duration-500">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600">Caso Clinico Veterinario Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2">Risolvi il caso passo dopo passo</p>
+        </header>
 
-        <!-- Schermata Iniziale -->
-        <div id="start-screen" class="screen active-screen text-center">
-            <div class="flex justify-center mb-4">
-                <svg class="w-16 h-16 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
-                </svg>
-            </div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Caso Clinico Interattivo</h1>
-            <p class="text-xl text-gray-600 mb-6">Un Caso Clinico nel Vitellone da Carne</p>
-            <p class="mb-8 max-w-2xl mx-auto">Sei il veterinario responsabile di un allevamento. Un allevatore ti chiama per un problema respiratorio in un lotto di vitelloni appena arrivati. Segui il caso, analizza i dati e metti alla prova le tue capacità diagnostiche.</p>
-            <button id="start-btn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition-transform transform hover:scale-105">Inizia il Caso</button>
-        </div>
+        <main id="case-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
 
-        <!-- Schermata Anamnesi -->
-        <div id="anamnesi-screen" class="screen">
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2">1. Anamnesi e Segnalamento</h2>
-            <div class="space-y-4 text-gray-700 leading-relaxed">
-                <p><strong>Gruppo interessato:</strong> Lotto di 50 vitelloni maschi di razza Limousine e meticci, età media 6 mesi, peso medio 250 kg.</p>
-                <p><strong>Storia recente:</strong> Acquistati una settimana fa da un centro di raccolta, hanno affrontato un viaggio di 8 ore. Sono stati raggruppati animali di diversa provenienza. Lo stato vaccinale è sconosciuto e non è stata fatta metafilassi all'arrivo.</p>
-                <p><strong>Motivo della chiamata:</strong> L'allevatore è preoccupato per un numero crescente di animali (10-12/50) con depressione, anoressia e scolo nasale. I sintomi sono comparsi ieri sera e sono peggiorati stamattina.</p>
-            </div>
-            <div class="text-center mt-8">
-                <button id="anamnesi-btn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition-transform transform hover:scale-105">Procedi con la Visita Clinica</button>
-            </div>
-        </div>
-
-        <!-- Schermata Esame Clinico -->
-        <div id="esame-clinico-screen" class="screen">
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2">2. Esame Clinico</h2>
-            <div class="grid md:grid-cols-2 gap-6 text-gray-700 leading-relaxed">
-                <div>
-                    <h3 class="font-semibold text-lg mb-2 text-gray-800">Esame a distanza (sul gruppo)</h3>
-                    <ul class="list-disc list-inside space-y-2">
-                        <li>Circa 1/4 del gruppo si isola, letargico, con testa e orecchie basse.</li>
-                        <li><strong>Tachipnea</strong> evidente in molti soggetti.</li>
-                        <li><strong>Dispnea</strong> con respiro addominale in 2-3 casi gravi.</li>
-                        <li>Tosse umida e debole.</li>
-                        <li>Scolo nasale da sieroso a mucopurulento.</li>
+            <!-- Sezione 1: Anamnesi (visibile da subito) -->
+            <section id="anamnesi" class="case-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
+                <div class="space-y-3 text-gray-700">
+                    <p><strong>Paziente:</strong> Gruppo di 50 vitelloni maschi di razza Charolaise, età media 8 mesi.</p>
+                    <p><strong>Provenienza:</strong> Acquistati a un'asta in Francia e trasportati in camion per 12 ore fino a un allevamento da ingrasso in Italia.</p>
+                    <p><strong>Storia recente:</strong> Arrivati in allevamento da 5 giorni. Al loro arrivo sono stati raggruppati in un unico box con animali già presenti.</p>
+                    <p><strong>Motivo della visita:</strong> L'allevatore segnala che un animale è stato trovato morto stamattina e altri 4-5 soggetti sono depressi, non si alimentano e tendono a isolarsi.</p>
+                </div>
+            </section>
+            
+            <!-- Sezione 2: Visita Clinica (nascosta) -->
+            <section id="visita-clinica" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">2. Esame Clinico a Distanza e Ravvicinato</h2>
+                 <div class="space-y-2 text-gray-700">
+                    <p>Si esamina uno dei soggetti più abbattuti.</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Atteggiamento:</strong> Gravemente depresso, testa bassa, orecchie flosce.</li>
+                        <li><strong>Parametri vitali:</strong> Temperatura rettale 40.8°C. Frequenza respiratoria 60 apm, con respiro superficiale e a bocca aperta.</li>
+                        <li><strong>Ispezione:</strong> Secrezione nasale sierosa bilaterale e scialorrea.</li>
+                        <li><strong>Auscultazione toracica:</strong> Rumori respiratori umidi (crepitii e soffi) ben udibili sull'area polmonare cranio-ventrale.</li>
                     </ul>
                 </div>
-                <div class="space-y-3">
-                    <h3 class="font-semibold text-lg mb-2 text-gray-800">Esame ravvicinato (soggetto n. 74)</h3>
-                     <p><strong>Temperatura:</strong> <span class="font-bold text-red-600">40.5°C</span></p>
-                    <p><strong>Frequenza cardiaca:</strong> 110 bpm</p>
-                    <p><strong>Frequenza respiratoria:</strong> <span class="font-bold text-red-600">80 atti/min</span></p>
-                    <p><strong>Auscultazione toracica (aree cranio-ventrali):</strong> Presenza di <strong>rantoli umidi e sibili</strong>. Murmure vescicolare ridotto in alcune aree.</p>
-                    <p><strong>Stato di idratazione:</strong> Lieve disidratazione (5-6%).</p>
+            </section>
+            
+            <!-- Sezione 3: Iter Diagnostico (nascosta) -->
+            <section id="iter-diagnostico" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">3. Approccio Diagnostico</h2>
+                <p class="text-gray-700">Il quadro clinico e l'anamnesi sono altamente suggestivi di un focolaio di Malattia Respiratoria Bovina (BRD). Si esegue un tampone nasale profondo sul soggetto malato e si procede con l'esame necroscopico sul soggetto deceduto.</p>
+            </section>
+
+            <!-- Sezione 4: Risultati Test (nascosta) -->
+             <section id="risultati-test" class="case-section hidden-section">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">4. Risultati degli Esami</h2>
+                <div class="space-y-3 text-gray-700">
+                    <p><strong>Esame necroscopico:</strong> Evidenzia un quadro di broncopolmonite fibrinosa acuta, con consolidamento marcato dei lobi polmonari craniali e medi.</p>
+                    <p><strong>Tampone nasale (PCR):</strong> Il campione viene inviato al laboratorio per una PCR multiplex. I risultati confermano la presenza di <em>Mannheimia haemolytica</em> e del Virus Respiratorio Sinciziale Bovino (BRSV).</p>
                 </div>
-            </div>
-             <div class="text-center mt-8">
-                <button id="esame-clinico-btn" class="bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-green-700 transition-transform transform hover:scale-105">Hai tutti i dati. Inizia il Quiz!</button>
-            </div>
-        </div>
-        
-        <!-- Schermata Quiz -->
-        <div id="quiz-screen" class="screen">
-            <div class="mb-4">
-                <p id="question-counter" class="text-sm text-gray-500 font-medium">Domanda 1 di 10</p>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 10%"></div>
-                </div>
-            </div>
-            <h2 id="question-text" class="text-xl font-bold mb-6"></h2>
-            <div id="answer-buttons" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- I bottoni delle risposte saranno inseriti qui da JS -->
-            </div>
-            <div id="rationale-container" class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded-r-lg hidden">
-                <h4 class="font-bold">Spiegazione</h4>
-                <p id="rationale-text"></p>
-            </div>
-            <div class="text-right mt-6">
-                <button id="next-btn" class="bg-gray-800 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-gray-900 transition-transform transform hover:scale-105 hidden">Prossima Domanda</button>
-            </div>
-        </div>
+            </section>
 
-        <!-- Schermata Risultati -->
-        <div id="results-screen" class="screen text-center">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Quiz Completato!</h2>
-            <p class="text-xl text-gray-600 mb-6">Ecco il tuo punteggio:</p>
-            <div id="score-circle" class="relative w-40 h-40 mx-auto flex items-center justify-center bg-gray-100 rounded-full mb-6">
-                <span id="final-score" class="text-4xl font-bold text-gray-800"></span>
-            </div>
-            <p id="score-message" class="text-lg mb-8 max-w-xl mx-auto"></p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button id="restart-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-transform transform hover:scale-105">Riprova il Caso</button>
-                <button id="summary-btn" class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-800 transition-transform transform hover:scale-105">Riepilogo del Caso</button>
-                <button id="brd-sheet-btn" class="bg-teal-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105">Scheda sulla BRD</button>
-            </div>
-        </div>
+            <!-- Contenitore del Quiz -->
+            <div id="quiz-container" class="mt-6"></div>
 
-    </div>
-
-    <!-- Modale Riepilogo Caso -->
-    <div id="summary-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-summary-btn" class="close-btn">&times;</span>
-            <h2 class="text-2xl font-bold mb-4 border-b pb-2">Riepilogo del Caso Clinico</h2>
-            <div class="space-y-3 text-gray-700 text-left">
-                <p><strong>Segnalamento:</strong> 50 vitelloni (Limousine/meticci), 6 mesi, 250 kg.</p>
-                <p><strong>Anamnesi Chiave:</strong> Arrivati da 1 settimana, stress da trasporto (8h), mescolamento di gruppi, nessuna metafilassi all'arrivo.</p>
-                <p><strong>Sintomi:</strong> Morbilità del 20-25%. Esordio acuto con depressione, anoressia, scolo nasale, tosse.</p>
-                <p><strong>Reperti Clinici Salienti:</strong> Ipertermia grave (40.5°C), Tachipnea grave (80 atti/min), rantoli umidi e sibili all'auscultazione delle aree cranio-ventrali.</p>
-                <p><strong>Diagnosi Finale:</strong> Complesso della Malattia Respiratoria Bovina (BRD), con probabile eziologia mista (infezione virale primaria e sovrainfezione batterica da *Mannheimia haemolytica*).</p>
-                <p><strong>Approccio Terapeutico:</strong> Metafilassi antibiotica sull'intero gruppo e somministrazione di FANS ai soggetti con segni clinici evidenti per controllare l'infiammazione e la febbre.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modale Scheda BRD -->
-    <div id="brd-sheet-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-brd-btn" class="close-btn">&times;</span>
-            <div id="printable-brd-sheet">
-                <h2 class="text-2xl font-bold mb-4 border-b pb-2">Scheda sulla Malattia Respiratoria Bovina (BRD)</h2>
-                <div class="space-y-4 text-gray-700 text-left leading-relaxed">
-                    <p><strong>Definizione:</strong> La BRD è una sindrome respiratoria multifattoriale, principale causa di morbilità, mortalità e perdite economiche nel bovino da carne, specialmente nella fase di ingrasso.</p>
-                    <p><strong>Fattori Predisponenti (Stress):</strong> Trasporto, svezzamento, cambio di alimentazione, mescolamento di animali di diversa provenienza, condizioni ambientali avverse (sovraffollamento, scarsa ventilazione).</p>
-                    <div>
-                        <strong>Eziologia Complessa:</strong>
-                        <ul class="list-disc list-inside ml-4 mt-1">
-                            <li><strong>Agenti Virali Primari:</strong> Danneggiano le difese immunitarie locali. I più comuni sono: BHV-1 (IBR), BRSV, PI3, BVDV.</li>
-                            <li><strong>Agenti Batterici Secondari:</strong> Colonizzano il polmone danneggiato. I più comuni sono: *Mannheimia haemolytica*, *Pasteurella multocida*, *Histophilus somni*, *Mycoplasma bovis*.</li>
-                        </ul>
+            <!-- Sezione Finale: Diagnosi e Riassunto (nascosta) -->
+            <div id="final-summary" class="summary-section hidden-section">
+                <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Caso Risolto!</h2>
+                <p class="text-center text-xl mb-4">Diagnosi: <strong>Focolaio di Malattia Respiratoria Bovina (BRD)</strong></p>
+                
+                <div id="printable-summary">
+                    <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Bovine Respiratory Disease (BRD)</h2>
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
+                            <p class="text-gray-700">La BRD è una sindrome respiratoria multifattoriale, la più importante patologia del bovino da carne all'ingrasso. È causata dall'interazione complessa tra <strong>fattori stressanti</strong> (trasporto, cambio di ambiente, rimescolamento), <strong>agenti virali</strong> (IBR, BVD, PI3, BRSV) che danneggiano le difese immunitarie polmonari, e <strong>agenti batterici</strong> (principalmente <em>Mannheimia haemolytica</em>, <em>Pasteurella multocida</em>, <em>Histophilus somni</em>) che causano la polmonite batterica secondaria.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Diagnosi</h3>
+                            <p class="text-gray-700">La diagnosi si basa sull'anamnesi e sui segni clinici. L'identificazione degli agenti patogeni si effettua tramite PCR su tamponi nasali profondi, lavaggi tracheali o campioni polmonari. L'isolamento batterico seguito da antibiogramma è cruciale per la scelta della terapia. L'esame necroscopico è fondamentale per confermare la diagnosi e caratterizzare le lesioni.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-600">Terapia e Controllo</h3>
+                            <p class="text-gray-700">Il trattamento dei singoli animali malati si basa su una <strong>terapia antibiotica</strong> tempestiva, mirata e, idealmente, guidata dai risultati di un antibiogramma per la scelta della molecola più adatta. A questo si associa l'uso di <strong>farmaci antinfiammatori non steroidei (FANS)</strong> per controllare la febbre e l'infiammazione. A livello di gruppo, in situazioni ad alto rischio come questa, la <strong>metafilassi</strong> (trattamento di massa) deve essere attentamente valutata e usata con estrema prudenza per non favorire lo sviluppo di fenomeni di antibiotico-resistenza.</p>
+                        </div>
                     </div>
-                    <p><strong>Segni Clinici Cardinali:</strong> Febbre (>39.5°C), depressione ("testa bassa"), anoressia, scolo nasale (da sieroso a purulento), tosse, aumento della frequenza respiratoria (tachipnea) e respirazione difficoltosa (dispnea).</p>
-                    <p><strong>Diagnosi:</strong> Si basa su anamnesi e fattori di rischio, esame clinico (con auscultazione e valutazione di score clinici), supportato da diagnostica per immagini (ecografia toracica) e campionamenti (tampone nasale profondo, lavaggio broncoalveolare) per l'identificazione degli agenti patogeni.</p>
-                    <p><strong>Terapia e Gestione:</strong>
-                        <ul class="list-disc list-inside ml-4 mt-1">
-                            <li><strong>Terapia:</strong> Antibiotici a lunga durata d'azione e buona diffusione polmonare.</li>
-                            <li><strong>Terapia di supporto:</strong> FANS per ridurre febbre e infiammazione, fluidoterapia se necessario.</li>
-                            <li><strong>Gestione del gruppo (Metafilassi):</strong> Trattamento antibiotico di tutto il gruppo a rischio quando la morbilità supera una certa soglia (es. 10-15%).</li>
-                        </ul>
-                    </p>
-                    <p><strong>Prevenzione:</strong> È l'approccio chiave. Si basa su programmi vaccinali mirati, riduzione dei fattori di stress, corretta gestione degli animali all'arrivo (quarantena) e buone pratiche di allevamento.</p>
+                </div>
+                
+                <div class="text-center mt-8 no-print">
+                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">Stampa o Salva Riassunto</button>
                 </div>
             </div>
-            <div class="text-center mt-8 no-print">
-                <button id="print-brd-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-green-700">Stampa / Salva PDF</button>
-            </div>
-        </div>
+
+        </main>
+        
+        <footer class="text-center mt-8 text-sm text-gray-500 no-print">
+            <p>Questo caso clinico è stato generato a scopo didattico.</p>
+        </footer>
     </div>
 
+<script>
+const quizData = [
+    {
+        question: "1/10: Qual è il principale fattore di rischio che ha predisposto questo gruppo di animali allo sviluppo della BRD?",
+        options: [
+            "La razza Charolaise",
+            "Lo stress associato al trasporto, al cambio di ambiente e al rimescolamento con altri animali",
+            "L'età degli animali",
+            "La stagione"
+        ],
+        answer: 1,
+        feedback: "Corretto. Lo stress è il fattore chiave che compromette il sistema immunitario dei vitelli, aprendo la porta agli agenti patogeni respiratori. Il trasporto e il rimescolamento sono tra i più potenti fattori di stress.",
+        reveals: "visita-clinica"
+    },
+    {
+        question: "2/10: Una temperatura rettale di 40.8°C in un vitellone è un segno di:",
+        options: [
+            "Febbre alta, indicativa di un processo infettivo/infiammatorio acuto",
+            "Stress da calore",
+            "Ipertermia maligna",
+            "Un valore normale dopo un lungo trasporto"
+        ],
+        answer: 0,
+        feedback: "Esatto. La febbre è uno dei primi e più affidabili segni clinici di BRD e indica una forte risposta del sistema immunitario a un'infezione.",
+        reveals: null
+    },
+    {
+        question: "3/10: I rumori umidi (crepitii) auscultati in sede cranio-ventrale sono tipicamente associati a:",
+        options: [
+            "Asma",
+            "Enfisema polmonare",
+            "Edema polmonare cardiogeno",
+            "La presenza di essudato (pus, fibrina, liquidi) negli alveoli e nei bronchioli, tipica della broncopolmonite"
+        ],
+        answer: 3,
+        feedback: "Perfetto. Questa localizzazione e questo tipo di rumore sono caratteristici della broncopolmonite batterica nel bovino, dove la deposizione di essudato segue la via aerogena verso le parti più declivi del polmone.",
+        reveals: "iter-diagnostico"
+    },
+    {
+        question: "4/10: Qual è la sequenza di eventi più comune nella patogenesi della BRD?",
+        options: [
+            "Un'infezione virale iniziale danneggia le difese immunitarie delle vie aeree, consentendo a batteri commensali di colonizzare i polmoni",
+            "Un'infezione batterica primaria apre la strada ai virus",
+            "Lo stress causa direttamente la polmonite batterica",
+            "La malattia è causata esclusivamente da batteri"
+        ],
+        answer: 0,
+        feedback: "Corretto. Questo è il modello classico della BRD: i virus (come BRSV in questo caso) agiscono come 'apriporta', paralizzando le ciglia e danneggiando i macrofagi, permettendo ai batteri come Mannheimia di invadere il polmone profondo.",
+        reveals: "risultati-test"
+    },
+    {
+        question: "5/10: Quale tra questi batteri è noto per causare la forma più grave di broncopolmonite fibrinosa acuta (chiamata anche 'shipping fever') nel bovino?",
+        options: [
+            "<i>Pasteurella multocida</i>",
+            "<i>Mannheimia haemolytica</i>",
+            "<i>Mycoplasma bovis</i>",
+            "<i>Trueperella pyogenes</i>"
+        ],
+        answer: 1,
+        feedback: "Esatto. <i>Mannheimia haemolytica</i> è l'agente eziologico più importante, capace di produrre una potente leucotossina che distrugge i neutrofili e causa le gravi lesioni fibrino-necrotiche osservate all'esame necroscopico.",
+        reveals: null
+    },
+    {
+        question: "6/10: Data la situazione (un morto, diversi malati gravi), qual è l'approccio terapeutico più corretto a livello di gruppo?",
+        options: [
+            "Trattare solo gli animali che mostrano sintomi gravi",
+            "Vaccinare immediatamente tutti gli animali con un vaccino per la BRD",
+            "Non fare nulla e lasciare che l'immunità di gruppo si sviluppi naturalmente",
+            "Instaurare una terapia antibiotica e antinfiammatoria sui soggetti malati e considerare la metafilassi (trattamento di massa) su tutto il gruppo a rischio"
+        ],
+        answer: 3,
+        feedback: "Corretto. In un focolaio acuto, è cruciale trattare subito i malati. La metafilassi sull'intero gruppo di arrivo è una strategia validata per ridurre la morbilità e la mortalità complessive in gruppi ad alto rischio.",
+        reveals: null
+    },
+    {
+        question: "7/10: Perché è importante associare un FANS (Farmaco Antinfiammatorio Non Steroideo) alla terapia antibiotica?",
+        options: [
+            "Per aumentare la potenza dell'antibiotico",
+            "Per abbassare rapidamente la febbre, ridurre il dolore e l'infiammazione, migliorando il benessere dell'animale e incoraggiandolo a riprendere ad alimentarsi",
+            "Per prevenire le infezioni virali secondarie",
+            "Ha un effetto calmante sugli animali stressati"
+        ],
+        answer: 1,
+        feedback: "Perfetto. I FANS sono fondamentali nella terapia di supporto. Un animale che sta meglio, con meno febbre e meno dolore, ha più probabilità di riprendere a mangiare e bere, accelerando la guarigione.",
+        reveals: null
+    },
+    {
+        question: "8/10: Per un vitellone destinato alla produzione di carne, quale caratteristica è più importante nella scelta di un antibiotico?",
+        options: [
+            "Il costo più basso in assoluto",
+            "L'efficacia contro i principali patogeni della BRD, unita a una lunga durata d'azione per ridurre lo stress da manipolazione e un tempo di sospensione definito",
+            "La facilità di somministrazione (es. via orale)",
+            "L'assenza di effetti collaterali"
+        ],
+        answer: 1,
+        feedback: "Esatto. L'efficacia è prioritaria. Formulazioni long-acting (LA) sono preferibili perché una singola iniezione può coprire l'intero ciclo terapeutico, riducendo il lavoro e lo stress per gli animali. Il rispetto dei tempi di sospensione è obbligatorio.",
+        reveals: null
+    },
+    {
+        question: "9/10: Quale pratica di gestione è la più efficace per prevenire la BRD in futuro?",
+        options: [
+            "Aumentare la densità di animali nei box",
+            "Somministrare antibiotici nell'acqua da bere per tutto il ciclo di ingrasso",
+            "Acquistare sempre animali dalla stessa provenienza",
+            "Un protocollo di 'pre-condizionamento' che includa vaccinazioni e adattamento all'alimento prima della partenza, e una quarantena all'arrivo"
+        ],
+        answer: 3,
+        feedback: "Corretto. La prevenzione è la chiave. Preparare gli animali prima dello stress del trasporto (pre-condizionamento) e gestire correttamente il loro arrivo (quarantena, 'tutto pieno-tutto vuoto') riduce drasticamente l'incidenza della BRD.",
+        reveals: null
+    },
+    {
+        question: "10/10: La presenza di lesioni polmonari croniche in animali guariti clinicamente dalla BRD può causare:",
+        options: [
+            "Un miglioramento dell'efficienza di conversione alimentare",
+            "Una riduzione permanente delle performance di crescita e un maggior rischio di recidive",
+            "Nessuna conseguenza a lungo termine",
+            "Un aumento del valore della carcassa al macello"
+        ],
+        answer: 1,
+        feedback: "Risposta corretta. Il danno polmonare può essere permanente. Anche se un animale sopravvive, le cicatrici e le aderenze polmonari riducono la sua capacità respiratoria per sempre, portando a un calo delle performance zootecniche.",
+        reveals: "final-summary"
+    },
+];
 
-    <script>
-        const quizData = [
-            {
-                question: "Un allevatore ti contatta perché un gruppo di 50 vitelloni da carne di razza Limousine, di circa 6 mesi, arrivati in allevamento da una settimana, presenta alcuni soggetti con depressione, anoressia e scolo nasale. Quale dato anamnestico è più critico per orientare la diagnosi?",
-                answers: [
-                    "Il recente trasporto e cambio di ambiente.",
-                    "Il tipo di lettiera utilizzata nel box.",
-                    "La genealogia dei vitelli.",
-                    "L'ultima sverminazione effettuata."
-                ],
-                correct: 0,
-                rationale: "Il trasporto è un potente fattore di stress che, insieme al mescolamento di animali di diversa provenienza, è un elemento chiave nello sviluppo della BRD."
-            },
-            {
-                question: "Ti rechi in allevamento. All'esame clinico a distanza di un soggetto sintomatico, noti che mantiene la testa e le orecchie basse. Quale altro segno, osservabile a distanza, è fortemente indicativo di un coinvolgimento respiratorio?",
-                answers: [
-                    "Tendenza a isolarsi dal gruppo.",
-                    "Presenza di diarrea.",
-                    "Aumento della frequenza respiratoria a riposo (tachipnea).",
-                    "Zoppia a un arto posteriore."
-                ],
-                correct: 2,
-                rationale: "La tachipnea è un meccanismo compensatorio per l'ipossia causata dalla ridotta funzionalità polmonare ed è un segno cardinale di distress respiratorio."
-            },
-            {
-                question: "Procedi con l'esame clinico ravvicinato di un vitello che presenta una temperatura rettale di 40.5°C. Durante l'auscultazione del torace, quali reperti acustici ti aspetti di sentire in caso di broncopolmonite?",
-                answers: [
-                    "Soffi cardiaci sistolici.",
-                    "Rantoli umidi e sibili.",
-                    "Murmure vescicolare normale in tutte le aree.",
-                    "Assenza completa di suoni respiratori in un'area."
-                ],
-                correct: 1,
-                rationale: "Questi suoni avventizi sono causati dal passaggio di aria attraverso le vie aeree contenenti essudato (rantoli) o ristrette (sibili), tipici della broncopolmonite."
-            },
-            {
-                question: "Sulla base dei dati anamnestici (stress da trasporto) e clinici (febbre, tachipnea, rantoli polmonari), qual è la diagnosi differenziale MENO probabile in questo scenario?",
-                answers: [
-                    "Complesso della Malattia Respiratoria Bovina (BRD).",
-                    "Rinotracheite Infettiva Bovina (IBR).",
-                    "Salmonellosi (forma respiratoria).",
-                    "Intossicazione acuta da urea."
-                ],
-                correct: 3,
-                rationale: "L'intossicazione da urea provoca segni neurologici acuti (tremori, barcollamento, convulsioni) e morte rapida, un quadro clinico molto diverso."
-            },
-            {
-                question: "Per approfondire la diagnosi, decidi di eseguire un'ecografia toracica. La presenza diffusa di 'linee B' (artefatti a coda di cometa) e aree di consolidamento polmonare ventrali è fortemente suggestiva di quale condizione?",
-                answers: [
-                    "Enfisema polmonare.",
-                    "Quadro polmonare normale.",
-                    "Broncopolmonite essudativa.",
-                    "Ernia diaframmatica."
-                ],
-                correct: 2,
-                rationale: "Le linee B indicano un aumento del contenuto di liquidi nell'interstizio e/o negli alveoli, e il consolidamento (epatizzazione) è il segno patognomonico della polmonite."
-            },
-            {
-                question: "Per identificare gli agenti eziologici, esegui un lavaggio broncoalveolare (BAL). Quale dei seguenti batteri è considerato il principale responsabile della mortalità e delle lesioni polmonari gravi nella BRD?",
-                answers: [
-                    "Mannheimia haemolytica.",
-                    "Pasteurella multocida.",
-                    "Histophilus somni.",
-                    "Mycoplasma bovis."
-                ],
-                correct: 0,
-                rationale: "Questo batterio è noto per la sua potente leucotossina, che causa una grave polmonite fibrino-necrotica ed è l'agente più letale nella BRD."
-            },
-            {
-                question: "L'esito del BAL conferma la presenza di *Mannheimia haemolytica* e del Bovine Herpesvirus 1 (BHV-1). Qual è il ruolo più probabile del BHV-1 in questo caso?",
-                answers: [
-                    "È un contaminante del campione.",
-                    "È l'agente della setticemia.",
-                    "È l'agente primario che ha danneggiato le difese respiratorie, favorendo l'infezione batterica secondaria.",
-                    "Ha causato una mutazione in Mannheimia."
-                ],
-                correct: 2,
-                rationale: "Molti virus della BRD, incluso BHV-1, compromettono l'epitelio respiratorio e la funzione immunitaria locale, aprendo la strada ai batteri."
-            },
-            {
-                question: "La diagnosi è Broncopolmonite da *Mannheimia haemolytica* secondaria a infezione da BHV-1. Poiché più del 20% degli animali mostra segni clinici, quale approccio gestionale è più indicato?",
-                answers: [
-                    "Trattare solo gli animali con febbre > 41°C.",
-                    "Isolare i malati e non trattare il resto del gruppo.",
-                    "Eseguire la metafilassi: trattare l'intero gruppo con un antibiotico a lunga azione.",
-                    "Vaccinare immediatamente l'intero gruppo."
-                ],
-                correct: 2,
-                rationale: "La metafilassi è il trattamento di un intero gruppo di animali a seguito della diagnosi di infezione in una parte del gruppo, ed è la strategia standard per controllare i focolai di BRD."
-            },
-            {
-                question: "Nella scelta dell'antibiotico per la terapia/metafilassi, quale criterio è FONDAMENTALE per un uso prudente ed efficace?",
-                answers: [
-                    "Scegliere sempre la molecola più recente.",
-                    "Utilizzare una molecola con spettro mirato, lunga durata d'azione e buona penetrazione polmonare.",
-                    "Scegliere l'antibiotico con il costo per ml più basso.",
-                    "Usare una combinazione di almeno tre antibiotici."
-                ],
-                correct: 1,
-                rationale: "Questi sono i tre pilastri della terapia antibiotica efficace: colpire i patogeni giusti, mantenere concentrazioni efficaci a lungo e raggiungere il sito d'infezione."
-            },
-            {
-                question: "Oltre alla terapia antibiotica, quale misura di supporto è cruciale per la guarigione dei vitelli affetti da BRD?",
-                answers: [
-                    "Somministrazione di un FANS (Farmaco Antinfiammatorio Non Steroideo).",
-                    "Lasciare gli animali nel box principale.",
-                    "Forzare l'alimentazione con sonda gastrica.",
-                    "Aumentare la densità di animali nel box."
-                ],
-                correct: 0,
-                rationale: "I FANS sono fondamentali per ridurre la febbre, l'infiammazione polmonare e il dolore, migliorando il benessere dell'animale e favorendo la ripresa dell'appetito."
+let currentQuestionIndex = 0;
+const quizContainer = document.getElementById('quiz-container');
+
+function displayQuestion() {
+    if (currentQuestionIndex >= quizData.length) {
+        quizContainer.innerHTML = ''; // Quiz finished
+        return;
+    }
+
+    const currentQuiz = quizData[currentQuestionIndex];
+    let optionsHtml = '';
+    currentQuiz.options.forEach((option, index) => {
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+    });
+
+    quizContainer.innerHTML = `
+        <div class="quiz-card p-4 border rounded-lg bg-gray-50">
+            <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
+            <div class="options-container">${optionsHtml}</div>
+            <div class="feedback-container mt-2"></div>
+        </div>
+    `;
+
+    document.querySelectorAll('.quiz-option').forEach(button => {
+        button.addEventListener('click', checkAnswer);
+    });
+}
+
+function checkAnswer(event) {
+    const selectedOption = event.target.closest('.quiz-option'); // Fix: always target the button
+    const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
+    const currentQuiz = quizData[currentQuestionIndex];
+    const feedbackContainer = quizContainer.querySelector('.feedback-container');
+
+    // Disable all buttons after an answer is chosen
+    document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+
+    if (selectedAnswerIndex === currentQuiz.answer) {
+        selectedOption.classList.add('correct');
+        feedbackContainer.innerHTML = `
+            <div class="feedback correct">
+                ${currentQuiz.feedback}
+            </div>
+            <button id="next-question-btn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg w-full">
+                Prosegui
+            </button>
+        `;
+
+        document.getElementById('next-question-btn').addEventListener('click', () => {
+            if (currentQuiz.reveals) {
+                const revealedSection = document.getElementById(currentQuiz.reveals);
+                revealedSection.style.display = 'block';
+                revealedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-        ];
-
-        let currentQuestionIndex = 0;
-        let score = 0;
-
-        const screens = document.querySelectorAll('.screen');
-        const startBtn = document.getElementById('start-btn');
-        const anamnesiBtn = document.getElementById('anamnesi-btn');
-        const esameClinicoBtn = document.getElementById('esame-clinico-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const restartBtn = document.getElementById('restart-btn');
-
-        const questionCounter = document.getElementById('question-counter');
-        const progressBar = document.getElementById('progress-bar');
-        const questionText = document.getElementById('question-text');
-        const answerButtonsContainer = document.getElementById('answer-buttons');
-        const rationaleContainer = document.getElementById('rationale-container');
-        const rationaleText = document.getElementById('rationale-text');
-        
-        const finalScoreEl = document.getElementById('final-score');
-        const scoreMessageEl = document.getElementById('score-message');
-        
-        // Modal elements
-        const summaryModal = document.getElementById('summary-modal');
-        const brdSheetModal = document.getElementById('brd-sheet-modal');
-        const summaryBtn = document.getElementById('summary-btn');
-        const brdSheetBtn = document.getElementById('brd-sheet-btn');
-        const closeSummaryBtn = document.getElementById('close-summary-btn');
-        const closeBrdBtn = document.getElementById('close-brd-btn');
-        const printBrdBtn = document.getElementById('print-brd-btn');
-
-
-        function showScreen(screenId) {
-            screens.forEach(screen => {
-                screen.classList.remove('active-screen');
-            });
-            document.getElementById(screenId).classList.add('active-screen');
-        }
-
-        function startQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            showScreen('quiz-screen');
-            showQuestion();
-        }
-
-        function showQuestion() {
-            resetState();
-            const currentQuestion = quizData[currentQuestionIndex];
-            questionText.textContent = currentQuestion.question;
-            
-            currentQuestion.answers.forEach((answer, index) => {
-                const button = document.createElement('button');
-                button.innerHTML = answer;
-                button.classList.add('answer-btn', 'w-full', 'p-4', 'border-2', 'rounded-lg', 'text-left', 'transition-colors', 'duration-200', 'hover:bg-gray-100', 'hover:border-blue-500');
-                button.dataset.index = index;
-                button.addEventListener('click', selectAnswer);
-                answerButtonsContainer.appendChild(button);
-            });
-
-            updateProgress();
-        }
-
-        function resetState() {
-            while (answerButtonsContainer.firstChild) {
-                answerButtonsContainer.removeChild(answerButtonsContainer.firstChild);
-            }
-            rationaleContainer.classList.add('hidden');
-            nextBtn.classList.add('hidden');
-        }
-
-        function selectAnswer(e) {
-            const selectedBtn = e.target;
-            const selectedIndex = parseInt(selectedBtn.dataset.index);
-            const correctIndex = quizData[currentQuestionIndex].correct;
-
-            if (selectedIndex === correctIndex) {
-                score++;
-                selectedBtn.classList.add('correct');
-            } else {
-                selectedBtn.classList.add('incorrect');
-            }
-            
-            Array.from(answerButtonsContainer.children).forEach(button => {
-                if (parseInt(button.dataset.index) === correctIndex) {
-                    button.classList.add('correct');
-                }
-                button.disabled = true;
-            });
-
-            rationaleText.textContent = quizData[currentQuestionIndex].rationale;
-            rationaleContainer.classList.remove('hidden');
-            nextBtn.classList.remove('hidden');
-        }
-        
-        function showNextQuestion() {
             currentQuestionIndex++;
-            if (currentQuestionIndex < quizData.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        }
-
-        function updateProgress() {
-            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
-            questionCounter.textContent = `Domanda ${currentQuestionIndex + 1} di ${quizData.length}`;
-            progressBar.style.width = `${progress}%`;
-        }
-        
-        function showResults() {
-            const scorePercent = Math.round((score / quizData.length) * 100);
-            finalScoreEl.textContent = `${score}/${quizData.length}`;
-
-            let message = '';
-            if (scorePercent === 100) {
-                message = "Eccellente! Hai dimostrato una profonda conoscenza del caso. Diagnosi perfetta!";
-            } else if (scorePercent >= 70) {
-                message = "Ottimo lavoro! Hai gestito il caso con competenza, dimostrando un solido ragionamento clinico.";
-            } else if (scorePercent >= 50) {
-                message = "Buon tentativo. Rivedi le spiegazioni per consolidare i punti in cui hai avuto difficoltà.";
-            } else {
-                message = "C'è margine di miglioramento. Non arrenderti, ripassa il caso e riprova. Ogni errore è un'opportunità per imparare!";
-            }
-            scoreMessageEl.textContent = message;
-
-            showScreen('results-screen');
-        }
-
-        startBtn.addEventListener('click', () => showScreen('anamnesi-screen'));
-        anamnesiBtn.addEventListener('click', () => showScreen('esame-clinico-screen'));
-        esameClinicoBtn.addEventListener('click', startQuiz);
-        nextBtn.addEventListener('click', showNextQuestion);
-        restartBtn.addEventListener('click', () => {
-            currentQuestionIndex = 0;
-            score = 0;
-            showScreen('start-screen');
+            displayQuestion();
         });
-        
-        // Modal listeners
-        summaryBtn.onclick = function() {
-            summaryModal.style.display = "block";
-        }
-        brdSheetBtn.onclick = function() {
-            brdSheetModal.style.display = "block";
-        }
-        closeSummaryBtn.onclick = function() {
-            summaryModal.style.display = "none";
-        }
-        closeBrdBtn.onclick = function() {
-            brdSheetModal.style.display = "none";
-        }
-        printBrdBtn.onclick = function() {
-            window.print();
-        }
-        window.onclick = function(event) {
-            if (event.target == summaryModal) {
-                summaryModal.style.display = "none";
-            }
-            if (event.target == brdSheetModal) {
-                brdSheetModal.style.display = "none";
-            }
-        }
+    } else {
+        selectedOption.classList.add('incorrect');
+        feedbackContainer.innerHTML = `<div class="feedback incorrect">Risposta non corretta. Riprova a ragionare sul caso.</div>`;
+         setTimeout(() => { // Re-enable buttons to allow another try
+            document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = false);
+            selectedOption.classList.remove('incorrect');
+            feedbackContainer.innerHTML = '';
+        }, 2000);
+    }
+}
 
-    </script>
+// Start the quiz
+window.onload = displayQuestion;
+</script>
+
 </body>
 </html>
-
