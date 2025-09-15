@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Interattivo: Dislocazione Abomasale</title>
+    <title>Caso Clinico: Bovino, Apparato Digerente</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,7 +89,7 @@
             fill: #4f46e5;
         }
         .tts-button.active svg {
-            fill: #dc2626; /* Red for stop */
+            fill: #4f46e5;
         }
     </style>
 </head>
@@ -396,6 +396,8 @@ const quizData = [
 let currentQuestionIndex = 0;
 const quizContainer = document.getElementById('quiz-container');
 let userAnswers = new Array(quizData.length).fill(null);
+let currentUtterance = null;
+let speakingButton = null;
 
 // --- Accessibility & Language Functions ---
 const standardFontBtn = document.getElementById('font-standard-btn');
@@ -419,6 +421,13 @@ function setFont(fontType) {
 }
 
 function setLanguage(lang) {
+    speechSynthesis.cancel();
+    if(speakingButton) {
+        speakingButton.classList.remove('active');
+        speakingButton = null;
+        currentUtterance = null;
+    }
+    
     currentLanguage = lang;
     localStorage.setItem('languagePreference', lang);
 
@@ -469,25 +478,48 @@ document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('case-container').addEventListener('click', function(event) {
     const ttsButton = event.target.closest('.tts-button');
     if (ttsButton) {
-        const sectionToRead = ttsButton.parentElement;
-        const title = sectionToRead.querySelector('h2, h3');
-        const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3')).map(el => el.innerText).join('\n');
-        const textToRead = (title ? title.innerText + '.\n' : '') + content;
-        
-        if (speechSynthesis.speaking) {
-            speechSynthesis.cancel();
-            document.querySelectorAll('.tts-button').forEach(btn => btn.classList.remove('active'));
+        if (speakingButton === ttsButton) {
+            // Clicked the same button that is currently active
+            if (speechSynthesis.paused) {
+                speechSynthesis.resume();
+            } else if (speechSynthesis.speaking) {
+                speechSynthesis.pause();
+            }
         } else {
-            const utterance = new SpeechSynthesisUtterance(textToRead);
-            utterance.lang = currentLanguage === 'en' ? 'en-US' : 'it-IT';
-            utterance.onend = () => {
-                ttsButton.classList.remove('active');
+            // Clicked a new button
+            speechSynthesis.cancel();
+            if(speakingButton) {
+                speakingButton.classList.remove('active');
+            }
+
+            const sectionToRead = ttsButton.parentElement;
+            const title = sectionToRead.querySelector('h2, h3');
+            const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3')).map(el => el.innerText).join('\n');
+            const textToRead = (title ? title.innerText + '.\n' : '') + content;
+            
+            currentUtterance = new SpeechSynthesisUtterance(textToRead);
+            currentUtterance.lang = currentLanguage === 'en' ? 'en-US' : 'it-IT';
+            
+            currentUtterance.onend = () => {
+                if (speakingButton) speakingButton.classList.remove('active');
+                speakingButton = null;
+                currentUtterance = null;
             };
-            speechSynthesis.speak(utterance);
+
+            currentUtterance.onerror = (e) => {
+                console.error('SpeechSynthesis Error:', e);
+                if (speakingButton) speakingButton.classList.remove('active');
+                speakingButton = null;
+                currentUtterance = null;
+            };
+            
+            speechSynthesis.speak(currentUtterance);
             ttsButton.classList.add('active');
+            speakingButton = ttsButton;
         }
     }
 });
+
 
 // --- Quiz Logic ---
 function displayQuestion() {
@@ -526,7 +558,14 @@ function displayQuestion() {
 function checkAnswer(event) {
     const selectedOption = event.target.closest('.quiz-option'); 
     if (!selectedOption || selectedOption.disabled) return;
+
     speechSynthesis.cancel();
+    if(speakingButton) {
+        speakingButton.classList.remove('active');
+        speakingButton = null;
+        currentUtterance = null;
+    }
+
     const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
     userAnswers[currentQuestionIndex] = selectedAnswerIndex;
     document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
