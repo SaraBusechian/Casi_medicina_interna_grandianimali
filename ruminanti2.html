@@ -604,8 +604,8 @@ function showResults() {
     document.getElementById('review-section').innerHTML = reviewHtml;
     document.getElementById('review-section').style.display = 'block';
     
-    document.querySelectorAll('#final-summary > div').forEach(el => el.classList.add('hidden'));
-    document.querySelector(`#final-summary > div[lang=${currentLanguage}]`).classList.remove('hidden');
+    document.querySelectorAll('#final-summary div[lang]').forEach(el => el.classList.add('hidden'));
+    document.querySelector(`#final-summary div[lang=${currentLanguage}]`).classList.remove('hidden');
     document.getElementById('final-summary').style.display = 'block';
 }
 
