@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Interattivo: Pecora con Zoppia</title>
+    <title>Caso Clinico: Ovino, Apparato Tegumentario</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,66 +11,85 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
         }
-        .case-section {
+        /* Stili per la modalità accessibile */
+        body.font-dyslexic {
+            font-family: Verdana, sans-serif;
+            background-color: #ffffff;
+        }
+        .font-dyslexic p, 
+        .font-dyslexic li, 
+        .font-dyslexic h2, 
+        .font-dyslexic h3, 
+        .font-dyslexic div,
+        .font-dyslexic button,
+        .font-dyslexic span {
+            font-size: 14pt;
+            letter-spacing: 0.05em;
+            word-spacing: 0.15em;
+            line-height: 1.8;
+            color: #111827; /* Nero più intenso */
+        }
+        .font-dyslexic .quiz-option {
+            font-size: 14pt !important;
+        }
+         .font-dyslexic h1, .font-dyslexic h2, .font-dyslexic h3 {
+            font-size: 1.5em; /* Aumenta la dimensione dei titoli proporzionalmente */
+        }
+
+        .case-section, .quiz-card {
+            position: relative;
             background-color: #f9fafb;
             border-left: 4px solid #4f46e5;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border-radius: 0.5rem;
         }
-        .hidden-section {
-            display: none;
+        .quiz-card {
+             margin-bottom: 0;
         }
-        .quiz-option {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0.5rem;
+        .hidden-section { display: none; }
+        .quiz-option { display: block; width: 100%; text-align: left; padding: 0.75rem 1.25rem; margin-bottom: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.5rem; background-color: #ffffff; transition: all 0.2s ease-in-out; cursor: pointer; }
+        .quiz-option:hover:not(:disabled) { border-color: #4f46e5; background-color: #eef2ff; }
+        .quiz-option.selected { border-color: #4f46e5; background-color: #e0e7ff; font-weight: 600; }
+        .quiz-option:disabled { cursor: not-allowed; }
+        .summary-section { background-color: #f3f4f6; border: 1px solid #d1d5db; padding: 2rem; margin-top: 3rem; border-radius: 0.5rem; }
+        
+        .accessibility-controls button {
+            padding: 0.5rem 1rem;
             border: 1px solid #d1d5db;
             border-radius: 0.5rem;
-            background-color: #ffffff;
-            transition: all 0.2s ease-in-out;
+            background-color: white;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .quiz-option:hover {
+        .accessibility-controls button.active {
+            background-color: #4f46e5;
+            color: white;
             border-color: #4f46e5;
-            background-color: #eef2ff;
         }
-        .quiz-option.correct {
-            background-color: #d1fae5;
-            border-color: #10b981;
+        .tts-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
         }
-        .quiz-option.incorrect {
-            background-color: #fee2e2;
-            border-color: #ef4444;
+        .tts-button svg {
+            width: 100%;
+            height: 100%;
+            fill: #6b7280;
+            transition: fill 0.2s;
         }
-        .feedback {
-            padding: 0.75rem 1.25rem;
-            margin-top: 1rem;
-            border-radius: 0.5rem;
+        .tts-button:hover svg {
+            fill: #4f46e5;
         }
-        .feedback.correct {
-            background-color: #e0f2fe;
-            color: #0c4a6e;
-        }
-        .feedback.incorrect {
-            background-color: #fef2f2;
-            color: #991b1b;
-        }
-        .summary-section {
-            background-color: #f3f4f6;
-            border: 1px solid #d1d5db;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-radius: 0.5rem;
-        }
-        @media print {
-            body * { visibility: hidden; }
-            #printable-summary, #printable-summary * { visibility: visible; }
-            #printable-summary { position: absolute; left: 0; top: 0; width: 100%; }
-            .no-print { display: none; }
+        .tts-button.active svg {
+            fill: #4f46e5;
         }
     </style>
 </head>
@@ -79,280 +98,523 @@
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600">Caso Clinico Veterinario Interattivo</h1>
-            <p class="text-lg text-gray-600 mt-2">Risolvi il caso passo dopo passo</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600" data-translate-key="mainTitle">Caso Clinico Veterinario Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2" data-translate-key="mainSubtitle">Risolvi il caso passo dopo passo</p>
         </header>
+
+        <!-- Accessibility Controls -->
+        <div class="accessibility-controls flex justify-center items-center flex-wrap gap-4 mb-8 bg-white p-4 rounded-lg shadow">
+            <div>
+                <span class="font-semibold text-gray-700 mr-2" data-translate-key="readingSettings">Impostazioni di lettura:</span>
+                <button id="font-standard-btn" class="active" data-translate-key="fontStandard">Font Standard</button>
+                <button id="font-dyslexic-btn" data-translate-key="fontAccessible">Font Accessibile</button>
+            </div>
+            <div class="border-l-2 border-gray-200 pl-4">
+                <span class="font-semibold text-gray-700 mr-2" data-translate-key="language">Lingua:</span>
+                <button id="lang-it-btn" class="active">ITA</button>
+                <button id="lang-en-btn">ENG</button>
+            </div>
+        </div>
 
         <main id="case-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
 
             <!-- Sezione 1: Anamnesi (visibile da subito) -->
             <section id="anamnesi" class="case-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
-                <div class="space-y-3 text-gray-700">
-                    <p><strong>Paziente:</strong> Pecora di razza Sarda, 4 anni, in lattazione da circa 60 giorni.</p>
-                    <p><strong>Allevamento:</strong> Semi-estensivo.</p>
-                    <p><strong>Motivo della visita:</strong> L'allevatore riferisce che la pecora presenta da circa 24 ore zoppia marcata all'arto posteriore sinistro, si isola dal gregge, è abbattuta e anoressica. La produzione di latte è quasi azzerata.</p>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="anamnesisTitle">1. Anamnesi e Segnalamento</h2>
+                <div class="space-y-3 text-gray-700" data-translate-key="anamnesisContent">
+                    <p><strong>Paziente:</strong> Pecora di razza Sarda, 4 anni, parto gemellare da 10 giorni.</p>
+                    <p><strong>Storia:</strong> L'allevatore nota che la pecora zoppica, è apatica e uno dei due agnelli è debole e non riesce a poppare.</p>
                 </div>
             </section>
             
             <!-- Sezione 2: Visita Clinica (nascosta) -->
             <section id="visita-clinica" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">2. Esame Clinico</h2>
-                 <div class="space-y-2 text-gray-700">
-                    <p>L'animale si presenta in decubito sternale, restio ad alzarsi. Si evidenziano marcati segni di malessere generale.</p>
-                    <ul class="list-disc list-inside space-y-1">
-                        <li><strong>Parametri vitali:</strong> T° 41.5°C, FC 120 bpm, FR 60 apm. Mucose congeste.</li>
-                        <li><strong>Esame della mammella:</strong> La ghiandola mammaria sinistra è marcatamente aumentata di volume, calda, edematosa e molto dolente alla palpazione. La cute sovrastante appare di colore rosso scuro-violaceo. La ghiandola destra è normale.</li>
-                        <li><strong>Esame del latte:</strong> Alla mungitura, dalla mammella sinistra fuoriesce un secreto acquoso, giallastro, maleodorante, contenente coaguli e fiocchi di fibrina.</li>
-                    </ul>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                     <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="clinicalExamTitle">2. Esame Clinico</h2>
+                 <div class="space-y-2 text-gray-700" data-translate-key="clinicalExamContent">
+                    <p>La pecora ha una temperatura di 41.5°C, frequenza cardiaca di 120 bpm e frequenza respiratoria di 50 apm. La mammella sinistra è calda, edematosa, dura e dolente alla palpazione. Alla spremitura del capezzolo, esce un secreto acquoso, giallastro con coaguli di fibrina.</p>
                 </div>
             </section>
             
             <!-- Sezione 3: Iter Diagnostico (nascosta) -->
             <section id="iter-diagnostico" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">3. Approccio Diagnostico</h2>
-                <p class="text-gray-700">Oltre all'esame clinico, si decide di effettuare alcuni test rapidi e di prelevare un campione di latte per analisi di laboratorio.</p>
-            </section>
-
-            <!-- Sezione 4: Risultati Test (nascosta) -->
-             <section id="risultati-test" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">4. Risultati degli Esami</h2>
-                <div class="space-y-3 text-gray-700">
-                    <p><strong>California Mastitis Test (CMT):</strong> Eseguito sul latte di entrambe le ghiandole, il test risulta fortemente positivo (reazione a gel denso, +++) per la mammella sinistra, mentre è negativo per la destra.</p>
-                    <p><strong>Esame batteriologico:</strong> Il campione di latte, inviato al laboratorio, rileva una crescita massiva di <em>Staphylococcus aureus</em>.</p>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                     <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="diagnosticProcTitle">3. Procedure Diagnostiche</h2>
+                <div class="space-y-3 text-gray-700" data-translate-key="diagnosticProcContent">
+                    <p>Si esegue un California Mastitis Test (CMT) sul secreto mammario.</p>
+                    <ul class="list-disc list-inside space-y-1">
+                       <li><strong>Risultato:</strong> Il test risulta fortemente positivo (+++) per la mammella sinistra.</li>
+                    </ul>
                 </div>
             </section>
 
             <!-- Contenitore del Quiz -->
             <div id="quiz-container" class="mt-6"></div>
 
+            <!-- Sezione Risultati (nascosta) -->
+            <div id="results-section" class="summary-section hidden-section"></div>
+
+            <div id="review-section" class="hidden-section mt-8"></div>
+
             <!-- Sezione Finale: Diagnosi e Riassunto (nascosta) -->
             <div id="final-summary" class="summary-section hidden-section">
-                <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Caso Risolto!</h2>
-                <p class="text-center text-xl mb-4">Diagnosi: <strong>Mastite gangrenosa acuta da <em>Staphylococcus aureus</em></strong></p>
-                
-                <div id="printable-summary">
-                    <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Mastite Gangrenosa nella Pecora</h2>
-                    <div class="space-y-4 text-left">
-                        <div>
-                            <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
-                            <p class="text-gray-700">È una forma iperacuta e grave di mastite, spesso causata da batteri produttori di tossine come <em>Staphylococcus aureus</em> o alcuni <em>Clostridium</em>. Le tossine causano una rapida necrosi (morte) del tessuto mammario, trombosi dei vasi sanguigni e il rilascio di gas, portando alla gangrena della ghiandola.</p>
+                <!-- Italian -->
+                <div lang="it">
+                    <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Diagnosi Confermata!</h2>
+                    <p class="text-center text-xl mb-4">La patologia è: <strong>Mastite acuta gangrenosa</strong></p>
+                    <div id="printable-summary-it">
+                        <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Mastite Gangrenosa Ovina</h2>
+                        <div class="space-y-4 text-left">
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
+                                <p class="text-gray-700">La mastite gangrenosa è una forma iperacuta e grave di mastite, spesso causata da batteri produttori di tossine come lo <em>Staphylococcus aureus</em>. Le tossine causano una trombosi vascolare, portando a ischemia e necrosi del tessuto mammario. È una vera emergenza medica.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Segni Clinici</h3>
+                                 <p class="text-gray-700">I segni iniziali includono febbre alta, depressione, anoressia e zoppia. La mammella colpita è inizialmente calda, gonfia e dolente, ma diventa rapidamente fredda, insensibile e assume una colorazione blu-violacea a causa della necrosi. Il secreto è acquoso e spesso maleodorante. L'animale sviluppa rapidamente uno stato di tossiemia e shock.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Diagnosi e Terapia</h3>
+                                <p class="text-gray-700">La diagnosi si basa sui gravi segni clinici. La terapia deve essere immediata e aggressiva, basata su antibiotici sistemici ad ampio spettro, farmaci anti-infiammatori non steroidei (FANS), fluidoterapia per contrastare lo shock e, se necessario, l'amputazione chirurgica della mammella necrotica. La prognosi per la sopravvivenza della mammella è infausta (il tessuto andrà in necrosi e si staccherà), mentre la prognosi per la vita dell'animale è riservata e dipende dalla tempestività del trattamento.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-indigo-600">Segni Clinici</h3>
-                            <p class="text-gray-700">I segni sistemici sono gravi e rapidi: febbre alta, depressione, anoressia, tachicardia. La mammella colpita inizialmente è calda, rossa e dolente, ma evolve rapidamente diventando fredda, insensibile e di colore blu-nerastro a causa della necrosi. Il secreto è acquoso e maleodorante. La zoppia è comune a causa del dolore e dell'ingombro della mammella.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-indigo-600">Terapia e Prognosi</h3>
-                            <p class="text-gray-700">La terapia deve essere immediata e aggressiva, focalizzata sul supporto sistemico: fluidoterapia, antibiotici ad ampio spettro per via endovenosa, antinfiammatori potenti. La prognosi per la vita dell'animale è riservata e dipende dalla rapidità dell'intervento. La prognosi per la funzionalità della ghiandola colpita è infausta: il tessuto necrotico non si rigenera e andrà incontro a sequestro o richiederà un'ablazione chirurgica (mastectomia).</p>
+                    </div>
+                </div>
+                 <!-- English -->
+                <div lang="en" class="hidden">
+                    <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Diagnosis Confirmed!</h2>
+                    <p class="text-center text-xl mb-4">The condition is: <strong>Acute gangrenous mastitis</strong></p>
+                    <div id="printable-summary-en">
+                        <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Summary Sheet: Ovine Gangrenous Mastitis</h2>
+                        <div class="space-y-4 text-left">
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">What is it?</h3>
+                                <p class="text-gray-700">Gangrenous mastitis is a peracute and severe form of mastitis, often caused by toxin-producing bacteria such as <em>Staphylococcus aureus</em>. The toxins cause vascular thrombosis, leading to ischemia and necrosis of the mammary tissue. It is a true medical emergency.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Clinical Signs</h3>
+                                <p class="text-gray-700">Initial signs include high fever, depression, anorexia, and lameness. The affected udder is initially hot, swollen, and painful, but quickly becomes cold, insensitive, and develops a blue-purplish discoloration due to necrosis. The secretion is watery and often foul-smelling. The animal rapidly develops toxemia and shock.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Diagnosis and Treatment</h3>
+                                <p class="text-gray-700">Diagnosis is based on the severe clinical signs. Treatment must be immediate and aggressive, based on broad-spectrum systemic antibiotics, non-steroidal anti-inflammatory drugs (NSAIDs), fluid therapy to counteract shock, and, if necessary, surgical amputation of the necrotic udder. The prognosis for the survival of the udder is grave (the tissue will become necrotic and slough off), while the prognosis for the animal's life is guarded and depends on the timeliness of treatment.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="text-center mt-8 no-print">
-                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">Stampa o Salva Riassunto</button>
+                <div class="text-center mt-8">
+                    <button id="print-btn" onclick="printSummary()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300" data-translate-key="printButton">Stampa o Salva Riassunto</button>
                 </div>
             </div>
-
         </main>
         
-        <footer class="text-center mt-8 text-sm text-gray-500 no-print">
-            <p>Questo caso clinico è stato generato a scopo didattico.</p>
+        <footer class="text-center mt-8 text-sm text-gray-500">
+             <p data-translate-key="footerCredit">Creato da Sara Busechian.</p>
+            <p data-translate-key="footerText" class="mt-1">Questo caso clinico è stato generato a scopo didattico.</p>
         </footer>
     </div>
 
 <script>
+let currentLanguage = 'it';
+
+const translations = {
+    it: {
+        mainTitle: "Caso Clinico Veterinario Interattivo",
+        mainSubtitle: "Risolvi il caso passo dopo passo",
+        readingSettings: "Impostazioni di lettura:",
+        fontStandard: "Font Standard",
+        fontAccessible: "Font Accessibile",
+        language: "Lingua:",
+        anamnesisTitle: "1. Anamnesi e Segnalamento",
+        anamnesisContent: `<p><strong>Paziente:</strong> Pecora di razza Sarda, 4 anni, parto gemellare da 10 giorni.</p><p><strong>Storia:</strong> L'allevatore nota che la pecora zoppica, è apatica e uno dei due agnelli è debole e non riesce a poppare.</p>`,
+        clinicalExamTitle: "2. Esame Clinico",
+        clinicalExamContent: `<p>La pecora ha una temperatura di 41.5°C, frequenza cardiaca di 120 bpm e frequenza respiratoria di 50 apm. La mammella sinistra è calda, edematosa, dura e dolente alla palpazione. Alla spremitura del capezzolo, esce un secreto acquoso, giallastro con coaguli di fibrina.</p>`,
+        diagnosticProcTitle: "3. Procedure Diagnostiche",
+        diagnosticProcContent: `<p>Si esegue un California Mastitis Test (CMT) sul secreto mammario.</p><ul class="list-disc list-inside space-y-1"><li><strong>Risultato:</strong> Il test risulta fortemente positivo (+++) per la mammella sinistra.</li></ul>`,
+        quizCompleted: "Quiz Completato!",
+        yourScoreIs: "Il tuo punteggio è:",
+        scoreText: "Di seguito trovi il riepilogo delle tue risposte e la scheda del caso clinico.",
+        reviewTitle: "Riepilogo Risposte",
+        yourAnswer: "La tua risposta:",
+        correctAnswer: "Risposta corretta:",
+        noAnswer: "Nessuna risposta",
+        printButton: "Stampa o Salva Riassunto",
+        footerCredit: "Creato da Sara Busechian.",
+        footerText: "Questo caso clinico è stato generato a scopo didattico.",
+        questionProgress: "Domanda",
+        of: "di",
+        printWindowTitle: "Riassunto Caso Clinico"
+    },
+    en: {
+        mainTitle: "Interactive Veterinary Clinical Case",
+        mainSubtitle: "Solve the case step-by-step",
+        readingSettings: "Reading Settings:",
+        fontStandard: "Standard Font",
+        fontAccessible: "Accessible Font",
+        language: "Language:",
+        anamnesisTitle: "1. Signalment and History",
+        anamnesisContent: `<p><strong>Patient:</strong> 4-year-old Sarda breed ewe, 10 days post-partum with twin lambs.</p><p><strong>History:</strong> The farmer notices the ewe is lame, apathetic, and one of the two lambs is weak and unable to suckle.</p>`,
+        clinicalExamTitle: "2. Clinical Examination",
+        clinicalExamContent: `<p>The ewe has a temperature of 41.5°C, a heart rate of 120 bpm, and a respiratory rate of 50 bpm. The left udder is hot, swollen, hard, and painful on palpation. Upon stripping the teat, a watery, yellowish secretion with fibrin clots is expressed.</p>`,
+        diagnosticProcTitle: "3. Diagnostic Procedures",
+        diagnosticProcContent: `<p>A California Mastitis Test (CMT) is performed on the mammary secretion.</p><ul class="list-disc list-inside space-y-1"><li><strong>Result:</strong> The test is strongly positive (+++) for the left udder half.</li></ul>`,
+        quizCompleted: "Quiz Completed!",
+        yourScoreIs: "Your score is:",
+        scoreText: "Below you will find a summary of your answers and the case study sheet.",
+        reviewTitle: "Answers Summary",
+        yourAnswer: "Your answer:",
+        correctAnswer: "Correct answer:",
+        noAnswer: "No answer",
+        printButton: "Print or Save Summary",
+        footerCredit: "Created by Sara Busechian.",
+        footerText: "This clinical case was generated for educational purposes.",
+        questionProgress: "Question",
+        of: "of",
+        printWindowTitle: "Clinical Case Summary"
+    }
+};
+
 const quizData = [
-    {
-        question: "1/10: In base all'anamnesi, quale sintomo è più indicativo di una patologia grave e sistemica piuttosto che di un semplice problema locale?",
-        options: [
-            "La zoppia",
-            "La produzione di latte azzerata",
-            "L'isolamento dal gregge, l'abbattimento e l'anoressia",
-            "L'età dell'animale"
-        ],
-        answer: 2,
-        feedback: "Corretto. Mentre la zoppia e il calo di latte possono avere molte cause, i gravi segni sistemici indicano che l'intero organismo è compromesso, suggerendo una tossiemia o setticemia.",
-        reveals: "visita-clinica"
+    { 
+        question: { it: "La zoppia in una pecora in lattazione può essere un segno di:", en: "Lameness in a lactating ewe can be a sign of:" }, 
+        answer: 2, 
+        reveals: "visita-clinica", 
+        options: { 
+            it: ["Artrite", "Trauma a un arto", "Dolore mammario (mastite)", "Una malattia neurologica"],
+            en: ["Arthritis", "Limb trauma", "Udder pain (mastitis)", "A neurological disease"]
+        }
     },
-    {
-        question: "2/10: La zoppia all'arto posteriore sinistro in una pecora con mastite è spesso definita 'zoppia da mastite'. Perché si manifesta?",
-        options: [
-            "Per un'infezione batterica all'articolazione",
-            "Per un meccanismo antalgico: l'animale allarga l'arto per non toccare la mammella dolente e ingrossata",
-            "Per un danno neurologico causato dalle tossine",
-            "Perché la mastite causa sempre artrite"
-        ],
-        answer: 1,
-        feedback: "Esatto. Il dolore e l'ingombro meccanico della mammella infiammata portano l'animale a modificare la propria andatura per evitare il contatto e alleviare il dolore.",
-        reveals: null
+    { 
+        question: { it: "Una temperatura di 41.5°C in una pecora indica:", en: "A temperature of 41.5°C in a sheep indicates:" }, 
+        answer: 1, 
+        reveals: null, 
+        options: {
+            it: ["Stress da caldo", "Uno stato settico grave", "Una normale reazione post-partum", "Un errore del termometro"],
+            en: ["Heat stress", "A severe septic state", "A normal post-partum reaction", "A thermometer error"]
+        }
     },
-    {
-        question: "3/10: I parametri vitali (T° 41.5°C, FC 120, FR 60) e l'aspetto della mammella (calda, edematosa, rosso-violacea) sono compatibili con quale forma di mastite?",
-        options: [
-            "Mastite subclinica",
-            "Mastite cronica",
-            "Mastite acuta/iperacuta",
-            "Un ascesso mammario localizzato"
-        ],
-        answer: 2,
-        feedback: "Perfetto. La febbre alta e i segni sistemici, uniti ai classici segni dell'infiammazione acuta (calor, rubor, tumor, dolor), definiscono una mastite acuta.",
-        reveals: "iter-diagnostico"
+    { 
+        question: { it: "Il secreto mammario descritto (acquoso, giallastro, con coaguli) è indicativo di:", en: "The described mammary secretion (watery, yellowish, with clots) is indicative of:" }, 
+        answer: 0, 
+        reveals: "iter-diagnostico", 
+        options: {
+            it: ["Un'infezione batterica grave della mammella", "Latte normale all'inizio della lattazione", "Un edema mammario", "La presenza di sangue nel latte"],
+            en: ["A severe bacterial infection of the udder", "Normal milk at the beginning of lactation", "Mammary edema", "The presence of blood in the milk"]
+        }
     },
-    {
-        question: "4/10: Qual è il test di campo più rapido ed economico per confermare un sospetto di mastite e valutare l'infiammazione della mammella?",
-        options: [
-            "Esame batteriologico",
-            "Conta delle cellule somatiche in laboratorio",
-            "California Mastitis Test (CMT)",
-            "Esame del sangue (emocromo)"
-        ],
-        answer: 2,
-        feedback: "Corretto. Il CMT è un test rapido che si esegue in stalla e rileva la presenza di un elevato numero di cellule somatiche (leucociti), indicando la presenza di un'infiammazione.",
-        reveals: "risultati-test"
+    { 
+        question: { it: "Il California Mastitis Test (CMT) serve a:", en: "The California Mastitis Test (CMT) is used to:" }, 
+        answer: 3, 
+        reveals: null, 
+        options: {
+            it: ["Identificare il batterio responsabile", "Misurare la produzione di latte", "Valutare la qualità nutrizionale del latte", "Stimare la conta delle cellule somatiche nel latte, indicando un'infiammazione"],
+            en: ["Identify the responsible bacterium", "Measure milk production", "Assess the nutritional quality of the milk", "Estimate the somatic cell count in the milk, indicating inflammation"]
+        }
     },
-    {
-        question: "5/10: Un risultato di CMT fortemente positivo (+++) indica:",
-        options: [
-            "La presenza di un batterio specifico",
-            "Un'alta carica batterica",
-            "Un'elevatissima conta di cellule somatiche (> 5.000.000/ml)",
-            "La presenza di sangue nel latte"
-        ],
-        answer: 2,
-        feedback: "Esatto. La densità del gel che si forma nel test è direttamente proporzionale al numero di cellule somatiche, che sono un indice diretto della gravità dell'infiammazione.",
-        reveals: null
+    { 
+        question: { it: "Un risultato CMT di +++ indica:", en: "A CMT result of +++ indicates:" }, 
+        answer: 1, 
+        reveals: null, 
+        options: {
+            it: ["Un'infiammazione lieve", "Un'infiammazione molto grave", "Un risultato dubbio", "Che il test non ha funzionato"],
+            en: ["Mild inflammation", "Very severe inflammation", "A doubtful result", "That the test did not work"]
+        }
     },
-    {
-        question: "6/10: Qual è l'agente eziologico più probabile in una mastite ovina così grave, con tendenza alla gangrena?",
-        options: [
-            "Streptococcus agalactiae",
-            "Mycoplasma agalactiae",
-            "Escherichia coli",
-            "Staphylococcus aureus"
-        ],
-        answer: 3,
-        feedback: "Corretto. Lo S. aureus è tristemente noto per la sua capacità di produrre tossine potenti (come l'alfa-tossina) che causano vasocostrizione, trombosi e necrosi tissutale, portando alla mastite gangrenosa.",
-        reveals: null
+    { 
+        question: { it: "Qual è l'agente eziologico più comunemente associato alla mastite gangrenosa nella pecora?", en: "What is the most common etiological agent associated with gangrenous mastitis in sheep?" }, 
+        answer: 0, 
+        reveals: null, 
+        options: {
+            it: ["Staphylococcus aureus", "Streptococcus agalactiae", "Escherichia coli", "Mannheimia haemolytica"],
+            en: ["Staphylococcus aureus", "Streptococcus agalactiae", "Escherichia coli", "Mannheimia haemolytica"]
+        }
     },
-    {
-        question: "7/10: L'evoluzione del colore della mammella da rosso-violaceo a blu-nerastro e freddo al tatto è un segno patognomonico di:",
-        options: [
-            "Guarigione e formazione di tessuto cicatriziale",
-            "Formazione di un ascesso",
-            "Necrosi tissutale e gangrena",
-            "Edema sottomammario"
-        ],
-        answer: 2,
-        feedback: "Perfetto. Il cambiamento di colore e la perdita di calore indicano la morte del tessuto (necrosi) a causa dell'interruzione dell'apporto di sangue, un segno tipico della gangrena.",
-        reveals: null
+    { 
+        question: { it: "La combinazione di segni sistemici gravi e segni locali sulla mammella suggerisce:", en: "The combination of severe systemic signs and local signs on the udder suggests:" }, 
+        answer: 2, 
+        reveals: null, 
+        options: {
+            it: ["Una mastite subclinica", "Una mastite cronica", "Una mastite iperacuta con tossiemia", "Un ascesso mammario"],
+            en: ["Subclinical mastitis", "Chronic mastitis", "Peracute mastitis with toxemia", "A mammary abscess"]
+        }
     },
-    {
-        question: "8/10: Qual è l'approccio terapeutico più importante e urgente in questo caso?",
-        options: [
-            "Mungiture frequenti per svuotare la mammella",
-            "Somministrazione di antibiotici per via intramammaria",
-            "Una terapia sistemica aggressiva (antibiotici, antinfiammatori, fluidi) per contrastare la tossiemia",
-            "Applicare impacchi caldi sulla mammella"
-        ],
-        answer: 2,
-        feedback: "Esatto. La priorità assoluta è salvare la vita dell'animale, che è a rischio per shock tossico. La terapia sistemica è fondamentale, mentre il trattamento locale è secondario.",
-        reveals: null
+     { 
+        question: { it: "Qual è l'approccio terapeutico più corretto in questo caso grave?", en: "What is the most appropriate therapeutic approach in this severe case?" }, 
+        answer: 3, 
+        reveals: null, 
+        options: {
+            it: ["Solo un anti-infiammatorio", "Solo un antibiotico intramammario", "Aspettare 24 ore e rivalutare", "Terapia antibiotica sistemica aggressiva, FANS e supporto fluidico"],
+            en: ["Only an anti-inflammatory drug", "Only an intramammary antibiotic", "Wait 24 hours and re-evaluate", "Aggressive systemic antibiotic therapy, NSAIDs, and fluid support"]
+        }
     },
-    {
-        question: "9/10: Quale antibiotico è generalmente considerato di prima scelta per le mastiti gravi da Stafilococchi in attesa di un antibiogramma?",
-        options: [
-            "Penicillina",
-            "Tetracicline",
-            "Sulfamidici",
-            "Oxacillina o altre penicilline penicillasi-resistenti"
-        ],
-        answer: 3,
-        feedback: "Corretto. Molti ceppi di S. aureus producono beta-lattamasi (penicillasi), enzimi che inattivano la penicillina standard. È quindi necessario usare antibiotici resistenti a questi enzimi.",
-        reveals: null
+    { 
+        question: { it: "Perché uno dei due agnelli è debole?", en: "Why is one of the two lambs weak?" }, 
+        answer: 0, 
+        reveals: null, 
+        options: {
+            it: ["Perché non si sta alimentando a sufficienza a causa della mastite della madre", "Perché ha una malattia congenita", "Perché è stato schiacciato dalla madre", "Perché ha freddo"],
+            en: ["Because it is not feeding enough due to the mother's mastitis", "Because it has a congenital disease", "Because it was crushed by the mother", "Because it is cold"]
+        }
     },
-    {
-        question: "10/10: Qual è la prognosi per la ghiandola mammaria sinistra?",
-        options: [
-            "Favorevole, tornerà a produrre latte dopo la terapia",
-            "Infausta, la ghiandola andrà incontro a necrosi e non sarà più produttiva",
-            "Riservata, potrebbe recuperare parzialmente la funzione",
-            "Buona, ma produrrà sempre latte di bassa qualità"
-        ],
-        answer: 1,
-        feedback: "Risposta corretta. Nella mastite gangrenosa, il tessuto mammario muore e non può rigenerarsi. L'obiettivo della terapia è salvare la vita dell'animale; la ghiandola è irrimediabilmente persa.",
-        reveals: "final-summary"
-    },
+    { 
+        question: { it: "Qual è la prognosi per la mammella colpita in un caso di mastite gangrenosa?", en: "What is the prognosis for the affected udder half in a case of gangrenous mastitis?" }, 
+        answer: 1, 
+        reveals: "final-summary", 
+        options: {
+            it: ["Buona, se trattata subito recupera la funzione", "Infausta, la mammella andrà incontro a necrosi e distacco", "Discreta, produrrà meno latte", "Riservata, dipende dall'antibiotico usato"],
+            en: ["Good, if treated immediately it will recover function", "Grave, the udder will undergo necrosis and sloughing", "Fair, it will produce less milk", "Guarded, it depends on the antibiotic used"]
+        }
+    }
 ];
 
 let currentQuestionIndex = 0;
 const quizContainer = document.getElementById('quiz-container');
+let userAnswers = new Array(quizData.length).fill(null);
+let currentUtterance = null;
+let speakingButton = null;
 
-function displayQuestion() {
-    if (currentQuestionIndex >= quizData.length) {
-        quizContainer.innerHTML = ''; // Quiz finished
-        return;
+// --- Accessibility & Language Functions ---
+const standardFontBtn = document.getElementById('font-standard-btn');
+const dyslexicFontBtn = document.getElementById('font-dyslexic-btn');
+const langItBtn = document.getElementById('lang-it-btn');
+const langEnBtn = document.getElementById('lang-en-btn');
+const body = document.body;
+
+function setFont(fontType) {
+    if (fontType === 'dyslexic') {
+        body.classList.add('font-dyslexic');
+        standardFontBtn.classList.remove('active');
+        dyslexicFontBtn.classList.add('active');
+        localStorage.setItem('fontPreference', 'dyslexic');
+    } else {
+        body.classList.remove('font-dyslexic');
+        dyslexicFontBtn.classList.remove('active');
+        standardFontBtn.classList.add('active');
+        localStorage.setItem('fontPreference', 'standard');
     }
+}
 
-    const currentQuiz = quizData[currentQuestionIndex];
-    let optionsHtml = '';
-    currentQuiz.options.forEach((option, index) => {
-        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+function setLanguage(lang) {
+    speechSynthesis.cancel();
+    if(speakingButton) {
+        speakingButton.classList.remove('active');
+        speakingButton = null;
+        currentUtterance = null;
+    }
+    
+    currentLanguage = lang;
+    localStorage.setItem('languagePreference', lang);
+
+    if (lang === 'en') {
+        langItBtn.classList.remove('active');
+        langEnBtn.classList.add('active');
+    } else {
+        langEnBtn.classList.remove('active');
+        langItBtn.classList.add('active');
+    }
+    
+    document.querySelectorAll('[data-translate-key]').forEach(el => {
+        const key = el.dataset.translateKey;
+        if (translations[lang][key]) {
+            if (key.includes('Content')) {
+                 el.innerHTML = translations[lang][key];
+            } else {
+                 el.innerText = translations[lang][key];
+            }
+        }
     });
 
+    updateDynamicContent();
+}
+
+function updateDynamicContent() {
+    if (currentQuestionIndex < quizData.length && !document.getElementById('results-section').style.display || document.getElementById('results-section').style.display === 'none') {
+        displayQuestion();
+    } else {
+        showResults();
+    }
+}
+
+standardFontBtn.addEventListener('click', () => setFont('standard'));
+dyslexicFontBtn.addEventListener('click', () => setFont('dyslexic'));
+langItBtn.addEventListener('click', () => setLanguage('it'));
+langEnBtn.addEventListener('click', () => setLanguage('en'));
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedFont = localStorage.getItem('fontPreference') || 'standard';
+    const savedLang = localStorage.getItem('languagePreference') || 'it';
+    setFont(savedFont);
+    setLanguage(savedLang);
+    displayQuestion();
+});
+
+// Text-to-Speech
+document.getElementById('case-container').addEventListener('click', function(event) {
+    const ttsButton = event.target.closest('.tts-button');
+    if (ttsButton) {
+        if (speakingButton === ttsButton) {
+            // Clicked the same button that is currently active
+            if (speechSynthesis.paused) {
+                speechSynthesis.resume();
+            } else if (speechSynthesis.speaking) {
+                speechSynthesis.pause();
+            }
+        } else {
+            // Clicked a new button
+            speechSynthesis.cancel();
+            if(speakingButton) {
+                speakingButton.classList.remove('active');
+            }
+
+            const sectionToRead = ttsButton.parentElement;
+            const title = sectionToRead.querySelector('h2, h3');
+            const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3, .flex')).map(el => el.innerText).join('\n');
+            const textToRead = (title ? title.innerText + '.\n' : '') + content;
+            
+            currentUtterance = new SpeechSynthesisUtterance(textToRead);
+            currentUtterance.lang = currentLanguage === 'en' ? 'en-US' : 'it-IT';
+            
+            currentUtterance.onend = () => {
+                if (speakingButton) speakingButton.classList.remove('active');
+                speakingButton = null;
+                currentUtterance = null;
+            };
+
+            currentUtterance.onerror = (e) => {
+                console.error('SpeechSynthesis Error:', e);
+                if (speakingButton) speakingButton.classList.remove('active');
+                speakingButton = null;
+                currentUtterance = null;
+            };
+            
+            speechSynthesis.speak(currentUtterance);
+            ttsButton.classList.add('active');
+            speakingButton = ttsButton;
+        }
+    }
+});
+
+
+// --- Quiz Logic ---
+function displayQuestion() {
+    if (currentQuestionIndex >= quizData.length) {
+        if (!document.getElementById('results-section').style.display || document.getElementById('results-section').style.display === 'none') {
+             showResults();
+        }
+        return;
+    }
+    const currentQuiz = quizData[currentQuestionIndex];
+    let optionsHtml = '';
+    currentQuiz.options[currentLanguage].forEach((option, index) => {
+        const letters = ['A. ', 'B. ', 'C. ', 'D. '];
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${letters[index]}${option}</button>`;
+    });
+
+    const progressIndicator = `<p class="text-center text-gray-600 font-semibold mb-2">${translations[currentLanguage].questionProgress} ${currentQuestionIndex + 1} ${translations[currentLanguage].of} ${quizData.length}</p>`;
+
     quizContainer.innerHTML = `
-        <div class="quiz-card p-4 border rounded-lg bg-gray-50">
-            <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
-            <div class="options-container">${optionsHtml}</div>
-            <div class="feedback-container mt-2"></div>
+        <div class="mb-4">
+            ${progressIndicator}
+            <div class="quiz-card p-4 border rounded-lg">
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h3 class="text-lg font-semibold mb-4">${currentQuiz.question[currentLanguage]}</h3>
+                <div class="options-container">${optionsHtml}</div>
+            </div>
         </div>
     `;
-
     document.querySelectorAll('.quiz-option').forEach(button => {
         button.addEventListener('click', checkAnswer);
     });
 }
 
 function checkAnswer(event) {
-    const selectedOption = event.target;
-    const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
-    const currentQuiz = quizData[currentQuestionIndex];
-    const feedbackContainer = quizContainer.querySelector('.feedback-container');
+    const selectedOption = event.target.closest('.quiz-option'); 
+    if (!selectedOption || selectedOption.disabled) return;
 
-    // Disable all buttons after an answer is chosen
-    document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
-
-    if (selectedAnswerIndex === currentQuiz.answer) {
-        selectedOption.classList.add('correct');
-        feedbackContainer.innerHTML = `
-            <div class="feedback correct">
-                ${currentQuiz.feedback}
-            </div>
-            <button id="next-question-btn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg w-full">
-                Prosegui
-            </button>
-        `;
-
-        document.getElementById('next-question-btn').addEventListener('click', () => {
-            if (currentQuiz.reveals) {
-                document.getElementById(currentQuiz.reveals).style.display = 'block';
-            }
-            currentQuestionIndex++;
-            displayQuestion();
-        });
-    } else {
-        selectedOption.classList.add('incorrect');
-        feedbackContainer.innerHTML = `<div class="feedback incorrect">Risposta non corretta. Riprova a ragionare sul caso.</div>`;
-         setTimeout(() => { // Re-enable buttons to allow another try
-            document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = false);
-            selectedOption.classList.remove('incorrect');
-            feedbackContainer.innerHTML = '';
-        }, 2000);
+    speechSynthesis.cancel();
+    if(speakingButton) {
+        speakingButton.classList.remove('active');
+        speakingButton = null;
+        currentUtterance = null;
     }
+
+    const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
+    userAnswers[currentQuestionIndex] = selectedAnswerIndex;
+    document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+    selectedOption.classList.add('selected');
+    const currentQuiz = quizData[currentQuestionIndex];
+    setTimeout(() => {
+        if (currentQuiz.reveals) {
+            const revealedSection = document.getElementById(currentQuiz.reveals);
+            if(revealedSection) {
+                revealedSection.style.display = 'block';
+                revealedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        currentQuestionIndex++;
+        displayQuestion();
+    }, 500);
 }
 
-// Start the quiz
-window.onload = displayQuestion;
+function showResults() {
+    quizContainer.innerHTML = ''; 
+    let score = 0;
+    let reviewHtml = `<h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">${translations[currentLanguage].reviewTitle}</h2>`;
+    quizData.forEach((question, index) => {
+        const userAnswerIndex = userAnswers[index];
+        const correctAnswerIndex = question.answer;
+        const userAnswerText = userAnswerIndex !== null ? (['A. ', 'B. ', 'C. ', 'D. '][userAnswerIndex] + question.options[currentLanguage][userAnswerIndex]) : translations[currentLanguage].noAnswer;
+        const correctAnswerText = ['A. ', 'B. ', 'C. ', 'D. '][correctAnswerIndex] + question.options[currentLanguage][correctAnswerIndex];
+        const isCorrect = userAnswerIndex === correctAnswerIndex;
+        if (isCorrect) score++;
+        reviewHtml += `
+            <div class="p-4 mb-4 border-l-4 rounded-r-lg ${isCorrect ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}">
+                <p class="font-semibold text-gray-800">${index + 1}. ${question.question[currentLanguage]}</p>
+                <p class="mt-2 text-md ${isCorrect ? 'text-green-800' : 'text-red-800'}">
+                    <strong>${translations[currentLanguage].yourAnswer}</strong> ${userAnswerText} ${isCorrect ? '<span class="text-green-600 font-bold">&#10004;</span>' : '<span class="text-red-600 font-bold">&#10008;</span>'}
+                </p>
+                ${!isCorrect ? `<p class="mt-1 text-md text-gray-700"><strong>${translations[currentLanguage].correctAnswer}</strong> ${correctAnswerText}</p>` : ''}
+            </div>`;
+    });
+    const resultsSection = document.getElementById('results-section');
+    resultsSection.innerHTML = `
+        <h2 class="text-center text-3xl font-bold text-indigo-600 mb-4">${translations[currentLanguage].quizCompleted}</h2>
+        <p class="text-center text-xl text-gray-800">${translations[currentLanguage].yourScoreIs} <strong class="text-2xl">${score} / ${quizData.length}</strong></p>
+        <p class="text-center text-gray-600 mt-4">${translations[currentLanguage].scoreText}</p>`;
+    resultsSection.style.display = 'block';
+    if(currentQuestionIndex === quizData.length) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.getElementById('review-section').innerHTML = reviewHtml;
+    document.getElementById('review-section').style.display = 'block';
+    
+    document.querySelectorAll('#final-summary > div').forEach(el => el.classList.add('hidden'));
+    document.querySelector(`#final-summary > div[lang=${currentLanguage}]`).classList.remove('hidden');
+    document.getElementById('final-summary').style.display = 'block';
+}
+
+function printSummary() {
+    const printableContent = document.getElementById(`printable-summary-${currentLanguage}`).innerHTML;
+    const printWindow = window.open('', '', 'height=800,width=1000');
+    printWindow.document.write(`<html><head><title>${translations[currentLanguage].printWindowTitle}</title>`);
+    printWindow.document.write(`<style>body{font-family:'Inter',sans-serif;line-height:1.6;color:#374151;padding:2rem}h2{text-align:center;font-size:1.5rem;font-weight:bold;color:#111827;margin-bottom:1rem}h3{font-size:1.125rem;font-weight:600;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;margin-top:1.5rem}ul{list-style-type:disc;list-style-position:inside;padding-left:1rem}li{margin-bottom:0.25rem}strong{font-weight:600;color:#1f2937}</style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">`);
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printableContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+}
+
 </script>
 
 </body>
