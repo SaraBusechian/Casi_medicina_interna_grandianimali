@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Interattivo: Cavallo con Tosse Cronica</title>
+    <title>Caso Clinico: Cavallo, Apparato Respiratorio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,66 +11,85 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
         }
-        .case-section {
+        /* Stili per la modalità accessibile */
+        body.font-dyslexic {
+            font-family: Verdana, sans-serif;
+            background-color: #ffffff;
+        }
+        .font-dyslexic p, 
+        .font-dyslexic li, 
+        .font-dyslexic h2, 
+        .font-dyslexic h3, 
+        .font-dyslexic div,
+        .font-dyslexic button,
+        .font-dyslexic span {
+            font-size: 14pt;
+            letter-spacing: 0.05em;
+            word-spacing: 0.15em;
+            line-height: 1.8;
+            color: #111827; /* Nero più intenso */
+        }
+        .font-dyslexic .quiz-option {
+            font-size: 14pt !important;
+        }
+         .font-dyslexic h1, .font-dyslexic h2, .font-dyslexic h3 {
+            font-size: 1.5em; /* Aumenta la dimensione dei titoli proporzionalmente */
+        }
+
+        .case-section, .quiz-card {
+            position: relative;
             background-color: #f9fafb;
             border-left: 4px solid #4f46e5;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border-radius: 0.5rem;
         }
-        .hidden-section {
-            display: none;
+        .quiz-card {
+             margin-bottom: 0;
         }
-        .quiz-option {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0.5rem;
+        .hidden-section { display: none; }
+        .quiz-option { display: block; width: 100%; text-align: left; padding: 0.75rem 1.25rem; margin-bottom: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.5rem; background-color: #ffffff; transition: all 0.2s ease-in-out; cursor: pointer; }
+        .quiz-option:hover:not(:disabled) { border-color: #4f46e5; background-color: #eef2ff; }
+        .quiz-option.selected { border-color: #4f46e5; background-color: #e0e7ff; font-weight: 600; }
+        .quiz-option:disabled { cursor: not-allowed; }
+        .summary-section { background-color: #f3f4f6; border: 1px solid #d1d5db; padding: 2rem; margin-top: 3rem; border-radius: 0.5rem; }
+        
+        .accessibility-controls button {
+            padding: 0.5rem 1rem;
             border: 1px solid #d1d5db;
             border-radius: 0.5rem;
-            background-color: #ffffff;
-            transition: all 0.2s ease-in-out;
+            background-color: white;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .quiz-option:hover {
+        .accessibility-controls button.active {
+            background-color: #4f46e5;
+            color: white;
             border-color: #4f46e5;
-            background-color: #eef2ff;
         }
-        .quiz-option.correct {
-            background-color: #d1fae5;
-            border-color: #10b981;
+        .tts-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
         }
-        .quiz-option.incorrect {
-            background-color: #fee2e2;
-            border-color: #ef4444;
+        .tts-button svg {
+            width: 100%;
+            height: 100%;
+            fill: #6b7280;
+            transition: fill 0.2s;
         }
-        .feedback {
-            padding: 0.75rem 1.25rem;
-            margin-top: 1rem;
-            border-radius: 0.5rem;
+        .tts-button:hover svg {
+            fill: #4f46e5;
         }
-        .feedback.correct {
-            background-color: #e0f2fe;
-            color: #0c4a6e;
-        }
-        .feedback.incorrect {
-            background-color: #fef2f2;
-            color: #991b1b;
-        }
-        .summary-section {
-            background-color: #f3f4f6;
-            border: 1px solid #d1d5db;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-radius: 0.5rem;
-        }
-        @media print {
-            body * { visibility: hidden; }
-            #printable-summary, #printable-summary * { visibility: visible; }
-            #printable-summary { position: absolute; left: 0; top: 0; width: 100%; }
-            .no-print { display: none; }
+        .tts-button.active svg {
+            fill: #4f46e5;
         }
     </style>
 </head>
@@ -79,285 +98,527 @@
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600">Caso Clinico Veterinario Interattivo</h1>
-            <p class="text-lg text-gray-600 mt-2">Risolvi il caso passo dopo passo</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600" data-translate-key="mainTitle">Caso Clinico Veterinario Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2" data-translate-key="mainSubtitle">Risolvi il caso passo dopo passo</p>
         </header>
+
+        <!-- Accessibility Controls -->
+        <div class="accessibility-controls flex justify-center items-center flex-wrap gap-4 mb-8 bg-white p-4 rounded-lg shadow">
+            <div>
+                <span class="font-semibold text-gray-700 mr-2" data-translate-key="readingSettings">Impostazioni di lettura:</span>
+                <button id="font-standard-btn" class="active" data-translate-key="fontStandard">Font Standard</button>
+                <button id="font-dyslexic-btn" data-translate-key="fontAccessible">Font Accessibile</button>
+            </div>
+            <div class="border-l-2 border-gray-200 pl-4">
+                <span class="font-semibold text-gray-700 mr-2" data-translate-key="language">Lingua:</span>
+                <button id="lang-it-btn" class="active">ITA</button>
+                <button id="lang-en-btn">ENG</button>
+            </div>
+        </div>
 
         <main id="case-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
 
             <!-- Sezione 1: Anamnesi (visibile da subito) -->
             <section id="anamnesi" class="case-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
-                <div class="space-y-3 text-gray-700">
-                    <p><strong>Paziente:</strong> Cavallo Warmblood, castrone, 12 anni.</p>
-                    <p><strong>Disciplina:</strong> Dressage, livello amatoriale.</p>
-                    <p><strong>Management:</strong> Vive in box su lettiera di paglia, alimentato con fieno di prato stabile e mangime commerciale.</p>
-                    <p><strong>Motivo della visita:</strong> Il proprietario lamenta una tosse cronica, secca, che si manifesta soprattutto all'inizio del lavoro e quando si trova in scuderia. Da alcuni mesi nota anche un calo della performance e un recupero più lento dopo lo sforzo.</p>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="anamnesisTitle">1. Anamnesi e Segnalamento</h2>
+                <div class="space-y-3 text-gray-700" data-translate-key="anamnesisContent">
+                    <p><strong>Paziente:</strong> Cavallo castrone, Quarter Horse, 15 anni.</p>
+                    <p><strong>Storia:</strong> Il proprietario riferisce una tosse cronica, secca e stizzosa, che peggiora notevolmente quando il cavallo è in scuderia. Presenta anche uno scolo nasale bilaterale di tipo mucopurulento e una visibile difficoltà respiratoria anche a riposo.</p>
                 </div>
             </section>
             
             <!-- Sezione 2: Visita Clinica (nascosta) -->
             <section id="visita-clinica" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">2. Esame Clinico a Riposo</h2>
-                 <div class="space-y-2 text-gray-700">
-                    <p>Il cavallo è vigile ma presenta una leggera dilatazione delle narici.</p>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                     <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="clinicalExamTitle">2. Esame Clinico</h2>
+                 <div class="space-y-2 text-gray-700" data-translate-key="clinicalExamContent">
+                    <p>All'esame clinico si evidenzia:</p>
                     <ul class="list-disc list-inside space-y-1">
-                        <li><strong>Parametri vitali:</strong> T° 38.0°C, FC 44 bpm, FR 24 apm.</li>
-                        <li><strong>Ispezione:</strong> Si nota un'evidente ipertrofia dei muscoli addominali obliqui esterni ("heaves line"). Non c'è scolo nasale.</li>
-                        <li><strong>Auscultazione toracica:</strong> Alla fine dell'espirazione si apprezzano sibili diffusi su entrambi i campi polmonari.</li>
-                        <li><strong>Test della rebreathing bag:</strong> evoca una tosse secca e profonda.</li>
+                        <li><strong>Frequenza Respiratoria (FR):</strong> 30 atti al minuto (aumentata).</li>
+                        <li><strong>Sforzo espiratorio:</strong> evidente doppia contrazione dei muscoli addominali durante l'espirazione.</li>
+                        <li><strong>Muscolatura:</strong> Ipertrofia dei muscoli obliqui addominali esterni ("heaves line").</li>
+                        <li><strong>Auscultazione del torace:</strong> Presenza di sibili espiratori diffusi su entrambi i campi polmonari.</li>
                     </ul>
                 </div>
             </section>
             
             <!-- Sezione 3: Iter Diagnostico (nascosta) -->
             <section id="iter-diagnostico" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">3. Approccio Diagnostico</h2>
-                <p class="text-gray-700">Dato il sospetto di una patologia infiammatoria cronica delle basse vie aeree, si decide di procedere con un esame endoscopico e un lavaggio broncoalveolare (BAL).</p>
-            </section>
-
-            <!-- Sezione 4: Risultati Test (nascosta) -->
-             <section id="risultati-test" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">4. Risultati degli Esami</h2>
-                <div class="space-y-3 text-gray-700">
-                    <p><strong>Endoscopia:</strong> L'esame endoscopico delle vie aeree superiori è normale. In trachea si osserva un accumulo di muco denso e biancastro, classificato come Grado 3 su 5.</p>
-                    <p><strong>Lavaggio Broncoalveolare (BAL):</strong> L'esame citologico del fluido di lavaggio rivela un'infiammazione marcata, con una popolazione cellulare composta per il 40% da neutrofili (valore normale < 10%).</p>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                     <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="diagnosticProcTitle">3. Procedure Diagnostiche</h2>
+                <div class="space-y-3 text-gray-700" data-translate-key="diagnosticProcContent">
+                    <p>Si esegue un Lavaggio Bronco-Alveolare (BAL) per analizzare la popolazione cellulare delle basse vie aeree.</p>
+                     <p><strong>Risultato dell'esame citologico:</strong> Si riscontra un marcato aumento della percentuale di neutrofili (> 20%).</p>
                 </div>
             </section>
 
             <!-- Contenitore del Quiz -->
             <div id="quiz-container" class="mt-6"></div>
 
+            <!-- Sezione Risultati (nascosta) -->
+            <div id="results-section" class="summary-section hidden-section"></div>
+
+            <div id="review-section" class="hidden-section mt-8"></div>
+
             <!-- Sezione Finale: Diagnosi e Riassunto (nascosta) -->
             <div id="final-summary" class="summary-section hidden-section">
-                <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Caso Risolto!</h2>
-                <p class="text-center text-xl mb-4">Diagnosi: <strong>Asma Equina Grave (precedentemente nota come Recurrent Airway Obstruction (RAO))</strong></p>
-                
-                <div id="printable-summary">
-                    <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Asma Equina</h2>
-                    <div class="space-y-4 text-left">
-                        <div>
-                            <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
-                            <p class="text-gray-700">L'asma equina è una sindrome infiammatoria cronica non settica delle basse vie aeree, causata da una reazione di ipersensibilità a particelle inalate, principalmente muffe e polveri presenti nel fieno e nell'ambiente di scuderia. Si manifesta con bronchite, broncospasmo e accumulo di muco.</p>
+                <!-- Italian -->
+                <div lang="it">
+                    <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Diagnosi Confermata!</h2>
+                    <p class="text-center text-xl mb-4">La patologia è: <strong>Asma Equina Grave (precedentemente RAO)</strong></p>
+                    <div id="printable-summary-it">
+                        <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Asma Equina Grave</h2>
+                        <div class="space-y-4 text-left">
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
+                                <p class="text-gray-700">L'asma equina grave, nota in passato come Ostruzione Ricorrente delle Vie Aeree (Recurrent Airway Obstruction - RAO) o "bolsaggine", è una patologia respiratoria cronica, non infettiva, di natura allergica. È scatenata dall'inalazione di polveri organiche (muffe, acari) presenti principalmente nel fieno e nella lettiera di paglia.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Fisiopatologia e Segni Clinici</h3>
+                                 <p class="text-gray-700">La reazione allergica causa infiammazione delle piccole vie aeree, broncocostrizione e un'eccessiva produzione di muco. Questo porta ai segni clinici caratteristici: tosse cronica, scolo nasale, aumento della frequenza e dello sforzo respiratorio (specialmente in fase espiratoria), e intolleranza all'esercizio. La "heaves line" è l'ipertrofia dei muscoli addominali dovuta allo sforzo cronico per espellere l'aria.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Diagnosi e Terapia</h3>
+                                <p class="text-gray-700">La diagnosi si basa sull'anamnesi (peggioramento in scuderia) e sui segni clinici, ed è confermata dall'esame citologico del lavaggio bronco-alveolare (BAL), che mostra una tipica infiammazione neutrofilica. La terapia si fonda su tre pilastri: <strong>1) Gestione ambientale (fondamentale)</strong> per ridurre l'esposizione agli allergeni (es. vita al paddock, fieno bagnato o vaporizzato); <strong>2) Corticosteroidi</strong> per controllare l'infiammazione; <strong>3) Broncodilatatori</strong> per alleviare la broncocostrizione. La prognosi per la qualità di vita è buona con un'ottima gestione, ma è una patologia cronica che non guarisce.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-indigo-600">Diagnosi</h3>
-                            <p class="text-gray-700">La diagnosi si basa sull'anamnesi (tosse cronica, legame con l'ambiente), sui segni clinici (sibili, heaves line) e viene confermata dal <strong>lavaggio broncoalveolare (BAL)</strong>. Un'alta percentuale di neutrofili (>20-25%) nel liquido di lavaggio è considerata diagnostica per la forma grave.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-indigo-600">Terapia e Management</h3>
-                            <p class="text-gray-700">Il cardine della terapia è la <strong>gestione ambientale</strong>, volta a ridurre l'esposizione agli allergeni (es. vita al paddock, fieno bagnato o vaporizzato, lettiera depolverizzata). La terapia farmacologica si basa su due pilastri: <strong>corticosteroidi</strong> (per via sistemica o inalatoria) per controllare l'infiammazione e <strong>broncodilatatori</strong> (es. clenbuterolo) per alleviare il broncospasmo e migliorare la respirazione.</p>
+                    </div>
+                </div>
+                 <!-- English -->
+                <div lang="en" class="hidden">
+                    <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Diagnosis Confirmed!</h2>
+                    <p class="text-center text-xl mb-4">The condition is: <strong>Severe Equine Asthma (formerly RAO)</strong></p>
+                    <div id="printable-summary-en">
+                        <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Summary Sheet: Severe Equine Asthma</h2>
+                        <div class="space-y-4 text-left">
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">What is it?</h3>
+                                <p class="text-gray-700">Severe equine asthma, formerly known as Recurrent Airway Obstruction (RAO) or "heaves," is a chronic, non-infectious, allergic respiratory disease. It is triggered by the inhalation of organic dust (molds, mites) found primarily in hay and straw bedding.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Pathophysiology and Clinical Signs</h3>
+                                <p class="text-gray-700">The allergic reaction causes inflammation of the small airways, bronchoconstriction, and excessive mucus production. This leads to the characteristic clinical signs: chronic cough, nasal discharge, increased respiratory rate and effort (especially during expiration), and exercise intolerance. The "heaves line" is the hypertrophy of the abdominal muscles due to the chronic effort to expel air.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Diagnosis and Treatment</h3>
+                                <p class="text-gray-700">The diagnosis is based on the history (worsening in the stable) and clinical signs, and is confirmed by cytological examination of the broncho-alveolar lavage (BAL), which shows a typical neutrophilic inflammation. Treatment is based on three pillars: <strong>1) Environmental management (essential)</strong> to reduce allergen exposure (e.g., paddock turnout, soaked or steamed hay); <strong>2) Corticosteroids</strong> to control inflammation; <strong>3) Bronchodilators</strong> to relieve bronchoconstriction. The prognosis for quality of life is good with excellent management, but it is a chronic condition that does not resolve.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="text-center mt-8 no-print">
-                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">Stampa o Salva Riassunto</button>
+                <div class="text-center mt-8">
+                    <button id="print-btn" onclick="printSummary()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300" data-translate-key="printButton">Stampa o Salva Riassunto</button>
                 </div>
             </div>
-
         </main>
         
-        <footer class="text-center mt-8 text-sm text-gray-500 no-print">
-            <p>Questo caso clinico è stato generato a scopo didattico.</p>
+        <footer class="text-center mt-8 text-sm text-gray-500">
+             <p data-translate-key="footerCredit">Creato da Sara Busechian.</p>
+            <p data-translate-key="footerText" class="mt-1">Questo caso clinico è stato generato a scopo didattico.</p>
         </footer>
     </div>
 
 <script>
+let currentLanguage = 'it';
+
+const translations = {
+    it: {
+        mainTitle: "Caso Clinico Veterinario Interattivo",
+        mainSubtitle: "Risolvi il caso passo dopo passo",
+        readingSettings: "Impostazioni di lettura:",
+        fontStandard: "Font Standard",
+        fontAccessible: "Font Accessibile",
+        language: "Lingua:",
+        anamnesisTitle: "1. Anamnesi e Segnalamento",
+        anamnesisContent: `<p><strong>Paziente:</strong> Cavallo castrone, Quarter Horse, 15 anni.</p><p><strong>Storia:</strong> Il proprietario riferisce una tosse cronica, secca e stizzosa, che peggiora notevolmente quando il cavallo è in scuderia. Presenta anche uno scolo nasale bilaterale di tipo mucopurulento e una visibile difficoltà respiratoria anche a riposo.</p>`,
+        clinicalExamTitle: "2. Esame Clinico",
+        clinicalExamContent: `<p>All'esame clinico si evidenzia:</p><ul class="list-disc list-inside space-y-1"><li><strong>Frequenza Respiratoria (FR):</strong> 30 atti al minuto (aumentata).</li><li><strong>Sforzo espiratorio:</strong> evidente doppia contrazione dei muscoli addominali durante l'espirazione.</li><li><strong>Muscolatura:</strong> Ipertrofia dei muscoli obliqui addominali esterni ("heaves line").</li><li><strong>Auscultazione del torace:</strong> Presenza di sibili espiratori diffusi su entrambi i campi polmonari.</li></ul>`,
+        diagnosticProcTitle: "3. Procedure Diagnostiche",
+        diagnosticProcContent: `<p>Si esegue un Lavaggio Bronco-Alveolare (BAL) per analizzare la popolazione cellulare delle basse vie aeree.</p><p><strong>Risultato dell'esame citologico:</strong> Si riscontra un marcato aumento della percentuale di neutrofili (> 20%).</p>`,
+        quizCompleted: "Quiz Completato!",
+        yourScoreIs: "Il tuo punteggio è:",
+        scoreText: "Di seguito trovi il riepilogo delle tue risposte e la scheda del caso clinico.",
+        reviewTitle: "Riepilogo Risposte",
+        yourAnswer: "La tua risposta:",
+        correctAnswer: "Risposta corretta:",
+        noAnswer: "Nessuna risposta",
+        printButton: "Stampa o Salva Riassunto",
+        footerCredit: "Creato da Sara Busechian.",
+        footerText: "Questo caso clinico è stato generato a scopo didattico.",
+        questionProgress: "Domanda",
+        of: "di",
+        printWindowTitle: "Riassunto Caso Clinico"
+    },
+    en: {
+        mainTitle: "Interactive Veterinary Clinical Case",
+        mainSubtitle: "Solve the case step-by-step",
+        readingSettings: "Reading Settings:",
+        fontStandard: "Standard Font",
+        fontAccessible: "Accessible Font",
+        language: "Language:",
+        anamnesisTitle: "1. Signalment and History",
+        anamnesisContent: `<p><strong>Patient:</strong> 15-year-old Quarter Horse gelding.</p><p><strong>History:</strong> The owner reports a chronic, dry, hacking cough that significantly worsens when the horse is in the stable. It also has bilateral mucopurulent nasal discharge and visible respiratory difficulty even at rest.</p>`,
+        clinicalExamTitle: "2. Clinical Examination",
+        clinicalExamContent: `<p>The clinical examination reveals:</p><ul class="list-disc list-inside space-y-1"><li><strong>Respiratory Rate (RR):</strong> 30 breaths per minute (increased).</li><li><strong>Expiratory effort:</strong> Evident double contraction of the abdominal muscles during expiration.</li><li><strong>Musculature:</strong> Hypertrophy of the external abdominal oblique muscles ("heaves line").</li><li><strong>Chest auscultation:</strong> Presence of diffuse expiratory wheezes over both lung fields.</li></ul>`,
+        diagnosticProcTitle: "3. Diagnostic Procedures",
+        diagnosticProcContent: `<p>A Broncho-Alveolar Lavage (BAL) is performed to analyze the cell population of the lower airways.</p><p><strong>Cytology result:</strong> A marked increase in the percentage of neutrophils (> 20%) is found.</p>`,
+        quizCompleted: "Quiz Completed!",
+        yourScoreIs: "Your score is:",
+        scoreText: "Below you will find a summary of your answers and the case study sheet.",
+        reviewTitle: "Answers Summary",
+        yourAnswer: "Your answer:",
+        correctAnswer: "Correct answer:",
+        noAnswer: "No answer",
+        printButton: "Print or Save Summary",
+        footerCredit: "Created by Sara Busechian.",
+        footerText: "This clinical case was generated for educational purposes.",
+        questionProgress: "Question",
+        of: "of",
+        printWindowTitle: "Clinical Case Summary"
+    }
+};
+
 const quizData = [
-    {
-        question: "1/10: In base all'anamnesi e al management del cavallo, quale fattore è il principale sospettato come causa scatenante della sintomatologia?",
-        options: [
-            "L'esercizio fisico (dressage)",
-            "L'età avanzata del cavallo",
-            "L'esposizione a polveri e muffe presenti nel fieno e nella lettiera in paglia",
-            "Un'infezione batterica contagiosa"
-        ],
-        answer: 2,
-        feedback: "Corretto. L'asma equina è primariamente una reazione allergica agli aeroallergeni presenti nell'ambiente di scuderia, in particolare nel fieno e nella paglia.",
-        reveals: "visita-clinica"
+    { 
+        question: { it: "Il fatto che i sintomi peggiorino in scuderia è un'informazione anamnestica chiave. Cosa suggerisce?", en: "The fact that the symptoms worsen in the stable is a key piece of information from the history. What does it suggest?" }, 
+        answer: 0, 
+        reveals: "visita-clinica", 
+        options: { 
+            it: ["Una causa ambientale/allergenica legata a fieno e lettiera", "Una malattia infettiva contagiosa", "Un problema legato al lavoro", "Una patologia stagionale"],
+            en: ["An environmental/allergenic cause related to hay and bedding", "A contagious infectious disease", "A work-related problem", "A seasonal condition"]
+        }
     },
-    {
-        question: "2/10: La 'heaves line' è l'ipertrofia dei muscoli addominali obliqui. Qual è il suo significato fisiopatologico in questo contesto?",
-        options: [
-            "È un segno di dolore addominale cronico",
-            "Indica uno sforzo espiratorio attivo a causa dell'ostruzione delle piccole vie aeree",
-            "È causata dalla tosse persistente",
-            "È una caratteristica comune nei cavalli da dressage"
-        ],
-        answer: 1,
-        feedback: "Esatto. Normalmente l'espirazione è un processo passivo. In caso di ostruzione bronchiale, il cavallo deve usare attivamente i muscoli addominali per espellere l'aria, causandone l'ipertrofia.",
-        reveals: null
+    { 
+        question: { it: "La 'heaves line' e lo sforzo espiratorio sono segni di:", en: "The 'heaves line' and expiratory effort are signs of:" }, 
+        answer: 2, 
+        reveals: null, 
+        options: {
+            it: ["Dolore addominale", "Debolezza muscolare", "Ostruzione delle piccole vie aeree", "Insufficienza cardiaca"],
+            en: ["Abdominal pain", "Muscle weakness", "Small airway obstruction", "Heart failure"]
+        }
     },
-    {
-        question: "3/10: I sibili espiratori auscultati sul torace sono un suono tipicamente prodotto da:",
-        options: [
-            "Liquido negli alveoli (edema polmonare)",
-            "Accumulo di muco denso nelle grandi vie aeree",
-            "Il passaggio turbolento dell'aria attraverso le piccole vie aeree ristrette (broncospasmo)",
-            "Infiammazione della pleura"
-        ],
-        answer: 2,
-        feedback: "Perfetto. I sibili sono suoni musicali acuti generati dal rapido flusso d'aria attraverso i bronchioli contratti, un segno distintivo del broncospasmo.",
-        reveals: "iter-diagnostico"
+    { 
+        question: { it: "Quale esame diagnostico è considerato il gold standard per confermare l'infiammazione delle basse vie aeree in un caso come questo?", en: "Which diagnostic test is considered the gold standard to confirm lower airway inflammation in a case like this?" }, 
+        answer: 1, 
+        reveals: "iter-diagnostico", 
+        options: {
+            it: ["Endoscopia a riposo", "Lavaggio Bronco-Alveolare (BAL)", "Radiografia toracica", "Test della riespirazione (rebreathing bag)"],
+            en: ["Resting endoscopy", "Broncho-Alveolar Lavage (BAL)", "Thoracic radiography", "Rebreathing bag test"]
+        }
     },
-    {
-        question: "4/10: Quale di questi esami è considerato il 'gold standard' per ottenere una diagnosi definitiva di asma equina, differenziandola da altre patologie respiratorie?",
-        options: [
-            "Radiografia toracica",
-            "Esame del sangue con conta degli eosinofili",
-            "Endoscopia delle vie aeree",
-            "Citologia del lavaggio broncoalveolare (BAL)"
-        ],
-        answer: 3,
-        feedback: "Corretto. Solo l'analisi citologica del BAL permette di identificare e quantificare l'infiammazione neutrofilica a livello alveolare, che è il segno patognomonico dell'asma equina grave.",
-        reveals: "risultati-test"
+    { 
+        question: { it: "Un aumento dei neutrofili nel liquido del BAL (>20%) è patognomonico per:", en: "An increase in neutrophils in the BAL fluid (>20%) is pathognomonic for:" }, 
+        answer: 0, 
+        reveals: null, 
+        options: {
+            it: ["Asma equina grave (Recurrent Airway Obstruction - RAO)", "Polmonite batterica", "Emorragia polmonare da sforzo (EIPH)", "Una normale citologia in un cavallo anziano"],
+            en: ["Severe Equine Asthma (Recurrent Airway Obstruction - RAO)", "Bacterial pneumonia", "Exercise-Induced Pulmonary Hemorrhage (EIPH)", "Normal cytology in an old horse"]
+        }
     },
-    {
-        question: "5/10: Un risultato del BAL con il 40% di neutrofili in un cavallo con questa sintomatologia è:",
-        options: [
-            "Normale per un cavallo atleta",
-            "Indicativo di un'infezione batterica polmonare (broncopolmonite)",
-            "Fortemente suggestivo di Asma Equina Grave (Recurrent Airway Obstruction (RAO))",
-            "Un artefatto di laboratorio dovuto a contaminazione con sangue"
-        ],
-        answer: 2,
-        feedback: "Esatto. Mentre una polmonite batterica mostrerebbe neutrofili degenerati e batteri, un'alta percentuale di neutrofili non degenerati è il segno distintivo della reazione infiammatoria sterile tipica dell'asma.",
-        reveals: null
+    { 
+        question: { it: "Qual è il pilastro FONDAMENTALE della terapia per l'asma equina?", en: "What is the FUNDAMENTAL pillar of therapy for equine asthma?" }, 
+        answer: 3, 
+        reveals: null, 
+        options: {
+            it: ["La somministrazione di antibiotici", "Il riposo assoluto", "L'uso di mucolitici", "La gestione ambientale per ridurre l'esposizione alla polvere"],
+            en: ["The administration of antibiotics", "Absolute rest", "The use of mucolytics", "Environmental management to reduce dust exposure"]
+        }
     },
-    {
-        question: "6/10: Qual è l'intervento più importante e fondamentale nella gestione a lungo termine dell'asma equina?",
-        options: [
-            "Somministrare antibiotici a cicli regolari",
-            "Allenare il cavallo più intensamente per 'rinforzare' i polmoni",
-            "Modificare l'ambiente per ridurre al minimo l'esposizione alla polvere (es. paddock, fieno bagnato)",
-            "Utilizzare solo broncodilatatori al bisogno"
-        ],
-        answer: 2,
-        feedback: "Corretto. Nessuna terapia farmacologica può essere efficace a lungo termine se non si rimuove la causa scatenante, ovvero l'esposizione agli allergeni ambientali.",
-        reveals: null
+    { 
+        question: { it: "Quali farmaci si usano per controllare l'infiammazione delle vie aeree?", en: "What drugs are used to control airway inflammation?" }, 
+        answer: 0, 
+        reveals: null, 
+        options: {
+            it: ["Corticosteroidi (sistemici o per via inalatoria)", "FANS (Farmaci Anti-infiammatori Non Steroidei)", "Diuretici", "Antistaminici"],
+            en: ["Corticosteroids (systemic or inhaled)", "NSAIDs (Non-Steroidal Anti-Inflammatory Drugs)", "Diuretics", "Antihistamines"]
+        }
     },
-    {
-        question: "7/10: Quale classe di farmaci è utilizzata per controllare l'infiammazione delle vie aeree, che è alla base della patologia?",
-        options: [
-            "Antibiotici",
-            "Broncodilatatori (es. Clenbuterolo)",
-            "Corticosteroidi (es. Dexametasone, Fluticasone)",
-            "Mucolitici (es. Bromexina)"
-        ],
-        answer: 2,
-        feedback: "Perfetto. I corticosteroidi sono i farmaci antinfiammatori più potenti ed efficaci per ridurre la reazione di ipersensibilità che causa l'asma.",
-        reveals: null
+    { 
+        question: { it: "I broncodilatatori (es. clenbuterolo) nell'asma equina servono a:", en: "Bronchodilators (e.g., clenbuterol) in equine asthma are used to:" }, 
+        answer: 2, 
+        reveals: null, 
+        options: {
+            it: ["Curare l'infezione", "Ridurre l'infiammazione", "Rilasciare la muscolatura liscia delle vie aeree e migliorare il flusso d'aria", "Fluidificare il muco"],
+            en: ["Cure the infection", "Reduce inflammation", "Relax the airway smooth muscle and improve airflow", "Thin the mucus"]
+        }
     },
-    {
-        question: "8/10: Il clenbuterolo, un broncodilatatore, agisce:",
-        options: [
-            "Riducendo l'infiammazione nei polmoni",
-            "Fluidificando il muco presente in trachea",
-            "Rilasciando la muscolatura liscia dei bronchioli e dilatando le vie aeree",
-            "Sopprimendo la tosse a livello centrale"
-        ],
-        answer: 2,
-        feedback: "Esatto. Il clenbuterolo è un agonista beta-2 che fornisce un sollievo rapido dai sintomi, rilassando i muscoli bronchiali e migliorando il flusso d'aria, ma non agisce sulla causa infiammatoria.",
-        reveals: null
+     { 
+        question: { it: "Quale delle seguenti modifiche gestionali NON è raccomandata?", en: "Which of the following management changes is NOT recommended?" }, 
+        answer: 1, 
+        reveals: null, 
+        options: {
+            it: ["Sostituire la lettiera in paglia con truciolo depolverato", "Spostare il cavallo in una scuderia più chiusa e calda in inverno", "Bagnare o vaporizzare il fieno prima di somministrarlo", "Garantire la massima permanenza al paddock"],
+            en: ["Replacing straw bedding with dust-free shavings", "Moving the horse to a more enclosed and warmer stable in winter", "Soaking or steaming hay before feeding", "Maximizing turnout time in the paddock"]
+        }
     },
-    {
-        question: "9/10: Qual è il principale vantaggio dell'utilizzo di corticosteroidi per via inalatoria (aerosol) rispetto alla via sistemica (orale o iniettiva)?",
-        options: [
-            "Hanno un'azione più rapida",
-            "Costano meno",
-            "Concentrano il farmaco dove serve (i polmoni) riducendo gli effetti collaterali sistemici (es. laminite)",
-            "Non richiedono prescrizione veterinaria"
-        ],
-        answer: 2,
-        feedback: "Corretto. La terapia inalatoria è ideale per la gestione a lungo termine perché minimizza i rischi associati all'uso cronico di steroidi, come la laminite o l'immunosoppressione.",
-        reveals: null
+    { 
+        question: { it: "L'asma equina è una malattia:", en: "Equine asthma is a disease that is:" }, 
+        answer: 3, 
+        reveals: null, 
+        options: {
+            it: ["Acuta e che guarisce completamente con la terapia", "Infettiva e trasmissibile ad altri cavalli", "Che colpisce solo i cavalli giovani", "Cronica e che richiede una gestione a vita"],
+            en: ["Acute and resolves completely with therapy", "Infectious and transmissible to other horses", "Affects only young horses", "Chronic and requires lifelong management"]
+        }
     },
-    {
-        question: "10/10: Qual è la prognosi a lungo termine per un cavallo con asma grave?",
-        options: [
-            "Guarigione completa dopo un ciclo di terapia",
-            "È una condizione cronica che richiede un management a vita, ma con cui si può convivere bene",
-            "Peggioramento progressivo inevitabile che porta sempre all'eutanasia",
-            "Il cavallo non potrà più svolgere alcun tipo di attività fisica"
-        ],
-        answer: 1,
-        feedback: "Risposta corretta. L'asma non si 'cura', ma si 'gestisce'. Con un attento controllo ambientale e una terapia adeguata, molti cavalli possono tornare a una buona qualità di vita e a un'attività sportiva soddisfacente.",
-        reveals: "final-summary"
-    },
+    { 
+        question: { it: "Qual è la prognosi per un cavallo con asma grave ben gestito?", en: "What is the prognosis for a well-managed horse with severe asthma?" }, 
+        answer: 0, 
+        reveals: "final-summary", 
+        options: {
+            it: ["Buona per una buona qualità di vita e per lavori leggeri, ma la patologia rimane", "Infausta, l'aspettativa di vita è breve", "Eccellente, il cavallo può tornare a qualsiasi livello di competizione", "Riservata, dipende dalla stagione"],
+            en: ["Good for a good quality of life and for light work, but the condition remains", "Grave, the life expectancy is short", "Excellent, the horse can return to any level of competition", "Guarded, it depends on the season"]
+        }
+    }
 ];
 
 let currentQuestionIndex = 0;
 const quizContainer = document.getElementById('quiz-container');
+let userAnswers = new Array(quizData.length).fill(null);
+let currentUtterance = null;
+let speakingButton = null;
 
-function displayQuestion() {
-    if (currentQuestionIndex >= quizData.length) {
-        quizContainer.innerHTML = ''; // Quiz finished
-        return;
+// --- Accessibility & Language Functions ---
+const standardFontBtn = document.getElementById('font-standard-btn');
+const dyslexicFontBtn = document.getElementById('font-dyslexic-btn');
+const langItBtn = document.getElementById('lang-it-btn');
+const langEnBtn = document.getElementById('lang-en-btn');
+const body = document.body;
+
+function setFont(fontType) {
+    if (fontType === 'dyslexic') {
+        body.classList.add('font-dyslexic');
+        standardFontBtn.classList.remove('active');
+        dyslexicFontBtn.classList.add('active');
+        localStorage.setItem('fontPreference', 'dyslexic');
+    } else {
+        body.classList.remove('font-dyslexic');
+        dyslexicFontBtn.classList.remove('active');
+        standardFontBtn.classList.add('active');
+        localStorage.setItem('fontPreference', 'standard');
     }
+}
 
-    const currentQuiz = quizData[currentQuestionIndex];
-    let optionsHtml = '';
-    currentQuiz.options.forEach((option, index) => {
-        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+function setLanguage(lang) {
+    speechSynthesis.cancel();
+    if(speakingButton) {
+        speakingButton.classList.remove('active');
+        speakingButton = null;
+        currentUtterance = null;
+    }
+    
+    currentLanguage = lang;
+    localStorage.setItem('languagePreference', lang);
+
+    if (lang === 'en') {
+        langItBtn.classList.remove('active');
+        langEnBtn.classList.add('active');
+    } else {
+        langEnBtn.classList.remove('active');
+        langItBtn.classList.add('active');
+    }
+    
+    document.querySelectorAll('[data-translate-key]').forEach(el => {
+        const key = el.dataset.translateKey;
+        if (translations[lang][key]) {
+            if (key.includes('Content')) {
+                 el.innerHTML = translations[lang][key];
+            } else {
+                 el.innerText = translations[lang][key];
+            }
+        }
     });
 
+    updateDynamicContent();
+}
+
+function updateDynamicContent() {
+    if (currentQuestionIndex < quizData.length && !document.getElementById('results-section').style.display || document.getElementById('results-section').style.display === 'none') {
+        displayQuestion();
+    } else {
+        showResults();
+    }
+}
+
+standardFontBtn.addEventListener('click', () => setFont('standard'));
+dyslexicFontBtn.addEventListener('click', () => setFont('dyslexic'));
+langItBtn.addEventListener('click', () => setLanguage('it'));
+langEnBtn.addEventListener('click', () => setLanguage('en'));
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedFont = localStorage.getItem('fontPreference') || 'standard';
+    const savedLang = localStorage.getItem('languagePreference') || 'it';
+    setFont(savedFont);
+    setLanguage(savedLang);
+    displayQuestion();
+});
+
+// Text-to-Speech
+document.getElementById('case-container').addEventListener('click', function(event) {
+    const ttsButton = event.target.closest('.tts-button');
+    if (ttsButton) {
+        if (speakingButton === ttsButton) {
+            // Clicked the same button that is currently active
+            if (speechSynthesis.paused) {
+                speechSynthesis.resume();
+            } else if (speechSynthesis.speaking) {
+                speechSynthesis.pause();
+            }
+        } else {
+            // Clicked a new button
+            speechSynthesis.cancel();
+            if(speakingButton) {
+                speakingButton.classList.remove('active');
+            }
+
+            const sectionToRead = ttsButton.parentElement;
+            const title = sectionToRead.querySelector('h2, h3');
+            const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3, .flex')).map(el => el.innerText).join('\n');
+            const textToRead = (title ? title.innerText + '.\n' : '') + content;
+            
+            currentUtterance = new SpeechSynthesisUtterance(textToRead);
+            currentUtterance.lang = currentLanguage === 'en' ? 'en-US' : 'it-IT';
+            
+            currentUtterance.onend = () => {
+                if (speakingButton) speakingButton.classList.remove('active');
+                speakingButton = null;
+                currentUtterance = null;
+            };
+
+            currentUtterance.onerror = (e) => {
+                console.error('SpeechSynthesis Error:', e);
+                if (speakingButton) speakingButton.classList.remove('active');
+                speakingButton = null;
+                currentUtterance = null;
+            };
+            
+            speechSynthesis.speak(currentUtterance);
+            ttsButton.classList.add('active');
+            speakingButton = ttsButton;
+        }
+    }
+});
+
+
+// --- Quiz Logic ---
+function displayQuestion() {
+    if (currentQuestionIndex >= quizData.length) {
+        if (!document.getElementById('results-section').style.display || document.getElementById('results-section').style.display === 'none') {
+             showResults();
+        }
+        return;
+    }
+    const currentQuiz = quizData[currentQuestionIndex];
+    let optionsHtml = '';
+    currentQuiz.options[currentLanguage].forEach((option, index) => {
+        const letters = ['A. ', 'B. ', 'C. ', 'D. '];
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${letters[index]}${option}</button>`;
+    });
+
+    const progressIndicator = `<p class="text-center text-gray-600 font-semibold mb-2">${translations[currentLanguage].questionProgress} ${currentQuestionIndex + 1} ${translations[currentLanguage].of} ${quizData.length}</p>`;
+
     quizContainer.innerHTML = `
-        <div class="quiz-card p-4 border rounded-lg bg-gray-50">
-            <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
-            <div class="options-container">${optionsHtml}</div>
-            <div class="feedback-container mt-2"></div>
+        <div class="mb-4">
+            ${progressIndicator}
+            <div class="quiz-card p-4 border rounded-lg">
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h3 class="text-lg font-semibold mb-4">${currentQuiz.question[currentLanguage]}</h3>
+                <div class="options-container">${optionsHtml}</div>
+            </div>
         </div>
     `;
-
     document.querySelectorAll('.quiz-option').forEach(button => {
         button.addEventListener('click', checkAnswer);
     });
 }
 
 function checkAnswer(event) {
-    const selectedOption = event.target;
+    const selectedOption = event.target.closest('.quiz-option'); 
+    if (!selectedOption || selectedOption.disabled) return;
+
+    speechSynthesis.cancel();
+    if(speakingButton) {
+        speakingButton.classList.remove('active');
+        speakingButton = null;
+        currentUtterance = null;
+    }
+
     const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
-    const currentQuiz = quizData[currentQuestionIndex];
-    const feedbackContainer = quizContainer.querySelector('.feedback-container');
-
-    // Disable all buttons after an answer is chosen
+    userAnswers[currentQuestionIndex] = selectedAnswerIndex;
     document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
-
-    if (selectedAnswerIndex === currentQuiz.answer) {
-        selectedOption.classList.add('correct');
-        feedbackContainer.innerHTML = `
-            <div class="feedback correct">
-                ${currentQuiz.feedback}
-            </div>
-            <button id="next-question-btn" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg w-full">
-                Prosegui
-            </button>
-        `;
-
-        document.getElementById('next-question-btn').addEventListener('click', () => {
-            if (currentQuiz.reveals) {
-                const revealedSection = document.getElementById(currentQuiz.reveals);
+    selectedOption.classList.add('selected');
+    const currentQuiz = quizData[currentQuestionIndex];
+    setTimeout(() => {
+        if (currentQuiz.reveals) {
+            const revealedSection = document.getElementById(currentQuiz.reveals);
+            if(revealedSection) {
                 revealedSection.style.display = 'block';
-                // Scrolla la vista fino alla nuova sezione che è apparsa
                 revealedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-            currentQuestionIndex++;
-            displayQuestion();
-        });
-    } else {
-        selectedOption.classList.add('incorrect');
-        feedbackContainer.innerHTML = `<div class="feedback incorrect">Risposta non corretta. Riprova a ragionare sul caso.</div>`;
-         setTimeout(() => { // Re-enable buttons to allow another try
-            document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = false);
-            selectedOption.classList.remove('incorrect');
-            feedbackContainer.innerHTML = '';
-        }, 2000);
-    }
+        }
+        currentQuestionIndex++;
+        displayQuestion();
+    }, 500);
 }
 
-// Start the quiz
-window.onload = displayQuestion;
+function showResults() {
+    quizContainer.innerHTML = ''; 
+    let score = 0;
+    let reviewHtml = `<h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">${translations[currentLanguage].reviewTitle}</h2>`;
+    quizData.forEach((question, index) => {
+        const userAnswerIndex = userAnswers[index];
+        const correctAnswerIndex = question.answer;
+        const userAnswerText = userAnswerIndex !== null ? (['A. ', 'B. ', 'C. ', 'D. '][userAnswerIndex] + question.options[currentLanguage][userAnswerIndex]) : translations[currentLanguage].noAnswer;
+        const correctAnswerText = ['A. ', 'B. ', 'C. ', 'D. '][correctAnswerIndex] + question.options[currentLanguage][correctAnswerIndex];
+        const isCorrect = userAnswerIndex === correctAnswerIndex;
+        if (isCorrect) score++;
+        reviewHtml += `
+            <div class="p-4 mb-4 border-l-4 rounded-r-lg ${isCorrect ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}">
+                <p class="font-semibold text-gray-800">${index + 1}. ${question.question[currentLanguage]}</p>
+                <p class="mt-2 text-md ${isCorrect ? 'text-green-800' : 'text-red-800'}">
+                    <strong>${translations[currentLanguage].yourAnswer}</strong> ${userAnswerText} ${isCorrect ? '<span class="text-green-600 font-bold">&#10004;</span>' : '<span class="text-red-600 font-bold">&#10008;</span>'}
+                </p>
+                ${!isCorrect ? `<p class="mt-1 text-md text-gray-700"><strong>${translations[currentLanguage].correctAnswer}</strong> ${correctAnswerText}</p>` : ''}
+            </div>`;
+    });
+    const resultsSection = document.getElementById('results-section');
+    resultsSection.innerHTML = `
+        <h2 class="text-center text-3xl font-bold text-indigo-600 mb-4">${translations[currentLanguage].quizCompleted}</h2>
+        <p class="text-center text-xl text-gray-800">${translations[currentLanguage].yourScoreIs} <strong class="text-2xl">${score} / ${quizData.length}</strong></p>
+        <p class="text-center text-gray-600 mt-4">${translations[currentLanguage].scoreText}</p>`;
+    resultsSection.style.display = 'block';
+    if(currentQuestionIndex === quizData.length) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.getElementById('review-section').innerHTML = reviewHtml;
+    document.getElementById('review-section').style.display = 'block';
+    
+    document.querySelectorAll('#final-summary > div').forEach(el => el.classList.add('hidden'));
+    document.querySelector(`#final-summary > div[lang=${currentLanguage}]`).classList.remove('hidden');
+    document.getElementById('final-summary').style.display = 'block';
+}
+
+function printSummary() {
+    const printableContent = document.getElementById(`printable-summary-${currentLanguage}`).innerHTML;
+    const printWindow = window.open('', '', 'height=800,width=1000');
+    printWindow.document.write(`<html><head><title>${translations[currentLanguage].printWindowTitle}</title>`);
+    printWindow.document.write(`<style>body{font-family:'Inter',sans-serif;line-height:1.6;color:#374151;padding:2rem}h2{text-align:center;font-size:1.5rem;font-weight:bold;color:#111827;margin-bottom:1rem}h3{font-size:1.125rem;font-weight:600;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;margin-top:1.5rem}ul{list-style-type:disc;list-style-position:inside;padding-left:1rem}li{margin-bottom:0.25rem}strong{font-weight:600;color:#1f2937}</style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">`);
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printableContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+}
+
 </script>
 
 </body>
