@@ -494,7 +494,7 @@ document.getElementById('case-container').addEventListener('click', function(eve
 
             const sectionToRead = ttsButton.parentElement;
             const title = sectionToRead.querySelector('h2, h3');
-            const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3')).map(el => el.innerText).join('\n');
+            const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3, .flex')).map(el => el.innerText).join('\n');
             const textToRead = (title ? title.innerText + '.\n' : '') + content;
             
             currentUtterance = new SpeechSynthesisUtterance(textToRead);
@@ -615,8 +615,8 @@ function showResults() {
     document.getElementById('review-section').innerHTML = reviewHtml;
     document.getElementById('review-section').style.display = 'block';
     
-    document.querySelectorAll('#final-summary > div').forEach(el => el.classList.add('hidden'));
-    document.querySelector(`#final-summary > div[lang=${currentLanguage}]`).classList.remove('hidden');
+    document.querySelectorAll('#final-summary div[lang]').forEach(el => el.classList.add('hidden'));
+    document.querySelector(`#final-summary div[lang=${currentLanguage}]`).classList.remove('hidden');
     document.getElementById('final-summary').style.display = 'block';
 }
 
