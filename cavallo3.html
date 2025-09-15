@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Interattivo: Cavallo con Colica</title>
+    <title>Caso Clinico: Cavallo, Apparato Digerente</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -195,7 +195,6 @@
                     <div id="printable-summary-it">
                         <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: La Colica Chirurgica del Cavallo</h2>
                         <div class="space-y-4 text-left">
-                           <!-- Contenuto IT... -->
                             <div>
                                 <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
                                 <p class="text-gray-700">La colica è un termine generico che indica dolore addominale. La distinzione più importante è tra coliche "mediche" (gestibili in campo con farmaci) e coliche "chirurgiche", causate da lesioni come torsioni (volvoli), strangolamenti o dislocazioni che richiedono un intervento chirurgico per essere risolte.</p>
@@ -226,7 +225,6 @@
                     <div id="printable-summary-en">
                         <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Summary Sheet: Surgical Colic in Horses</h2>
                         <div class="space-y-4 text-left">
-                            <!-- Contenuto EN... -->
                             <div>
                                 <h3 class="text-lg font-semibold text-indigo-600">What is it?</h3>
                                 <p class="text-gray-700">Colic is a general term for abdominal pain. The most important distinction is between "medical" colic (manageable in the field with medication) and "surgical" colic, caused by lesions such as torsions (volvulus), strangulations, or displacements that require surgery to resolve.</p>
@@ -258,7 +256,7 @@
         </main>
         
         <footer class="text-center mt-8 text-sm text-gray-500">
-            <p data-translate-key="footerCredit">Creato da Sara Busechian.</p>
+             <p data-translate-key="footerCredit">Creato da Sara Busechian.</p>
             <p data-translate-key="footerText" class="mt-1">Questo caso clinico è stato generato a scopo didattico.</p>
         </footer>
     </div>
@@ -406,7 +404,7 @@ const quizData = [
         reveals: null, 
         options: {
             it: ["Tentare con un secondo bolo di analgesico e rivalutare tra un'ora", "Sondare di nuovo il cavallo e idratarlo con fluidi per via orale", "Lasciare il cavallo libero in un paddock per vedere se si risolve da solo", "Stabilizzare il cavallo e organizzare il trasporto immediato verso una clinica chirurgica"],
-            en: ["Try a second dose of analgesic and re-evaluate in an hour", "Pass the nasogastric tube again and hydrate with oral fluids", "Turn the horse out in a paddock to see if it resolves on its own", "D. Stabilize the horse and arrange for immediate transport to a surgical facility"]
+            en: ["Try a second dose of analgesic and re-evaluate in an hour", "Pass the nasogastric tube again and hydrate with oral fluids", "Turn the horse out in a paddock to see if it resolves on its own", "Stabilize the horse and arrange for immediate transport to a surgical facility"]
         }
     },
     { 
@@ -454,7 +452,7 @@ function setLanguage(lang) {
         speakingButton = null;
         currentUtterance = null;
     }
-
+    
     currentLanguage = lang;
     localStorage.setItem('languagePreference', lang);
 
@@ -469,7 +467,6 @@ function setLanguage(lang) {
     document.querySelectorAll('[data-translate-key]').forEach(el => {
         const key = el.dataset.translateKey;
         if (translations[lang][key]) {
-            // Use innerHTML for keys that contain HTML tags
             if (key.includes('Content')) {
                  el.innerHTML = translations[lang][key];
             } else {
@@ -522,7 +519,7 @@ document.getElementById('case-container').addEventListener('click', function(eve
 
             const sectionToRead = ttsButton.parentElement;
             const title = sectionToRead.querySelector('h2, h3');
-            const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3')).map(el => el.innerText).join('\n');
+            const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3, .flex')).map(el => el.innerText).join('\n');
             const textToRead = (title ? title.innerText + '.\n' : '') + content;
             
             currentUtterance = new SpeechSynthesisUtterance(textToRead);
@@ -533,20 +530,21 @@ document.getElementById('case-container').addEventListener('click', function(eve
                 speakingButton = null;
                 currentUtterance = null;
             };
-            
+
             currentUtterance.onerror = (e) => {
                 console.error('SpeechSynthesis Error:', e);
                 if (speakingButton) speakingButton.classList.remove('active');
                 speakingButton = null;
                 currentUtterance = null;
             };
-
+            
             speechSynthesis.speak(currentUtterance);
             ttsButton.classList.add('active');
             speakingButton = ttsButton;
         }
     }
 });
+
 
 // --- Quiz Logic ---
 function displayQuestion() {
@@ -585,14 +583,14 @@ function displayQuestion() {
 function checkAnswer(event) {
     const selectedOption = event.target.closest('.quiz-option'); 
     if (!selectedOption || selectedOption.disabled) return;
-    
+
     speechSynthesis.cancel();
     if(speakingButton) {
         speakingButton.classList.remove('active');
         speakingButton = null;
         currentUtterance = null;
     }
-    
+
     const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
     userAnswers[currentQuestionIndex] = selectedAnswerIndex;
     document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
@@ -642,8 +640,8 @@ function showResults() {
     document.getElementById('review-section').innerHTML = reviewHtml;
     document.getElementById('review-section').style.display = 'block';
     
-    document.querySelectorAll('#final-summary > div').forEach(el => el.classList.add('hidden'));
-    document.querySelector(`#final-summary > div[lang=${currentLanguage}]`).classList.remove('hidden');
+    document.querySelectorAll('#final-summary div[lang]').forEach(el => el.classList.add('hidden'));
+    document.querySelector(`#final-summary div[lang=${currentLanguage}]`).classList.remove('hidden');
     document.getElementById('final-summary').style.display = 'block';
 }
 
