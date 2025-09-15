@@ -154,6 +154,9 @@
                        <li><strong>Slap test:</strong> Lo "slap test" controlaterale evoca un'adduzione incompleta e debole dell'aritenoide sinistra. La condizione viene classificata come Grado III secondo la scala di Havemeyer.</li>
                     </ul>
                 </div>
+                <div class="flex justify-center mt-4">
+                    <img src="image_78a0b0.jpg" alt="Immagine endoscopica del laringe di un cavallo" class="rounded-lg shadow-md max-w-sm w-full">
+                </div>
             </section>
 
              <!-- Sezione 4: Endoscopia dinamica (nascosta) -->
@@ -165,9 +168,6 @@
                 <div class="space-y-3 text-gray-700" data-translate-key="endoscopyDynamicContent">
                     <p>Si esegue un'endoscopia durante esercizio su tapis roulant.</p>
                      <p><strong>Risultato:</strong> Durante l'esercizio intenso, si osserva un collasso dinamico completo dell'aritenoide sinistra, che ostruisce parzialmente il lume laringeo. La condizione viene classificata come C.</p>
-                </div>
-                 <div class="flex justify-center mt-4">
-                    <img src="image-78a0b0.jpg" alt="Immagine endoscopica del laringe di un cavallo" class="rounded-lg shadow-md max-w-sm w-full">
                 </div>
             </section>
 
@@ -333,7 +333,7 @@ const quizData = [
     { 
         question: { it: "Il risultato dell'endoscopia a riposo (Grado III di Havemeyer) indica:", en: "The result of the resting endoscopy (Havemeyer Grade III) indicates:" }, 
         answer: 1, 
-        reveals: null, 
+        reveals: "endoscopia-dinamica", 
         options: {
             it: ["Una normale funzionalità laringea.", "Una significativa asimmetria e ipomobilità dell'aritenoide sinistra, fortemente sospetta per emiplegia laringea.", "Un'infiammazione della faringe.", "La presenza di un corpo estraneo."],
             en: ["Normal laryngeal function.", "Significant asymmetry and hypomobility of the left arytenoid, highly suspicious for laryngeal hemiplegia.", "Inflammation of the pharynx.", "The presence of a foreign body."]
@@ -342,14 +342,14 @@ const quizData = [
     { 
         question: { it: "Perché è fondamentale eseguire un'endoscopia dinamica in questo caso?", en: "Why is it essential to perform a dynamic endoscopy in this case?" }, 
         answer: 3, 
-        reveals: "endoscopia-dinamica", 
+        reveals: null, 
         options: {
             it: ["Per controllare la presenza di sangue nei polmoni (EIPH).", "Per valutare la funzionalità cardiaca.", "Per misurare la frequenza respiratoria sotto sforzo.", "Per confermare se il collasso dell'aritenoide avviene durante l'esercizio, che è il momento in cui si manifesta il problema clinico."],
             en: ["To check for blood in the lungs (EIPH).", "To assess cardiac function.", "To measure respiratory rate under stress.", "To confirm if the arytenoid collapse occurs during exercise, which is when the clinical problem manifests."]
         }
     },
     { 
-        question: { it: "Osservando l'immagine e i risultati, qual è la diagnosi definitiva?", en: "Observing the image and the results, what is the definitive diagnosis?" }, 
+        question: { it: "Basandosi su tutti i risultati, qual è la diagnosi definitiva?", en: "Based on all the results, what is the definitive diagnosis?" }, 
         answer: 0, 
         reveals: null, 
         options: {
@@ -639,4 +639,3 @@ function printSummary() {
 
 </body>
 </html>
-
