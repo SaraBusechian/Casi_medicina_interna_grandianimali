@@ -8,15 +8,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/opendyslexic@latest/build/css/opendyslexic.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            transition: font-family 0.3s ease;
+            transition: all 0.3s ease;
         }
+        /* Stili per la modalità accessibile */
         body.font-dyslexic {
-            font-family: 'OpenDyslexic', sans-serif;
+            font-family: Verdana, sans-serif;
+            background-color: #ffffff;
         }
+        .font-dyslexic p, 
+        .font-dyslexic li, 
+        .font-dyslexic h2, 
+        .font-dyslexic h3, 
+        .font-dyslexic div,
+        .font-dyslexic button,
+        .font-dyslexic span {
+            font-size: 14pt;
+            letter-spacing: 0.05em;
+            word-spacing: 0.15em;
+            line-height: 1.8;
+            color: #111827; /* Nero più intenso */
+        }
+        .font-dyslexic .quiz-option {
+            font-size: 14pt !important;
+        }
+         .font-dyslexic h1, .font-dyslexic h2, .font-dyslexic h3 {
+            font-size: 1.5em; /* Aumenta la dimensione dei titoli proporzionalmente */
+        }
+
         .case-section, .quiz-card {
             position: relative;
             background-color: #f9fafb;
@@ -312,8 +333,8 @@ const quizData = [
         answer: 1, 
         reveals: "visita-clinica", 
         options: { 
-            it: ["A. La temperatura rettale", "B. La frequenza cardiaca", "C. La frequenza respiratoria", "D. Il colore delle mucose"],
-            en: ["A. Rectal temperature", "B. Heart rate", "C. Respiratory rate", "D. Mucous membrane color"]
+            it: ["La temperatura rettale", "La frequenza cardiaca", "La frequenza respiratoria", "Il colore delle mucose"],
+            en: ["Rectal temperature", "Heart rate", "Respiratory rate", "Mucous membrane color"]
         }
     },
     { 
@@ -321,8 +342,8 @@ const quizData = [
         answer: 2, 
         reveals: null, 
         options: {
-            it: ["A. Un dolore lieve e gestibile in campo", "B. Uno stato di disidratazione moderata", "C. Un grave stato di shock endotossico, spesso associato a una lesione intestinale con compromissione vascolare", "D. Un'infezione batterica sistemica"],
-            en: ["A. Mild pain manageable in the field", "B. A state of moderate dehydration", "C. Severe endotoxic shock, often associated with an intestinal lesion with vascular compromise", "D. A systemic bacterial infection"]
+            it: ["Un dolore lieve e gestibile in campo", "Uno stato di disidratazione moderata", "Un grave stato di shock endotossico, spesso associato a una lesione intestinale con compromissione vascolare", "Un'infezione batterica sistemica"],
+            en: ["Mild pain manageable in the field", "A state of moderate dehydration", "Severe endotoxic shock, often associated with an intestinal lesion with vascular compromise", "A systemic bacterial infection"]
         }
     },
     { 
@@ -330,8 +351,8 @@ const quizData = [
         answer: 2, 
         reveals: "iter-diagnostico", 
         options: {
-            it: ["A. Un prelievo di sangue", "B. Un'ecografia addominale", "C. Il sondaggio naso-gastrico", "D. La somministrazione di un lassativo"],
-            en: ["A. A blood draw", "B. An abdominal ultrasound", "C. Nasogastric intubation", "D. Administration of a laxative"]
+            it: ["Un prelievo di sangue", "Un'ecografia addominale", "Il sondaggio naso-gastrico", "La somministrazione di un lassativo"],
+            en: ["A blood draw", "An abdominal ultrasound", "Nasogastric intubation", "Administration of a laxative"]
         }
     },
     { 
@@ -339,8 +360,8 @@ const quizData = [
         answer: 1, 
         reveals: null, 
         options: {
-            it: ["A. Un'ulcera gastrica", "B. Un'ostruzione del piccolo intestino (meccanica o funzionale)", "C. Un'eccessiva assunzione di acqua", "D. Un'ostruzione del grosso intestino"],
-            en: ["A. A gastric ulcer", "B. A small intestinal obstruction (mechanical or functional)", "C. Excessive water intake", "D. A large intestinal obstruction"]
+            it: ["Un'ulcera gastrica", "Un'ostruzione del piccolo intestino (meccanica o funzionale)", "Un'eccessiva assunzione di acqua", "Un'ostruzione del grosso intestino"],
+            en: ["A gastric ulcer", "A small intestinal obstruction (mechanical or functional)", "Excessive water intake", "A large intestinal obstruction"]
         }
     },
     { 
@@ -348,8 +369,8 @@ const quizData = [
         answer: 2, 
         reveals: "risultati-test", 
         options: {
-            it: ["A. Spostamento dorsale sinistro del colon", "B. Costipazione del grosso colon", "C. Volvolo o strangolamento del piccolo intestino", "D. Enterite"],
-            en: ["A. Left dorsal displacement of the colon", "B. Large colon impaction", "C. Small intestinal volvulus or strangulation", "D. Enteritis"]
+            it: ["Spostamento dorsale sinistro del colon", "Costipazione del grosso colon", "Volvolo o strangolamento del piccolo intestino", "Enterite"],
+            en: ["Left dorsal displacement of the colon", "Large colon impaction", "Small intestinal volvulus or strangulation", "Enteritis"]
         }
     },
     { 
@@ -357,8 +378,8 @@ const quizData = [
         answer: 2, 
         reveals: null, 
         options: {
-            it: ["A. Una peritonite batterica primaria", "B. Un trauma addominale recente", "C. Una sofferenza della parete intestinale (ischemia/necrosi) con passaggio di liquidi, proteine e globuli rossi in addome", "D. Una normale risposta infiammatoria a una colica medica"],
-            en: ["A. Primary bacterial peritonitis", "B. Recent abdominal trauma", "C. Compromise of the intestinal wall (ischemia/necrosis) with leakage of fluid, protein, and red blood cells into the abdomen", "D. A normal inflammatory response to medical colic"]
+            it: ["Una peritonite batterica primaria", "Un trauma addominale recente", "Una sofferenza della parete intestinale (ischemia/necrosi) con passaggio di liquidi, proteine e globuli rossi in addome", "Una normale risposta infiammatoria a una colica medica"],
+            en: ["Primary bacterial peritonitis", "Recent abdominal trauma", "Compromise of the intestinal wall (ischemia/necrosis) with leakage of fluid, protein, and red blood cells into the abdomen", "A normal inflammatory response to medical colic"]
         }
     },
     { 
@@ -366,8 +387,8 @@ const quizData = [
         answer: 1, 
         reveals: null, 
         options: {
-            it: ["A. Il farmaco non è efficace e bisogna cambiarlo", "B. Il dolore è di tipo 'meccanico' (dovuto a tensione e ischemia) e non solo infiammatorio, quindi non può essere controllato completamente dai FANS", "C. La dose di farmaco era insufficiente", "D. Il cavallo sta sviluppando una resistenza al farmaco"],
-            en: ["A. The drug is ineffective and should be changed", "B. The pain is 'mechanical' (due to tension and ischemia) and not just inflammatory, so it cannot be fully controlled by NSAIDs", "C. The drug dose was insufficient", "D. The horse is developing resistance to the drug"]
+            it: ["Il farmaco non è efficace e bisogna cambiarlo", "Il dolore è di tipo 'meccanico' (dovuto a tensione e ischemia) e non solo infiammatorio, quindi non può essere controllato completamente dai FANS", "La dose di farmaco era insufficiente", "Il cavallo sta sviluppando una resistenza al farmaco"],
+            en: ["The drug is ineffective and should be changed", "The pain is 'mechanical' (due to tension and ischemia) and not just inflammatory, so it cannot be fully controlled by NSAIDs", "The drug dose was insufficient", "The horse is developing resistance to the drug"]
         }
     },
      { 
@@ -375,8 +396,8 @@ const quizData = [
         answer: 1, 
         reveals: null, 
         options: {
-            it: ["A. Volvolo del grosso colon", "B. Dislocazione dorsale sinistra del colon (incarceramento nello spazio nefrosplenico)", "C. Strangolamento dell'intestino tenue da lipoma peduncolato", "D. Ernia nel forame epiploico"],
-            en: ["A. Large colon volvulus", "B. Left dorsal displacement of the colon (nephrosplenic entrapment)", "C. Small intestinal strangulation by a pedunculated lipoma", "D. Epiploic foramen entrapment"]
+            it: ["Volvolo del grosso colon", "Dislocazione dorsale sinistra del colon (incarceramento nello spazio nefrosplenico)", "Strangolamento dell'intestino tenue da lipoma peduncolato", "Ernia nel forame epiploico"],
+            en: ["Large colon volvulus", "Left dorsal displacement of the colon (nephrosplenic entrapment)", "Small intestinal strangulation by a pedunculated lipoma", "Epiploic foramen entrapment"]
         }
     },
     { 
@@ -384,8 +405,8 @@ const quizData = [
         answer: 3, 
         reveals: null, 
         options: {
-            it: ["A. Tentare con un secondo bolo di analgesico e rivalutare tra un'ora", "B. Sondare di nuovo il cavallo e idratarlo con fluidi per via orale", "C. Lasciare il cavallo libero in un paddock per vedere se si risolve da solo", "D. Stabilizzare il cavallo e organizzare il trasporto immediato verso una clinica chirurgica"],
-            en: ["A. Try a second dose of analgesic and re-evaluate in an hour", "B. Pass the nasogastric tube again and hydrate with oral fluids", "C. Turn the horse out in a paddock to see if it resolves on its own", "D. Stabilize the horse and arrange for immediate transport to a surgical facility"]
+            it: ["Tentare con un secondo bolo di analgesico e rivalutare tra un'ora", "Sondare di nuovo il cavallo e idratarlo con fluidi per via orale", "Lasciare il cavallo libero in un paddock per vedere se si risolve da solo", "Stabilizzare il cavallo e organizzare il trasporto immediato verso una clinica chirurgica"],
+            en: ["Try a second dose of analgesic and re-evaluate in an hour", "Pass the nasogastric tube again and hydrate with oral fluids", "Turn the horse out in a paddock to see if it resolves on its own", "D. Stabilize the horse and arrange for immediate transport to a surgical facility"]
         }
     },
     { 
@@ -393,8 +414,8 @@ const quizData = [
         answer: 2, 
         reveals: "final-summary", 
         options: {
-            it: ["A. L'età del cavallo", "B. La razza del cavallo", "C. Il tempo che intercorre tra l'insorgenza dei sintomi e l'intervento chirurgico", "D. Il tipo di anestesia utilizzata"],
-            en: ["A. The age of the horse", "B. The breed of the horse", "C. The time elapsed between the onset of symptoms and surgery", "D. The type of anesthesia used"]
+            it: ["L'età del cavallo", "La razza del cavallo", "Il tempo che intercorre tra l'insorgenza dei sintomi e l'intervento chirurgico", "Il tipo di anestesia utilizzata"],
+            en: ["The age of the horse", "The breed of the horse", "The time elapsed between the onset of symptoms and surgery", "The type of anesthesia used"]
         }
     }
 ];
@@ -469,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('languagePreference') || 'it';
     setFont(savedFont);
     setLanguage(savedLang);
-    displayQuestion(); // Initial display
+    displayQuestion();
 });
 
 // Text-to-Speech
@@ -507,7 +528,8 @@ function displayQuestion() {
     const currentQuiz = quizData[currentQuestionIndex];
     let optionsHtml = '';
     currentQuiz.options[currentLanguage].forEach((option, index) => {
-        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+        const letters = ['A. ', 'B. ', 'C. ', 'D. '];
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${letters[index]}${option}</button>`;
     });
 
     const progressIndicator = `<p class="text-center text-gray-600 font-semibold mb-2">${translations[currentLanguage].questionProgress} ${currentQuestionIndex + 1} ${translations[currentLanguage].of} ${quizData.length}</p>`;
@@ -558,8 +580,8 @@ function showResults() {
     quizData.forEach((question, index) => {
         const userAnswerIndex = userAnswers[index];
         const correctAnswerIndex = question.answer;
-        const userAnswerText = userAnswerIndex !== null ? question.options[currentLanguage][userAnswerIndex] : translations[currentLanguage].noAnswer;
-        const correctAnswerText = question.options[currentLanguage][correctAnswerIndex];
+        const userAnswerText = userAnswerIndex !== null ? (['A. ', 'B. ', 'C. ', 'D. '][userAnswerIndex] + question.options[currentLanguage][userAnswerIndex]) : translations[currentLanguage].noAnswer;
+        const correctAnswerText = ['A. ', 'B. ', 'C. ', 'D. '][correctAnswerIndex] + question.options[currentLanguage][correctAnswerIndex];
         const isCorrect = userAnswerIndex === correctAnswerIndex;
         if (isCorrect) score++;
         reviewHtml += `
