@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caso Clinico Interattivo: Bovino con Anoressia</title>
+    <title>Caso Clinico Interattivo: Dislocazione Abomasale</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,66 +11,85 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
         }
-        .case-section {
+        /* Stili per la modalità accessibile */
+        body.font-dyslexic {
+            font-family: Verdana, sans-serif;
+            background-color: #ffffff;
+        }
+        .font-dyslexic p, 
+        .font-dyslexic li, 
+        .font-dyslexic h2, 
+        .font-dyslexic h3, 
+        .font-dyslexic div,
+        .font-dyslexic button,
+        .font-dyslexic span {
+            font-size: 14pt;
+            letter-spacing: 0.05em;
+            word-spacing: 0.15em;
+            line-height: 1.8;
+            color: #111827; /* Nero più intenso */
+        }
+        .font-dyslexic .quiz-option {
+            font-size: 14pt !important;
+        }
+         .font-dyslexic h1, .font-dyslexic h2, .font-dyslexic h3 {
+            font-size: 1.5em; /* Aumenta la dimensione dei titoli proporzionalmente */
+        }
+
+        .case-section, .quiz-card {
+            position: relative;
             background-color: #f9fafb;
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid #4f46e5;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             border-radius: 0.5rem;
         }
-        .hidden-section {
-            display: none;
+        .quiz-card {
+             margin-bottom: 0;
         }
-        .quiz-option {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 0.5rem;
+        .hidden-section { display: none; }
+        .quiz-option { display: block; width: 100%; text-align: left; padding: 0.75rem 1.25rem; margin-bottom: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.5rem; background-color: #ffffff; transition: all 0.2s ease-in-out; cursor: pointer; }
+        .quiz-option:hover:not(:disabled) { border-color: #4f46e5; background-color: #eef2ff; }
+        .quiz-option.selected { border-color: #4f46e5; background-color: #e0e7ff; font-weight: 600; }
+        .quiz-option:disabled { cursor: not-allowed; }
+        .summary-section { background-color: #f3f4f6; border: 1px solid #d1d5db; padding: 2rem; margin-top: 3rem; border-radius: 0.5rem; }
+        
+        .accessibility-controls button {
+            padding: 0.5rem 1rem;
             border: 1px solid #d1d5db;
             border-radius: 0.5rem;
-            background-color: #ffffff;
-            transition: all 0.2s ease-in-out;
+            background-color: white;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        .quiz-option:hover {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
+        .accessibility-controls button.active {
+            background-color: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
         }
-        .quiz-option.correct {
-            background-color: #d1fae5;
-            border-color: #10b981;
+        .tts-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
         }
-        .quiz-option.incorrect {
-            background-color: #fee2e2;
-            border-color: #ef4444;
+        .tts-button svg {
+            width: 100%;
+            height: 100%;
+            fill: #6b7280;
+            transition: fill 0.2s;
         }
-        .feedback {
-            padding: 0.75rem 1.25rem;
-            margin-top: 1rem;
-            border-radius: 0.5rem;
+        .tts-button:hover svg {
+            fill: #4f46e5;
         }
-        .feedback.correct {
-            background-color: #e0f2fe;
-            color: #0c4a6e;
-        }
-        .feedback.incorrect {
-            background-color: #fef2f2;
-            color: #991b1b;
-        }
-        .summary-section {
-            background-color: #f3f4f6;
-            border: 1px solid #d1d5db;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-radius: 0.5rem;
-        }
-        @media print {
-            body * { visibility: hidden; }
-            #printable-summary, #printable-summary * { visibility: visible; }
-            #printable-summary { position: absolute; left: 0; top: 0; width: 100%; }
-            .no-print { display: none; }
+        .tts-button.active svg {
+            fill: #dc2626; /* Red for stop */
         }
     </style>
 </head>
@@ -79,287 +98,502 @@
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-blue-600">Caso Clinico Veterinario Interattivo</h1>
-            <p class="text-lg text-gray-600 mt-2">Risolvi il caso passo dopo passo</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-600" data-translate-key="mainTitle">Caso Clinico Veterinario Interattivo</h1>
+            <p class="text-lg text-gray-600 mt-2" data-translate-key="mainSubtitle">Risolvi il caso passo dopo passo</p>
         </header>
+
+        <!-- Accessibility Controls -->
+        <div class="accessibility-controls flex justify-center items-center flex-wrap gap-4 mb-8 bg-white p-4 rounded-lg shadow">
+            <div>
+                <span class="font-semibold text-gray-700 mr-2" data-translate-key="readingSettings">Impostazioni di lettura:</span>
+                <button id="font-standard-btn" class="active" data-translate-key="fontStandard">Font Standard</button>
+                <button id="font-dyslexic-btn" data-translate-key="fontAccessible">Font Accessibile</button>
+            </div>
+            <div class="border-l-2 border-gray-200 pl-4">
+                <span class="font-semibold text-gray-700 mr-2" data-translate-key="language">Lingua:</span>
+                <button id="lang-it-btn" class="active">ITA</button>
+                <button id="lang-en-btn">ENG</button>
+            </div>
+        </div>
 
         <main id="case-container" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
 
             <!-- Sezione 1: Anamnesi (visibile da subito) -->
             <section id="anamnesi" class="case-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">1. Anamnesi e Segnalamento</h2>
-                <div class="space-y-3 text-gray-700">
-                    <p><strong>Animale:</strong> Bovino, femmina, Frisona Italiana di 5 anni.</p>
-                    <p><strong>Storia recente:</strong> Ha partorito da 12 giorni ed è alla sua quarta lattazione.</p>
-                    <p><strong>Motivo della visita:</strong> L'allevatore segnala un crollo della produzione lattea (da 40L a 15L/giorno) e anoressia selettiva da 3 giorni (rifiuta il concentrato).</p>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="anamnesisTitle">1. Anamnesi e Segnalamento</h2>
+                <div class="space-y-3 text-gray-700" data-translate-key="anamnesisContent">
+                    <p><strong>Paziente:</strong> Bovino di razza Frisona, 5 anni, a 40 giorni dal parto.</p>
+                    <p><strong>Storia:</strong> L'allevatore riferisce anoressia selettiva (l'animale rifiuta il concentrato ma mangia un po' di fieno), calo della produzione di latte e feci secche da circa 2 giorni.</p>
                 </div>
             </section>
             
             <!-- Sezione 2: Visita Clinica (nascosta) -->
             <section id="visita-clinica" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">2. Esame Obiettivo Generale e Particolare</h2>
-                 <div class="space-y-4">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Parametri Vitali e Atteggiamento</h3>
-                        <ul class="list-disc list-inside text-gray-700 space-y-1">
-                            <li><strong>Atteggiamento:</strong> Animale apatico, lievemente disidratato.</li>
-                            <li><strong>T°:</strong> 38.6 °C (Normale), <strong>FC:</strong> 84 bpm (Lieve tachicardia), <strong>FR:</strong> 30 apm (Normale).</li>
-                            <li><strong>Motilità ruminale:</strong> Fortemente ridotta.</li>
-                        </ul>
-                    </div>
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                     <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="clinicalExamTitle">2. Esame Clinico</h2>
+                 <div class="space-y-2 text-gray-700" data-translate-key="clinicalExamContent">
+                    <p>La bovina appare leggermente disidratata e apatica. I parametri clinici sono i seguenti:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Temperatura Rettale:</strong> 38.8°C.</li>
+                        <li><strong>Frequenza Cardiaca (FC):</strong> 80 battiti al minuto (bpm).</li>
+                        <li><strong>Frequenza Respiratoria (FR):</strong> 30 atti al minuto (apm).</li>
+                        <li><strong>Attività ruminale:</strong> Ruminazione assente, 1 contrazione ogni 2 minuti.</li>
+                        <li><strong>Ausculatazione/Percussione:</strong> Si rileva un suono metallico acuto ("ping") nell'area del fianco sinistro, tra la 9a e la 13a costa.</li>
+                    </ul>
                 </div>
             </section>
             
-            <!-- Sezione 3: Esame Addome (nascosta) -->
-            <section id="esame-addome" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">3. Esame dell'Addome</h2>
-                <div class="space-y-2 text-gray-700">
-                   <p><strong>Ispezione:</strong> Lieve "insellamento" della fossa del fianco sinistro.</p>
-                   <p><strong>Auscultazione e Percussione (Manovra combinata):</strong> Eseguendo la manovra sulla parete addominale sinistra (tra la 9ª e la 13ª costa), si percepisce un suono metallico, acuto e risonante, classicamente definito <strong>"PING"</strong>.</p>
-                   <p><strong>Esplorazione Rettale:</strong> Il rumine appare spostato medialmente e verso destra.</p>
+            <!-- Sezione 3: Iter Diagnostico (nascosta) -->
+            <section id="iter-diagnostico" class="case-section hidden-section">
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                     <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4" data-translate-key="diagnosticProcTitle">3. Procedure Diagnostiche Aggiuntive</h2>
+                <div class="space-y-3 text-gray-700" data-translate-key="diagnosticProcContent">
+                    <p>Per confermare il sospetto diagnostico, si procede con un test specifico.</p>
+                    <ul class="list-disc list-inside space-y-1">
+                       <li><strong>Test di Liptak:</strong> Si esegue una centesi nel punto in cui si ausculta il "ping". Si preleva un campione di fluido e se ne misura il pH.</li>
+                       <li><strong>Risultato:</strong> Il pH del campione è 2.5.</li>
+                    </ul>
                 </div>
             </section>
 
-            <!-- Sezione 4: Esami Collaterali (nascosta) -->
-             <section id="esami-collaterali" class="case-section hidden-section">
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">4. Esami Collaterali</h2>
-                <p class="text-gray-700">Un test rapido sulle urine tramite striscia reattiva rivela una moderata chetonuria (++).</p>
-            </section>
-
-            <!-- Contenitore del Quiz (SPOSTATO QUI) -->
+            <!-- Contenitore del Quiz -->
             <div id="quiz-container" class="mt-6"></div>
+
+            <!-- Sezione Risultati (nascosta) -->
+            <div id="results-section" class="summary-section hidden-section"></div>
+
+            <div id="review-section" class="hidden-section mt-8"></div>
 
             <!-- Sezione Finale: Diagnosi e Riassunto (nascosta) -->
             <div id="final-summary" class="summary-section hidden-section">
-                <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Caso Risolto!</h2>
-                <p class="text-center text-xl mb-4">Diagnosi: <strong>Dislocazione Abomasale Sinistra (DAS) con Chetosi Secondaria</strong></p>
-                
-                <div id="printable-summary">
-                    <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Dislocazione Abomasale Sinistra (DAS)</h2>
-                    <div class="space-y-4 text-left">
-                        <div>
-                            <h3 class="text-lg font-semibold text-blue-600">Cos'è la DAS?</h3>
-                            <p class="text-gray-700">La Dislocazione Abomasale a Sinistra è una patologia multifattoriale tipica delle vacche da latte ad alta produzione nel periodo del post-parto. L'abomaso si riempie di gas, si dilata e si sposta dalla sua normale posizione, rimanendo intrappolato tra il rumine e la parete addominale sinistra.</p>
+                <!-- Italian -->
+                <div lang="it">
+                    <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Diagnosi Confermata!</h2>
+                    <p class="text-center text-xl mb-4">La patologia è: <strong>Dislocazione Abomasale Sinistra (DAS)</strong></p>
+                    <div id="printable-summary-it">
+                        <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Scheda Riassuntiva: Dislocazione Abomasale Sinistra</h2>
+                        <div class="space-y-4 text-left">
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Cos'è?</h3>
+                                <p class="text-gray-700">La Dislocazione Abomasale Sinistra (DAS) è una patologia multifattoriale comune nelle bovine da latte ad alta produzione, tipicamente nelle prime 6 settimane dopo il parto. L'abomaso, che normalmente si trova nella parte inferiore destra dell'addome, si riempie di gas, si sposta verso l'alto e si posiziona tra il rumine e la parete addominale sinistra.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Fattori di Rischio</h3>
+                                 <ul class="list-disc list-inside space-y-1 mt-2">
+                                    <li><strong>Periodo di transizione:</strong> Il periodo intorno al parto è il più critico.</li>
+                                    <li><strong>Alimentazione:</strong> Diete ricche di concentrati e povere di fibre riducono la motilità e aumentano la produzione di gas.</li>
+                                    <li><strong>Patologie concomitanti:</strong> Ritenzione di placenta, metrite, ipocalcemia e chetosi aumentano il rischio.</li>
+                                    <li><strong>Genetica e conformazione:</strong> Animali più grandi e profondi possono essere predisposti.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Diagnosi e Terapia</h3>
+                                <p class="text-gray-700">La diagnosi si basa sull'anamnesi e sui segni clinici, ma è confermata dall'individuazione del caratteristico suono di "ping" nel fianco sinistro. Il test di Liptak (pH acido del campione) conferma che il gas è all'interno dell'abomaso. La terapia può essere medica (rotolamento della bovina) o, più comunemente e con maggior successo, chirurgica (es. omentopessi in laparotomia sul fianco destro) per riposizionare e fissare l'abomaso.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-blue-600">Fattori di Rischio Principali</h3>
-                            <ul class="list-disc list-inside text-gray-700">
-                                <li>Periodo di transizione (prime 2-4 settimane post-parto).</li>
-                                <li>Dietetica: diete ad alto contenuto di concentrati e basso contenuto di fibra.</li>
-                                <li>Atonia abomasale causata da ipocalcemia o patologie concomitanti (metriti, mastiti, ecc.).</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-blue-600">Diagnosi e Terapia</h3>
-                            <p class="text-gray-700">La diagnosi di certezza si basa sull'identificazione del <strong>suono di "PING"</strong>. La terapia d'elezione è quella chirurgica, che mira a riposizionare l'abomaso e fissarlo (omentopessi o piloropessi) per prevenire recidive. La prognosi dopo chirurgia è favorevole.</p>
+                    </div>
+                </div>
+                 <!-- English -->
+                <div lang="en" class="hidden">
+                    <h2 class="text-center text-3xl font-bold text-green-600 mb-6">Diagnosis Confirmed!</h2>
+                    <p class="text-center text-xl mb-4">The condition is: <strong>Left Displaced Abomasum (LDA)</strong></p>
+                    <div id="printable-summary-en">
+                        <h2 class="text-center text-2xl font-bold text-gray-800 mb-4 mt-6">Summary Sheet: Left Displaced Abomasum</h2>
+                        <div class="space-y-4 text-left">
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">What is it?</h3>
+                                <p class="text-gray-700">Left Displaced Abomasum (LDA) is a common multifactorial disease in high-producing dairy cows, typically occurring within the first 6 weeks after calving. The abomasum, normally located on the lower right side of the abdomen, fills with gas, rises, and moves to a position between the rumen and the left abdominal wall.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Risk Factors</h3>
+                                <ul class="list-disc list-inside space-y-1 mt-2">
+                                    <li><strong>Transition period:</strong> The period around calving is the most critical.</li>
+                                    <li><strong>Nutrition:</strong> Diets high in concentrates and low in fiber reduce motility and increase gas production.</li>
+                                    <li><strong>Concurrent diseases:</strong> Retained placenta, metritis, hypocalcemia, and ketosis increase the risk.</li>
+                                    <li><strong>Genetics and conformation:</strong> Larger, deep-bodied cows may be predisposed.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-indigo-600">Diagnosis and Treatment</h3>
+                                <p class="text-gray-700">Diagnosis is based on history and clinical signs but is confirmed by identifying the characteristic "ping" sound in the left flank. The Liptak test (acidic pH of the sample) confirms that the gas is within the abomasum. Treatment can be medical (rolling the cow) or, more commonly and successfully, surgical (e.g., right flank omentopexy) to reposition and fix the abomasum in place.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="text-center mt-8 no-print">
-                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">Stampa o Salva Riassunto</button>
+                <div class="text-center mt-8">
+                    <button id="print-btn" onclick="printSummary()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300" data-translate-key="printButton">Stampa o Salva Riassunto</button>
                 </div>
             </div>
-
         </main>
         
-        <footer class="text-center mt-8 text-sm text-gray-500 no-print">
-            <p>Questo caso clinico è stato generato a scopo didattico.</p>
+        <footer class="text-center mt-8 text-sm text-gray-500">
+             <p data-translate-key="footerCredit">Creato da Sara Busechian.</p>
+            <p data-translate-key="footerText" class="mt-1">Questo caso clinico è stato generato a scopo didattico.</p>
         </footer>
     </div>
 
 <script>
+let currentLanguage = 'it';
+
+const translations = {
+    it: {
+        mainTitle: "Caso Clinico Veterinario Interattivo",
+        mainSubtitle: "Risolvi il caso passo dopo passo",
+        readingSettings: "Impostazioni di lettura:",
+        fontStandard: "Font Standard",
+        fontAccessible: "Font Accessibile",
+        language: "Lingua:",
+        anamnesisTitle: "1. Anamnesi e Segnalamento",
+        anamnesisContent: `<p><strong>Paziente:</strong> Bovino di razza Frisona, 5 anni, a 40 giorni dal parto.</p><p><strong>Storia:</strong> L'allevatore riferisce anoressia selettiva (l'animale rifiuta il concentrato ma mangia un po' di fieno), calo della produzione di latte e feci secche da circa 2 giorni.</p>`,
+        clinicalExamTitle: "2. Esame Clinico",
+        clinicalExamContent: `<p>La bovina appare leggermente disidratata e apatica. I parametri clinici sono i seguenti:</p><ul class="list-disc list-inside space-y-1"><li><strong>Temperatura Rettale:</strong> 38.8°C.</li><li><strong>Frequenza Cardiaca (FC):</strong> 80 battiti al minuto (bpm).</li><li><strong>Frequenza Respiratoria (FR):</strong> 30 atti al minuto (apm).</li><li><strong>Attività ruminale:</strong> Ruminazione assente, 1 contrazione ogni 2 minuti.</li><li><strong>Ausculatazione/Percussione:</strong> Si rileva un suono metallico acuto ("ping") nell'area del fianco sinistro, tra la 9a e la 13a costa.</li></ul>`,
+        diagnosticProcTitle: "3. Procedure Diagnostiche Aggiuntive",
+        diagnosticProcContent: `<p>Per confermare il sospetto diagnostico, si procede con un test specifico.</p><ul class="list-disc list-inside space-y-1"><li><strong>Test di Liptak:</strong> Si esegue una centesi nel punto in cui si ausculta il "ping". Si preleva un campione di fluido e se ne misura il pH.</li><li><strong>Risultato:</strong> Il pH del campione è 2.5.</li></ul>`,
+        quizCompleted: "Quiz Completato!",
+        yourScoreIs: "Il tuo punteggio è:",
+        scoreText: "Di seguito trovi il riepilogo delle tue risposte e la scheda del caso clinico.",
+        reviewTitle: "Riepilogo Risposte",
+        yourAnswer: "La tua risposta:",
+        correctAnswer: "Risposta corretta:",
+        noAnswer: "Nessuna risposta",
+        printButton: "Stampa o Salva Riassunto",
+        footerCredit: "Creato da Sara Busechian.",
+        footerText: "Questo caso clinico è stato generato a scopo didattico.",
+        questionProgress: "Domanda",
+        of: "di",
+        printWindowTitle: "Riassunto Caso Clinico"
+    },
+    en: {
+        mainTitle: "Interactive Veterinary Clinical Case",
+        mainSubtitle: "Solve the case step-by-step",
+        readingSettings: "Reading Settings:",
+        fontStandard: "Standard Font",
+        fontAccessible: "Accessible Font",
+        language: "Language:",
+        anamnesisTitle: "1. Signalment and History",
+        anamnesisContent: `<p><strong>Patient:</strong> 5-year-old Holstein Friesian cow, 40 days in milk.</p><p><strong>History:</strong> The farmer reports selective anorexia (the animal refuses concentrates but eats some hay), a drop in milk production, and dry feces for about 2 days.</p>`,
+        clinicalExamTitle: "2. Clinical Examination",
+        clinicalExamContent: `<p>The cow appears slightly dehydrated and apathetic. The clinical parameters are as follows:</p><ul class="list-disc list-inside space-y-1"><li><strong>Rectal Temperature:</strong> 38.8°C.</li><li><strong>Heart Rate (HR):</strong> 80 beats per minute (bpm).</li><li><strong>Respiratory Rate (RR):</strong> 30 breaths per minute (bpm).</li><li><strong>Rumen activity:</strong> Rumination absent, 1 contraction every 2 minutes.</li><li><strong>Auscultation/Percussion:</strong> A sharp metallic sound ("ping") is detected in the left flank area, between the 9th and 13th ribs.</li></ul>`,
+        diagnosticProcTitle: "3. Additional Diagnostic Procedures",
+        diagnosticProcContent: `<p>To confirm the suspected diagnosis, a specific test is performed.</p><ul class="list-disc list-inside space-y-1"><li><strong>Liptak Test:</strong> A centesis is performed at the location of the "ping". A fluid sample is collected, and its pH is measured.</li><li><strong>Result:</strong> The sample's pH is 2.5.</li></ul>`,
+        quizCompleted: "Quiz Completed!",
+        yourScoreIs: "Your score is:",
+        scoreText: "Below you will find a summary of your answers and the case study sheet.",
+        reviewTitle: "Answers Summary",
+        yourAnswer: "Your answer:",
+        correctAnswer: "Correct answer:",
+        noAnswer: "No answer",
+        printButton: "Print or Save Summary",
+        footerCredit: "Created by Sara Busechian.",
+        footerText: "This clinical case was generated for educational purposes.",
+        questionProgress: "Question",
+        of: "of",
+        printWindowTitle: "Clinical Case Summary"
+    }
+};
+
 const quizData = [
-    {
-        question: "1/10: Basandoti sull'anamnesi, quale combinazione di fattori è più indicativa per orientare la diagnosi?",
-        options: [
-            "Età avanzata e calo di produzione",
-            "Recente parto, alta produzione e anoressia selettiva",
-            "Razza Frisona e anoressia",
-            "Quarta lattazione e rifiuto di ogni alimento"
-        ],
-        answer: 1,
-        feedback: "Corretto. L'associazione tra il periodo del post-parto, l'alta produzione e l'anoressia selettiva è un campanello d'allarme per le patologie metaboliche e dislocative tipiche di questa fase.",
-        reveals: null
+    { 
+        question: { it: "I sintomi descritti (anoressia selettiva, calo di latte) in una bovina a 40 giorni post-partum sono tipici di quale periodo?", en: "The described symptoms (selective anorexia, drop in milk yield) in a cow 40 days post-partum are typical of which period?" }, 
+        answer: 0, 
+        reveals: "visita-clinica", 
+        options: { 
+            it: ["Del periodo di transizione, in cui sono frequenti le patologie metaboliche.", "Della tarda lattazione.", "Dell'asciutta.", "Della gravidanza."],
+            en: ["The transition period, where metabolic diseases are common.", "Late lactation.", "The dry period.", "Pregnancy."]
+        }
     },
-    {
-        question: "2/10: Quale apparato è quasi certamente il principale coinvolto in questo scenario clinico?",
-        options: [
-            "Apparato respiratorio",
-            "Apparato cardiovascolare",
-            "Apparato gastroenterico",
-            "Apparato urinario"
-        ],
-        answer: 2,
-        feedback: "Esatto. L'anoressia e il calo di produzione puntano direttamente a un problema a carico dell'apparato digerente. Ora procediamo con la visita clinica.",
-        reveals: "visita-clinica"
+    { 
+        question: { it: "Qual è il significato clinico del suono metallico ('ping') rilevato al fianco sinistro?", en: "What is the clinical significance of the metallic ('ping') sound detected on the left flank?" }, 
+        answer: 2, 
+        reveals: null, 
+        options: {
+            it: ["È un suono normale della digestione.", "Indica un accumulo di liquido nel rumine.", "È patognomonico di un organo pieno di gas dislocato tra il rumine e la parete addominale.", "Indica la presenza di un corpo estraneo metallico."],
+            en: ["It is a normal sound of digestion.", "It indicates fluid accumulation in the rumen.", "It is pathognomonic for a gas-filled organ displaced between the rumen and the abdominal wall.", "It indicates the presence of a metallic foreign body."]
+        }
     },
-    {
-        question: "3/10: L'assenza di febbre, associata a una lieve tachicardia e disidratazione, cosa suggerisce?",
-        options: [
-            "Un'infezione batterica grave",
-            "Un processo infiammatorio acuto o un disordine metabolico/meccanico",
-            "Un forte stato di shock",
-            "Un problema primariamente cardiaco"
-        ],
-        answer: 1,
-        feedback: "Perfetto. L'assenza di ipertermia tende a escludere un processo settico acuto, orientando verso una causa metabolica o un problema meccanico/ostruttivo a livello gastroenterico.",
-        reveals: null
+    { 
+        question: { it: "Sulla base dei reperti clinici, qual è il sospetto diagnostico più probabile?", en: "Based on the clinical findings, what is the most likely suspected diagnosis?" }, 
+        answer: 1, 
+        reveals: "iter-diagnostico", 
+        options: {
+            it: ["Indigestione semplice", "Dislocazione abomasale sinistra (DAS)", "Chetosi primaria", "Reticoloperitonite traumatica da corpo estraneo"],
+            en: ["Simple indigestion", "Left displaced abomasum (LDA)", "Primary ketosis", "Traumatic reticuloperitonitis"]
+        }
     },
-    {
-        question: "4/10: La forte riduzione della motilità ruminale è un segno importante. Qual è la procedura diagnostica successiva più logica?",
-        options: [
-            "Eseguire subito un'ecografia cardiaca",
-            "Procedere con l'esame sistematico dell'addome",
-            "Somministrare antibiotici e antipiretici",
-            "Prelevare un campione di urine"
-        ],
-        answer: 1,
-        feedback: "Ottima scelta. Con un sospetto problema gastroenterico, l'esame completo dell'addome è il passo fondamentale per proseguire nell'iter diagnostico.",
-        reveals: "esame-addome"
+    { 
+        question: { it: "Perché si esegue il test di Liptak?", en: "Why is the Liptak test performed?" }, 
+        answer: 3, 
+        reveals: null, 
+        options: {
+            it: ["Per misurare la quantità di gas presente.", "Per verificare la presenza di batteri.", "Per controllare il colore del liquido.", "Per differenziare il gas nel rumine (pH neutro) da quello nell'abomaso (pH acido) e confermare la diagnosi."],
+            en: ["To measure the amount of gas present.", "To check for the presence of bacteria.", "To check the color of the fluid.", "To differentiate gas in the rumen (neutral pH) from gas in the abomasum (acidic pH) and confirm the diagnosis."]
+        }
     },
-    {
-        question: "5/10: Il 'PING' rilevato al fianco sinistro è un suono patognomonico. Da cosa è generato?",
-        options: [
-            "Dalla contrazione del rumine pieno di liquido",
-            "Dalla percussione di un organo cavo pieno di gas, interposto tra la parete e altri visceri",
-            "Dal movimento di liquidi nell'intestino tenue",
-            "Da una raccolta di pus (ascesso) nella cavità addominale"
-        ],
-        answer: 1,
-        feedback: "Esattamente. Il 'PING' si genera quando un viscere pieno di gas si sposta e si tende contro la parete addominale. È il segno chiave per la nostra diagnosi.",
-        reveals: null
+    { 
+        question: { it: "Un pH di 2.5 nel campione prelevato cosa conferma?", en: "What does a pH of 2.5 in the collected sample confirm?" }, 
+        answer: 0, 
+        reveals: null, 
+        options: {
+            it: ["Che l'organo contenente gas è l'abomaso.", "Che l'organo contenente gas è il rumine.", "La presenza di una grave infezione.", "Che non ci sono problemi digestivi."],
+            en: ["That the gas-containing organ is the abomasum.", "That the gas-containing organ is the rumen.", "The presence of a severe infection.", "That there are no digestive issues."]
+        }
     },
-    {
-        question: "6/10: Mettendo insieme tutti i dati (anamnesi, clinica, PING a sinistra, esplorazione rettale), qual è la diagnosi più probabile?",
-        options: [
-            "Torsione del cieco",
-            "Indigestione gassosa (meteorismo ruminale)",
-            "Pneumoperitoneo (gas libero in addome)",
-            "Dislocazione abomasale sinistra (DAS)"
-        ],
-        answer: 3,
-        feedback: "Diagnosi corretta. Tutti i segni clinici e strumentali conducono inequivocabilmente a una Dislocazione Abomasale Sinistra. Verifichiamo con un ultimo test.",
-        reveals: "esami-collaterali"
+    { 
+        question: { it: "Quale tra le seguenti NON è una diagnosi differenziale comune per la DAS?", en: "Which of the following is NOT a common differential diagnosis for LDA?" }, 
+        answer: 3, 
+        reveals: null, 
+        options: {
+            it: ["Chetosi primaria", "Indigestione vagale", "Timpanismo gassoso del rumine", "Mastite"],
+            en: ["Primary ketosis", "Vagal indigestion", "Gaseous bloat of the rumen", "Mastitis"]
+        }
     },
-    {
-        question: "7/10: Perché troviamo chetonuria in questo animale?",
-        options: [
-            "È la causa primaria della malattia (chetosi primaria)",
-            "È un artefatto del test delle urine",
-            "È secondaria al bilancio energetico negativo causato dall'anoressia",
-            "È causata da un'insufficienza renale"
-        ],
-        answer: 2,
-        feedback: "Perfetto. L'animale non mangia a sufficienza, quindi mobilita le riserve corporee di grasso, portando alla produzione di corpi chetonici. È una chetosi secondaria alla patologia in atto.",
-        reveals: null
+    { 
+        question: { it: "Quale di questi è il principale fattore di rischio per la DAS?", en: "Which of these is the main risk factor for LDA?" }, 
+        answer: 1, 
+        reveals: null, 
+        options: {
+            it: ["L'età avanzata della bovina", "Una dieta post-parto ad alto contenuto di concentrati e bassa in fibra", "La stagione estiva", "L'assenza di esercizio fisico"],
+            en: ["The cow's advanced age", "A post-partum diet high in concentrates and low in fiber", "The summer season", "Lack of physical exercise"]
+        }
     },
-    {
-        question: "8/10: Qual è l'approccio terapeutico considerato risolutivo e con la più bassa percentuale di recidive per la DAS?",
-        options: [
-            "Terapia medica con fluidi e farmaci procinetici",
-            "Far rotolare la vacca sul dorso (tecnica conservativa)",
-            "Correzione chirurgica con fissazione dell'abomaso (pessi)",
-            "Lasciare l'animale a digiuno per 24 ore"
-        ],
-        answer: 2,
-        feedback: "Esatto. La chirurgia (es. omentopessi in laparotomia sul fianco destro) permette di riposizionare l'organo e fissarlo, prevenendo future dislocazioni. È la terapia d'elezione.",
-        reveals: null
+     { 
+        question: { it: "Qual è la terapia di elezione per la DAS che garantisce la minor incidenza di recidive?", en: "What is the treatment of choice for LDA that ensures the lowest recurrence rate?" }, 
+        answer: 2, 
+        reveals: null, 
+        options: {
+            it: ["Terapia medica con calcio e procinetici", "Il rotolamento della bovina", "La correzione chirurgica (es. omentopessi)", "Lasciare che si risolva spontaneamente"],
+            en: ["Medical therapy with calcium and prokinetics", "Rolling the cow", "Surgical correction (e.g., omentopexy)", "Letting it resolve spontaneously"]
+        }
     },
-    {
-        question: "9/10: Oltre alla chirurgia, quale terapia di supporto è fondamentale?",
-        options: [
-            "Solo un antinfiammatorio per il dolore post-operatorio",
-            "Fluidoterapia per correggere disidratazione e squilibri elettrolitici, e terapia per la chetosi",
-            "Una lunga terapia antibiotica per prevenire infezioni",
-            "Nessuna, la chirurgia è sufficiente"
-        ],
-        answer: 1,
-        feedback: "Corretto. È cruciale reidratare l'animale, correggere gli squilibri metabolici (ipocalcemia, ipokaliemia) e trattare la chetosi con precursori del glucosio (es. glicole propilenico).",
-        reveals: null
+    { 
+        question: { it: "La chirurgia per la DAS viene solitamente eseguita:", en: "Surgery for LDA is usually performed:" }, 
+        answer: 0, 
+        reveals: null, 
+        options: {
+            it: ["In laparotomia sul fianco destro, con l'animale in piedi e in anestesia locale", "In anestesia generale", "In laparotomia sul fianco sinistro", "Tramite endoscopia"],
+            en: ["Via right flank laparotomy, with the animal standing under local anesthesia", "Under general anesthesia", "Via left flank laparotomy", "Via endoscopy"]
+        }
     },
-    {
-        question: "10/10: Qual è la prognosi per una bovina con DAS trattata tempestivamente con la chirurgia?",
-        options: [
-            "Infausta, l'animale andrà macellato",
-            "Scarsa, la produzione di latte non tornerà mai normale",
-            "Riservata, dipende da molti fattori",
-            "Favorevole, con un rapido ritorno alla normale alimentazione e produzione"
-        ],
-        answer: 3,
-        feedback: "Esatto! Se diagnosticata e trattata rapidamente, la prognosi è ottima e la maggior parte delle bovine recupera completamente.",
-        reveals: "final-summary"
-    },
+    { 
+        question: { it: "Qual è la prognosi per una DAS trattata chirurgicamente in modo tempestivo?", en: "What is the prognosis for an LDA treated surgically in a timely manner?" }, 
+        answer: 0, 
+        reveals: "final-summary", 
+        options: {
+            it: ["Generalmente eccellente, con pieno recupero della produzione di latte", "Discreta, ma con alto rischio di complicazioni", "Scarsa, la maggior parte degli animali non recupera", "Riservata, dipende dalla risposta alla terapia antibiotica"],
+            en: ["Generally excellent, with full recovery of milk production", "Fair, but with a high risk of complications", "Poor, most animals do not recover", "Guarded, depends on the response to antibiotic therapy"]
+        }
+    }
 ];
 
 let currentQuestionIndex = 0;
 const quizContainer = document.getElementById('quiz-container');
+let userAnswers = new Array(quizData.length).fill(null);
 
-function displayQuestion() {
-    if (currentQuestionIndex >= quizData.length) {
-        quizContainer.innerHTML = ''; // Quiz finished
-        return;
+// --- Accessibility & Language Functions ---
+const standardFontBtn = document.getElementById('font-standard-btn');
+const dyslexicFontBtn = document.getElementById('font-dyslexic-btn');
+const langItBtn = document.getElementById('lang-it-btn');
+const langEnBtn = document.getElementById('lang-en-btn');
+const body = document.body;
+
+function setFont(fontType) {
+    if (fontType === 'dyslexic') {
+        body.classList.add('font-dyslexic');
+        standardFontBtn.classList.remove('active');
+        dyslexicFontBtn.classList.add('active');
+        localStorage.setItem('fontPreference', 'dyslexic');
+    } else {
+        body.classList.remove('font-dyslexic');
+        dyslexicFontBtn.classList.remove('active');
+        standardFontBtn.classList.add('active');
+        localStorage.setItem('fontPreference', 'standard');
     }
+}
 
-    const currentQuiz = quizData[currentQuestionIndex];
-    let optionsHtml = '';
-    currentQuiz.options.forEach((option, index) => {
-        optionsHtml += `<button class="quiz-option" data-index="${index}">${option}</button>`;
+function setLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('languagePreference', lang);
+
+    if (lang === 'en') {
+        langItBtn.classList.remove('active');
+        langEnBtn.classList.add('active');
+    } else {
+        langEnBtn.classList.remove('active');
+        langItBtn.classList.add('active');
+    }
+    
+    document.querySelectorAll('[data-translate-key]').forEach(el => {
+        const key = el.dataset.translateKey;
+        if (translations[lang][key]) {
+            if (key.includes('Content')) {
+                 el.innerHTML = translations[lang][key];
+            } else {
+                 el.innerText = translations[lang][key];
+            }
+        }
     });
 
+    updateDynamicContent();
+}
+
+function updateDynamicContent() {
+    if (currentQuestionIndex < quizData.length && !document.getElementById('results-section').style.display || document.getElementById('results-section').style.display === 'none') {
+        displayQuestion();
+    } else {
+        showResults();
+    }
+}
+
+standardFontBtn.addEventListener('click', () => setFont('standard'));
+dyslexicFontBtn.addEventListener('click', () => setFont('dyslexic'));
+langItBtn.addEventListener('click', () => setLanguage('it'));
+langEnBtn.addEventListener('click', () => setLanguage('en'));
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedFont = localStorage.getItem('fontPreference') || 'standard';
+    const savedLang = localStorage.getItem('languagePreference') || 'it';
+    setFont(savedFont);
+    setLanguage(savedLang);
+    displayQuestion();
+});
+
+// Text-to-Speech
+document.getElementById('case-container').addEventListener('click', function(event) {
+    const ttsButton = event.target.closest('.tts-button');
+    if (ttsButton) {
+        const sectionToRead = ttsButton.parentElement;
+        const title = sectionToRead.querySelector('h2, h3');
+        const content = Array.from(sectionToRead.children).filter(el => !el.matches('button, h2, h3')).map(el => el.innerText).join('\n');
+        const textToRead = (title ? title.innerText + '.\n' : '') + content;
+        
+        if (speechSynthesis.speaking) {
+            speechSynthesis.cancel();
+            document.querySelectorAll('.tts-button').forEach(btn => btn.classList.remove('active'));
+        } else {
+            const utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.lang = currentLanguage === 'en' ? 'en-US' : 'it-IT';
+            utterance.onend = () => {
+                ttsButton.classList.remove('active');
+            };
+            speechSynthesis.speak(utterance);
+            ttsButton.classList.add('active');
+        }
+    }
+});
+
+// --- Quiz Logic ---
+function displayQuestion() {
+    if (currentQuestionIndex >= quizData.length) {
+        if (!document.getElementById('results-section').style.display || document.getElementById('results-section').style.display === 'none') {
+             showResults();
+        }
+        return;
+    }
+    const currentQuiz = quizData[currentQuestionIndex];
+    let optionsHtml = '';
+    currentQuiz.options[currentLanguage].forEach((option, index) => {
+        const letters = ['A. ', 'B. ', 'C. ', 'D. '];
+        optionsHtml += `<button class="quiz-option" data-index="${index}">${letters[index]}${option}</button>`;
+    });
+
+    const progressIndicator = `<p class="text-center text-gray-600 font-semibold mb-2">${translations[currentLanguage].questionProgress} ${currentQuestionIndex + 1} ${translations[currentLanguage].of} ${quizData.length}</p>`;
+
     quizContainer.innerHTML = `
-        <div class="quiz-card p-4 border rounded-lg bg-gray-50">
-            <h3 class="text-lg font-semibold mb-4">${currentQuiz.question}</h3>
-            <div class="options-container">${optionsHtml}</div>
-            <div class="feedback-container mt-2"></div>
+        <div class="mb-4">
+            ${progressIndicator}
+            <div class="quiz-card p-4 border rounded-lg">
+                <button class="tts-button" aria-label="Leggi ad alta voce">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                </button>
+                <h3 class="text-lg font-semibold mb-4">${currentQuiz.question[currentLanguage]}</h3>
+                <div class="options-container">${optionsHtml}</div>
+            </div>
         </div>
     `;
-
     document.querySelectorAll('.quiz-option').forEach(button => {
         button.addEventListener('click', checkAnswer);
     });
 }
 
 function checkAnswer(event) {
-    const selectedOption = event.target;
+    const selectedOption = event.target.closest('.quiz-option'); 
+    if (!selectedOption || selectedOption.disabled) return;
+    speechSynthesis.cancel();
     const selectedAnswerIndex = parseInt(selectedOption.dataset.index);
-    const currentQuiz = quizData[currentQuestionIndex];
-    const feedbackContainer = quizContainer.querySelector('.feedback-container');
-
-    // Disable all buttons after an answer is chosen
+    userAnswers[currentQuestionIndex] = selectedAnswerIndex;
     document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
-
-    if (selectedAnswerIndex === currentQuiz.answer) {
-        selectedOption.classList.add('correct');
-        feedbackContainer.innerHTML = `
-            <div class="feedback correct">
-                ${currentQuiz.feedback}
-            </div>
-            <button id="next-question-btn" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full">
-                Prosegui
-            </button>
-        `;
-
-        document.getElementById('next-question-btn').addEventListener('click', () => {
-            if (currentQuiz.reveals) {
-                document.getElementById(currentQuiz.reveals).style.display = 'block';
+    selectedOption.classList.add('selected');
+    const currentQuiz = quizData[currentQuestionIndex];
+    setTimeout(() => {
+        if (currentQuiz.reveals) {
+            const revealedSection = document.getElementById(currentQuiz.reveals);
+            if(revealedSection) {
+                revealedSection.style.display = 'block';
+                revealedSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-            currentQuestionIndex++;
-            displayQuestion();
-        });
-    } else {
-        selectedOption.classList.add('incorrect');
-        feedbackContainer.innerHTML = `<div class="feedback incorrect">Risposta non corretta. Riprova a ragionare sul caso.</div>`;
-         setTimeout(() => { // Re-enable buttons to allow another try
-            document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = false);
-            selectedOption.classList.remove('incorrect');
-            feedbackContainer.innerHTML = '';
-        }, 2000);
-    }
+        }
+        currentQuestionIndex++;
+        displayQuestion();
+    }, 500);
 }
 
-// Start the quiz
-window.onload = displayQuestion;
+function showResults() {
+    quizContainer.innerHTML = ''; 
+    let score = 0;
+    let reviewHtml = `<h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">${translations[currentLanguage].reviewTitle}</h2>`;
+    quizData.forEach((question, index) => {
+        const userAnswerIndex = userAnswers[index];
+        const correctAnswerIndex = question.answer;
+        const userAnswerText = userAnswerIndex !== null ? (['A. ', 'B. ', 'C. ', 'D. '][userAnswerIndex] + question.options[currentLanguage][userAnswerIndex]) : translations[currentLanguage].noAnswer;
+        const correctAnswerText = ['A. ', 'B. ', 'C. ', 'D. '][correctAnswerIndex] + question.options[currentLanguage][correctAnswerIndex];
+        const isCorrect = userAnswerIndex === correctAnswerIndex;
+        if (isCorrect) score++;
+        reviewHtml += `
+            <div class="p-4 mb-4 border-l-4 rounded-r-lg ${isCorrect ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}">
+                <p class="font-semibold text-gray-800">${index + 1}. ${question.question[currentLanguage]}</p>
+                <p class="mt-2 text-md ${isCorrect ? 'text-green-800' : 'text-red-800'}">
+                    <strong>${translations[currentLanguage].yourAnswer}</strong> ${userAnswerText} ${isCorrect ? '<span class="text-green-600 font-bold">&#10004;</span>' : '<span class="text-red-600 font-bold">&#10008;</span>'}
+                </p>
+                ${!isCorrect ? `<p class="mt-1 text-md text-gray-700"><strong>${translations[currentLanguage].correctAnswer}</strong> ${correctAnswerText}</p>` : ''}
+            </div>`;
+    });
+    const resultsSection = document.getElementById('results-section');
+    resultsSection.innerHTML = `
+        <h2 class="text-center text-3xl font-bold text-indigo-600 mb-4">${translations[currentLanguage].quizCompleted}</h2>
+        <p class="text-center text-xl text-gray-800">${translations[currentLanguage].yourScoreIs} <strong class="text-2xl">${score} / ${quizData.length}</strong></p>
+        <p class="text-center text-gray-600 mt-4">${translations[currentLanguage].scoreText}</p>`;
+    resultsSection.style.display = 'block';
+    if(currentQuestionIndex === quizData.length) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.getElementById('review-section').innerHTML = reviewHtml;
+    document.getElementById('review-section').style.display = 'block';
+    
+    document.querySelectorAll('#final-summary > div').forEach(el => el.classList.add('hidden'));
+    document.querySelector(`#final-summary > div[lang=${currentLanguage}]`).classList.remove('hidden');
+    document.getElementById('final-summary').style.display = 'block';
+}
+
+function printSummary() {
+    const printableContent = document.getElementById(`printable-summary-${currentLanguage}`).innerHTML;
+    const printWindow = window.open('', '', 'height=800,width=1000');
+    printWindow.document.write(`<html><head><title>${translations[currentLanguage].printWindowTitle}</title>`);
+    printWindow.document.write(`<style>body{font-family:'Inter',sans-serif;line-height:1.6;color:#374151;padding:2rem}h2{text-align:center;font-size:1.5rem;font-weight:bold;color:#111827;margin-bottom:1rem}h3{font-size:1.125rem;font-weight:600;color:#4f46e5;border-bottom:1px solid #e5e7eb;padding-bottom:0.25rem;margin-top:1.5rem}ul{list-style-type:disc;list-style-position:inside;padding-left:1rem}li{margin-bottom:0.25rem}strong{font-weight:600;color:#1f2937}</style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">`);
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printableContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+}
+
 </script>
 
 </body>
