@@ -10,46 +10,43 @@
 <body>
 <tw-story><noscript><tw-noscript>JavaScript needs to be enabled to play Caso clinico cavallo respiratorio.</tw-noscript></noscript></tw-story>
 <tw-storydata name="Caso clinico cavallo respiratorio" startnode="1" creator="Twine" creator-version="2.11.1" format="Harlowe" format-version="3.3.9" ifid="75A19155-8C3A-4742-A5CA-9B3B986D59F2" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* =========================================
-   1. STILE GRAFICO (Sfondo Bianco, Testo Nero)
+   1. STILE FONT GLOBALE (Accessibilità di Default)
    ========================================= */
 tw-story, body {
-  background-color: white; /* Sfondo bianco */
-  color: black;            /* Testo nero */
-  font-family: sans-serif; /* Font leggibile */
+  /* Sfondo Pastello (Crema tenue: meno fatica visiva del bianco puro) */
+  background-color: #FAFAF0 !important; 
+  color: #1e293b;            /* Colore testo scuro, alto contrasto */
+  
+  /* Parametri del font accessibile (Verdana, 1.1rem, spaziatura 1.8) */
+  font-family: Verdana, sans-serif !important;
+  font-size: 1.1rem !important; 
+  line-height: 1.8 !important; 
+  letter-spacing: 0.05em !important;
 }
 
-/* Colore dei Link (Bivi) - Blu classico per vederli bene sul bianco */
+/* Allinea i titoli al tuo stile DSA */
+tw-story h1, 
+tw-story h2, 
+tw-story h3 {
+  letter-spacing: normal !important;
+  color: #4338ca !important; /* Colore viola del tuo stile */
+}
+
+/* =========================================
+   2. NASCONDI FRECCE E LINK (Rimane Essenziale)
+   ========================================= */
+
+/* Link (bivi) - Resi ben visibili e leggibili */
 a {
-  color: #0000EE;
+  color: #0000EE; 
   text-decoration: underline;
   font-weight: bold;
 }
 
-/* Colore del Link quando ci passi sopra col mouse (Viola) */
-a:hover {
-  color: #551A8B;
-}
-
-/* =========================================
-   2. NASCONDI FRECCE E CRONOLOGIA
-   (Questo blocco funziona per tutti i formati)
-   ========================================= */
-
-/* Codice per nascondere la barra in Harlowe */
-tw-sidebar {
+/* Codice per nascondere la barra laterale (per tutti i formati) */
+#ui-bar, tw-sidebar {
   display: none !important;
-}
-tw-icon.undo {
-  display: none !important;
-}
-tw-icon.redo {
-  display: none !important;
-}
-
-/* Codice per nascondere la barra in SugarCube */
-#ui-bar {
-  display: none !important;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Nodo 1: Presentazione (Victory)" tags="" position="425,0" size="100,100">CASO CLINICO: &quot;Victory&quot;
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-tag name="startup" color="yellow"></tw-tag><tw-tag name="footer" color="purple"></tw-tag><tw-tag name="header" color="blue"></tw-tag><tw-passagedata pid="1" name="Nodo 1: Presentazione (Victory)" tags="" position="425,0" size="100,100">CASO CLINICO: &quot;Victory&quot;
 PAZIENTE: Sella Francese, 8 anni, castrone.
 USO: Salto Ostacoli (livello 140cm).
 
@@ -73,9 +70,7 @@ Discutete nel vostro &quot;Diario Clinico&quot;:
 
 (Scrivete le vostre conclusioni *prima* di continuare).
 
-[[Abbiamo discusso. Qual è il piano diagnostico?|Nodo 1.5: Scelta Iniziale]]
-
-</tw-passagedata><tw-passagedata pid="2" name="Nodo 1.5: Scelta Iniziale" tags="" position="175,25" size="100,100">INTERPRETAZIONE:
+[[Abbiamo discusso. Qual è il piano diagnostico?|Nodo 1.5: Scelta Iniziale]]</tw-passagedata><tw-passagedata pid="2" name="Nodo 1.5: Scelta Iniziale" tags="" position="175,25" size="100,100">INTERPRETAZIONE:
 Il &quot;Poor Performance&quot; è uno dei problemi più difficili. La visita a riposo è &quot;muta&quot; (negativa), quindi il problema emerge solo sotto sforzo.
 Bisogna essere sistematici e indagare almeno i &quot;4 motori&quot; del cavallo atleta:
 1.  Apparato Locomotore
@@ -83,18 +78,17 @@ Bisogna essere sistematici e indagare almeno i &quot;4 motori&quot; del cavallo 
 3.  Apparato Cardiaco
 4.  Apparato Respiratorio
 
-Il colpo di tosse post-lavoro, anche se lieve, è un indizio che non va ignorato.   
-   
+Il colpo di tosse post-lavoro, anche se lieve, è un indizio che non va ignorato.
+
 DOMANDA:
 Il proprietario vi dà il via libera per un work-up completo, ma vi chiede di procedere per gradi e di iniziare dall&#39;apparato che ritenete più probabile.
 
 Da quale apparato iniziate la vostra indagine?
 
 [[1. Esegui un esame ortopedico completo (lameness exam).|Nodo 2: Ortopedia (Vicolo Cieco)]]
-[[2. Esegui un esame per valutare l'apparato muscolare (enzimi muscolari, CK, AST).|Nodo 3: Muscoli (Vicolo Cieco)]]
+[[2. Esegui esami ematici (enzimi muscolari, CK, AST).|Nodo 3: Muscoli (Vicolo Cieco)]]
 [[3. Esegui un esame cardiologico (ECG/Ecocardiografia).|Nodo 4: Cuore (Vicolo Cieco)]]
 [[4. Esegui un esame approfondito dell&#39;apparato respiratorio.|Nodo 5: Respiratorio (Percorso Corretto)]]
-
 </tw-passagedata><tw-passagedata pid="3" name="Nodo 2: Ortopedia (Vicolo Cieco)" tags="" position="250,150" size="100,100">Segui il sospetto del cavaliere e decidi di indagare l&#39;apparato locomotore.
 
 PROTOCOLLO:
@@ -112,8 +106,6 @@ Cosa significa questo referto? Avete risolto il caso? Discutetene nel vostro &qu
 (Scrivete le vostre conclusioni *prima* di continuare).
 
 [[Abbiamo discusso. Confrontiamo la nostra interpretazione.|Nodo 2.5: Interpretazione Ortopedia]]
-
-   
 </tw-passagedata><tw-passagedata pid="4" name="Nodo 3: Muscoli (Vicolo Cieco)" tags="" position="125,300" size="100,100">
 Decidi di indagare l&#39;apparato muscolare, sospettando una miopatia da sforzo (RER, PSSM) che potrebbe spiegare la &quot;mancanza di motore&quot;.
 
@@ -125,8 +117,8 @@ REFERTO (Enzimi Muscolari):
 ============================================================
 Parametro | Campione a Riposo | Campione Post-Esercizio | Range (a riposo)
 ============================================================
-  CK      |      180 U/L      |        250 U/L          |   100 - 400 U/L
-  AST     |      250 U/L      |        310 U/L          |   150 - 450 U/L
+  CK           |      180 U/L               |        250 U/L                     |   100 - 400 U/L
+  AST         |      250 U/L               |        310 U/L                     |   150 - 450 U/L
 ============================================================
 &lt;/pre&gt;
 
@@ -134,9 +126,7 @@ DISCUSSIONE:
 Cosa vi dicono questi numeri? Il leggero aumento post-esercizio è fisiologico o patologico? Avete confermato o escluso una miopatia? Discutetene nel vostro &quot;Diario Clinico&quot;.
 (Scrivete le vostre conclusioni *prima* di continuare).
 
-[[Abbiamo discusso. Confrontiamo la nostra interpretazione.|Nodo 3.5: Interpretazione Muscoli]]
-
-</tw-passagedata><tw-passagedata pid="5" name="Nodo 4: Cuore (Vicolo Cieco)" tags="" position="25,25" size="100,100">Decidi di indagare l&#39;apparato cardiocircolatorio. Una &quot;pompa&quot; difettosa potrebbe spiegare perfettamente la stanchezza sotto sforzo.
+[[Abbiamo discusso. Confrontiamo la nostra interpretazione.|Nodo 3.5: Interpretazione Muscoli]]</tw-passagedata><tw-passagedata pid="5" name="Nodo 4: Cuore (Vicolo Cieco)" tags="" position="25,25" size="100,100">Decidi di indagare l&#39;apparato cardiocircolatorio. Una &quot;pompa&quot; difettosa potrebbe spiegare perfettamente la stanchezza sotto sforzo.
 
 PROTOCOLLO:
 Esegui un esame cardiologico di base, che include:
@@ -154,9 +144,7 @@ DISCUSSIONE:
 Cosa vi dicono questi reperti? Avete escluso un problema cardiaco? Il colpo di tosse è spiegato? Discutetene nel vostro &quot;Diario Clinico&quot;.
 (Scrivete le vostre conclusioni *prima* di continuare).
 
-[[Abbiamo discusso. Confrontiamo la nostra interpretazione.|Nodo 4.5: Interpretazione Cuore]]
-
-</tw-passagedata><tw-passagedata pid="6" name="Nodo 5: Respiratorio (Percorso Corretto)" tags="" position="425,125" size="100,100">Decidi di concentrarti sull&#39;apparato respiratorio, seguendo l&#39;indizio del colpo di tosse post-lavoro.
+[[Abbiamo discusso. Confrontiamo la nostra interpretazione.|Nodo 4.5: Interpretazione Cuore]]</tw-passagedata><tw-passagedata pid="6" name="Nodo 5: Respiratorio (Percorso Corretto)" tags="" position="425,125" size="100,100">Decidi di concentrarti sull&#39;apparato respiratorio, seguendo l&#39;indizio del colpo di tosse post-lavoro.
 
 PROTOCOLLO:
 Esegui un esame clinico approfondito dell&#39;apparato respiratorio **a riposo**.
@@ -172,9 +160,7 @@ L&#39;esame clinico a riposo è **completamente normale**.
 Cosa significa? Questo esclude una malattia respiratoria? Come si concilia questo con l&#39;anamnesi (calo di performance e tosse *dopo* il lavoro)? Discutetene nel vostro &quot;Diario Clinico&quot;.
 (Scrivete le vostre conclusioni *prima* di continuare).
 
-[[Abbiamo discusso. Confrontiamo la nostra interpretazione.|Nodo 5.5: Interpretazione Respiratorio]]
-
-</tw-passagedata><tw-passagedata pid="7" name="Nodo 2.5: Interpretazione Ortopedia" tags="" position="250,275" size="100,100">INTERPRETAZIONE:
+[[Abbiamo discusso. Confrontiamo la nostra interpretazione.|Nodo 5.5: Interpretazione Respiratorio]]</tw-passagedata><tw-passagedata pid="7" name="Nodo 2.5: Interpretazione Ortopedia" tags="" position="250,275" size="100,100">INTERPRETAZIONE:
 Il test è **negativo**. Avete escluso una zoppia manifesta o un evidente problema ortopedico.
 
 PROBLEMA:
@@ -184,9 +170,7 @@ Questo reperto negativo, inoltre, non spiega in alcun modo il colpo di tosse pos
 DOMANDA:
 Devi ricominciare e cambiare apparato. Il problema non è nel &quot;telaio&quot; (locomotore).
 
-[[Torna alla scelta dell&#39;apparato.|Nodo 1.5: Scelta Iniziale]]
-
-</tw-passagedata><tw-passagedata pid="8" name="Nodo 3.5: Interpretazione Muscoli" tags="" position="50,475" size="100,100">INTERPRETAZIONE:
+[[Torna alla scelta dell&#39;apparato.|Nodo 1.5: Scelta Iniziale]]</tw-passagedata><tw-passagedata pid="8" name="Nodo 3.5: Interpretazione Muscoli" tags="" position="50,475" size="100,100">INTERPRETAZIONE:
 Il test è **negativo**.
 Un cavallo con una miopatia da sforzo (come RER o PSSM) avrebbe un picco drammatico (spesso &gt;10x o 100x) dei valori di CK e AST nel campione post-esercizio.
 I valori di &quot;Victory&quot; mostrano solo un lieve aumento fisiologico (normale dopo il lavoro) e rimangono ben all&#39;interno dei range di riferimento.
@@ -200,9 +184,7 @@ Questo reperto, inoltre, non spiega il colpo di tosse post-lavoro.
 DOMANDA:
 Devi ricominciare e cambiare apparato.
 
-[[Torna alla scelta dell&#39;apparato.|Nodo 1.5: Scelta Iniziale]]
-
-</tw-passagedata><tw-passagedata pid="9" name="Nodo 4.5: Interpretazione Cuore" tags="" position="25,150" size="100,100">INTERPRETAZIONE:
+[[Torna alla scelta dell&#39;apparato.|Nodo 1.5: Scelta Iniziale]]</tw-passagedata><tw-passagedata pid="9" name="Nodo 4.5: Interpretazione Cuore" tags="" position="25,150" size="100,100">INTERPRETAZIONE:
 Il test è **negativo**.
 L&#39;esame cardiologico a riposo (auscultazione, ECG, eco) è completamente nei limiti della norma. Avete escluso cause cardiache macroscopiche (difetti valvolari, miocarditi, aritmie evidenti a riposo).
 
@@ -213,19 +195,19 @@ Questo reperto, inoltre, non spiega in alcun modo il colpo di tosse post-lavoro.
 DOMANDA:
 Avete sistematicamente escluso l&#39;apparato locomotore, muscolare e cardiaco. Vi resta solo un apparato da indagare, quello che forse era il più probabile fin dall&#39;inizio.
 
-[[Torna alla scelta dell&#39;apparato.|Nodo 1.5: Scelta Iniziale]]
+[[Torna alla scelta dell&#39;apparato.|Nodo 1.5: Scelta Iniziale]]</tw-passagedata><tw-passagedata pid="10" name="Nodo 5.5: Interpretazione Respiratorio" tags="" position="425,275" size="100,100">INTERPRETAZIONE:
+La visita a riposo è &quot;muta&quot; (negativa).
 
-</tw-passagedata><tw-passagedata pid="10" name="Nodo 5.5: Interpretazione Respiratorio" tags="" position="425,275" size="100,100">INTERPRETAZIONE:
-La visita a riposo è &quot;muta&quot; (negativa), come succede molto spesso nelle patologie del cavallo atleta, che si manifestano solo quando le richieste metaboliche aumentano.
+Questo è un reperto **fondamentale** e molto comune. L&#39;asma equina lieve/moderata (precedentemente chiamata IAD) è una malattia &quot;nascosta&quot; (sub-clinica). L&#39;infiammazione c&#39;è, ma non è abbastanza grave da causare sintomi evidenti a riposo. Si manifesta solo quando la richiesta funzionale aumenta (sotto sforzo).
+
+Il colpo di tosse post-lavoro (dall&#39;anamnesi) è il vostro *unico* indizio che punta alle **basse vie aeree**.
 
 DOMANDA:
 La visita a riposo è inutile per fare la diagnosi. Devi &quot;guardare più in profondità&quot; o &quot;provocare&quot; il sintomo. Cosa fai ora?
 
 [[1. Esegui un&#39;endoscopia delle vie aeree a riposo (per vedere trachea e laringe).|Nodo 6: Endoscopia a Riposo]]
 [[2. Esegui un&#39;endoscopia sotto sforzo (Overground/Tapis Roulant).|Nodo 7: Endoscopia Sotto Sforzo (Vicolo Cieco)]]
-[[3. Dici al proprietario che non ha nulla (il test è negativo).|Nodo 8: Errore Grave (Vicolo Cieco)]]
-
-</tw-passagedata><tw-passagedata pid="11" name="Nodo 6: Endoscopia a Riposo" tags="" position="650,275" size="100,100">Decidi di eseguire un&#39;endoscopia delle vie aeree a riposo per visualizzare le alte vie (faringe, laringe) e la trachea.
+[[3. Dici al proprietario che non ha nulla (il test è negativo).|Nodo 8: Errore Grave (Vicolo Cieco)]]</tw-passagedata><tw-passagedata pid="11" name="Nodo 6: Endoscopia a Riposo" tags="" position="650,275" size="100,100">Decidi di eseguire un&#39;endoscopia delle vie aeree a riposo per visualizzare le alte vie (faringe, laringe) e la trachea.
 
 REFERTO ENDOSCOPICO:
 
@@ -312,7 +294,7 @@ Tipo Cellulare      | Risultato &quot;Victory&quot; | Valori di Riferimento (San
 =========================================================================
 Macrofagi           |        47 %         |        40 - 70 %
 Linfociti           |        30 %         |        30 - 60 %
-NEUTROFILI          |        15 %         |        &lt; 5 %
+NEUTROFILI          |        15 %         |        &lt; 5  %
 MASTOCITI           |         8 %         |        &lt; 2 %
 Eosinofili          |         0 %         |        &lt; 1 %
 Cellule Epiteliali  |       Rare          |           -
@@ -379,7 +361,7 @@ Avete indagato la funzionalità sotto sforzo delle alte vie ed è tutto normale.
 
 [[1. Torni indietro per rivalutare le opzioni diagnostiche (es. endoscopia a riposo).|Nodo 5.5: Interpretazione Respiratorio]]
 [[2. Provi una terapia &quot;alla cieca&quot; (sciroppo/antinfiammatorio) e vedi come va.|Nodo 11: Errore Terapia Empirica]]
-[[3. Dici al proprietario che il cavallo non ha nulla (il test è negativo).|Nodo 8: Errore Grave (Vicolo Cieco)]]</tw-passagedata><tw-passagedata pid="19" name="Nodo 9.5: Diagnosi Finale" tags="" position="700,400" size="100,100">DOMANDA:
+[[3. Dici al proprietario che il cavallo non ha nulla (il test è negativo).|Nodo 8: Errore Grave (Vicolo Cieco)]]</tw-passagedata><tw-passagedata pid="19" name="Nodo 9.5: Diagnosi Finale" tags="" position="675,400" size="100,100">DOMANDA:
 Avete il reperto citologico del BAL:
 * **Neutrofili: 15%** (Aumento lieve/moderato)
 * **Mastociti: 8%** (Aumento significativo)
@@ -404,7 +386,7 @@ Stai per prescrivere antibiotici inutili e dannosi.
 **DOMANDA:**
 Torna indietro e rileggi il referto citologico.
 
-[[Torna alla diagnosi.|Nodo 9.5: Diagnosi Finale]]</tw-passagedata><tw-passagedata pid="21" name="Nodo 12: Terapia - Asma" tags="" position="1025,350" size="100,100">**DIAGNOSI CORRETTA:**
+[[Torna alla diagnosi.|Nodo 9.5: Diagnosi Finale]]</tw-passagedata><tw-passagedata pid="21" name="Nodo 12: Terapia - Asma" tags="" position="900,450" size="100,100">**DIAGNOSI CORRETTA:**
 **Asma Equina Lieve** (Mild Equine Asthma).
 
 Hai trovato la causa. L&#39;infiammazione delle basse vie aeree (caratterizzata da neutrofili e mastociti) è la causa della produzione di muco, della tosse post-lavoro e del calo di performance.
@@ -429,7 +411,7 @@ L&#39;EIPH (Emorragia Polmonare) è una diagnosi differenziale comune per la poo
 **DOMANDA:**
 Torna indietro e concentrati sulle cellule infiammatorie presenti.
 
-[[Torna alla diagnosi.|Nodo 9.5: Diagnosi Finale]]</tw-passagedata><tw-passagedata pid="23" name="Nodo 13: Terapia Farmacologica" tags="" position="775,550" size="100,100">Decidi di aggredire la patologia con un approccio farmacologico completo, mirato a spegnere l&#39;infiammazione e pulire le vie aeree.
+[[Torna alla diagnosi.|Nodo 9.5: Diagnosi Finale]]</tw-passagedata><tw-passagedata pid="23" name="Nodo 13: Terapia Farmacologica" tags="" position="775,625" size="100,100">Decidi di aggredire la patologia con un approccio farmacologico completo, mirato a spegnere l&#39;infiammazione e pulire le vie aeree.
 
 PROTOCOLLO:
 1.  **Corticosteroidi:** Per l&#39;infiammazione (es. Dexametasone sistemico o Fluticasone inalatorio).
